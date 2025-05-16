@@ -47,6 +47,7 @@ public class IssueServiceTest {
 
     when(issueRepository.save(any(Issue.class)))
         .thenAnswer(invocation -> invocation.getArgument(0));
+    when(userService.existsById(userId)).thenReturn(true);
 
     // when
     Issue saved = issueService.createIssue(request, userId);
