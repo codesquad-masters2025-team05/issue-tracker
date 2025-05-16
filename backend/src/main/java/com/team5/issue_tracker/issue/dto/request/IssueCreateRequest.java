@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class IssueCreateRequest {
   private String title;
   private String body;
-  private Long assignee;
-  private List<Long> labels;
-  private Long milestone;
+  private Long assigneeId;
+  private List<Long> labelIds;
+  private Long milestoneId;
 }
