@@ -14,10 +14,10 @@ VALUES
     ('feature', '새로운 기능 요청', '#0e8a16'),
     ('documentation', '문서 관련 이슈', '#1d76db');
 
-INSERT INTO issue (title, body, image_url, user_id, milestone_id, is_open, created_at, updated_at)
+INSERT INTO issue (title, body, user_id, milestone_id, is_open, created_at, updated_at)
 VALUES
-    ('버튼이 작동하지 않음', '로그인 버튼이 클릭되지 않습니다.', null, 1, 1, true, NOW(), NOW()),
-    ('다크모드 추가 요청', '다크모드를 지원해 주세요.', null, 2, NULL, true, NOW(), NOW());
+    ('버튼이 작동하지 않음', '로그인 버튼이 클릭되지 않습니다.', 1, 1, true, NOW(), NOW()),
+    ('다크모드 추가 요청', '다크모드를 지원해 주세요.', 2, NULL, true, NOW(), NOW());
 
 INSERT INTO issue_label (issue_id, label_id)
 VALUES

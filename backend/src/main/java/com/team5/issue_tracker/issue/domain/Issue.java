@@ -11,7 +11,6 @@ public class Issue {
 
     private final String title;
     private final String body;
-    private final String imageUrl;
     private final Long userId;
     private final Long milestoneId;
     private final boolean isOpen;
@@ -19,11 +18,9 @@ public class Issue {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-  public Issue(String title, String body, String imageUrl,
-      Long userId, Long milestoneId, boolean isOpen) {
+  public Issue(String title, String body, Long userId, Long milestoneId, boolean isOpen) {
     this.title = title;
     this.body = body;
-    this.imageUrl = imageUrl;
     this.userId = userId;
     this.milestoneId = milestoneId;
     this.isOpen = isOpen;

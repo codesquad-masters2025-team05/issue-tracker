@@ -23,9 +23,8 @@ public class IssueService {
     Issue issue = new Issue(
         request.getTitle(),
         request.getBody(),
-        null,
         userId,
-        request.getMilestone(),
+        request.getMilestoneId(),
         true
     );
 

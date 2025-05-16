@@ -16,7 +16,6 @@ CREATE TABLE issue (
                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
                        title VARCHAR(255) NOT NULL,
                        body TEXT,
-                       image_url VARCHAR(255),
                        user_id BIGINT NOT NULL,
                        milestone_id BIGINT,
                        is_open BOOLEAN NOT NULL,
