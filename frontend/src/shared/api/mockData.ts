@@ -1,5 +1,3 @@
-// src/shared/api/mockData.ts
-
 /**
  * 경로별 mock 데이터를 반환하는 유틸
  */
@@ -8,16 +6,16 @@ export type MockData = unknown;
 // 경로에 따른 mock 데이터 로더 매핑
 const mockLoaders: Record<string, () => Promise<MockData>> = {
 	'/api/issues': async () => {
-		const { mockIssueListResponse } = await import(
-			'@/entities/issue/issueFixtures'
-		);
+		const { mockIssueListResponse } = await import('./mock/issueFixtures');
 		return mockIssueListResponse;
 	},
 	'/api/users': async () => {
-		const { mockUserListResponse } = await import(
-			'@/entities/user/userFixtures'
-		);
+		const { mockUserListResponse } = await import('./mock/userFixtures');
 		return mockUserListResponse;
+	},
+	'/api/issues/author': async () => {
+		const { mockAuthorListResponse } = await import('./mock/authorFixture');
+		return mockAuthorListResponse;
 	},
 };
 

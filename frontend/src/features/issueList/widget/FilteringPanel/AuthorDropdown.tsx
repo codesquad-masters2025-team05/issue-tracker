@@ -1,42 +1,42 @@
-import { useUserList } from '@/entities/user/hooks/useUserList';
-// src/entities/user/ui/AssigneeDropdown.tsx
+// src/entities/user/ui/AuthorDropdown.tsx
+import { useAuthorList } from '@/entities/user/hooks/useAuthorList';
 import {
 	CustomDropdownPanel,
 	type DropdownOption,
 } from '@/shared/ui/CustomDropdownPanel';
 import { useMemo, useState } from 'react';
 
-export default function AssigneeDropdown() {
+export default function AuthorDropdown() {
 	const [selected, setSelected] = useState<string | null>(null);
-	const { data, isLoading, error } = useUserList();
+	const { data, isLoading, error } = useAuthorList();
 
-	// ✅ useMemo를 항상 호출하도록 최상단에 선언
+	// 항상 최상단에서 useMemo 호출
 	const userOptions = useMemo<DropdownOption[]>(() => {
 		const noneOption: DropdownOption = {
 			id: 0,
 			value: 'none',
-			display: '담당자가 없는 이슈',
+			display: '작성자가 없는 이슈',
 		};
 
 		const fetchedOptions: DropdownOption[] =
-			data?.users.map((user) => ({
-				id: user.id,
-				value: user.username,
-				display: user.username,
-				imageUrl: user.imageUrl,
+			data?.authors.map((author) => ({
+				id: author.id,
+				value: author.username,
+				display: author.username,
+				imageUrl: author.imageUrl,
 			})) ?? [];
 
 		return [noneOption, ...fetchedOptions];
 	}, [data]);
 
-	// 로딩·에러 UI는 그 다음에 처리
+	// 로딩 및 에러 상태 처리
 	if (isLoading) {
-		return <div>담당자 목록 로딩 중…</div>;
+		return <div>작성자 목록 로딩 중…</div>;
 	}
 	if (error) {
 		return (
 			<div className='text-destructive'>
-				담당자 목록을 불러오는 중 에러가 발생했습니다.
+				작성자 목록을 불러오는 중 에러가 발생했습니다.
 			</div>
 		);
 	}
@@ -44,8 +44,8 @@ export default function AssigneeDropdown() {
 	return (
 		<div className='flex justify-center'>
 			<CustomDropdownPanel
-				label='담당자'
-				panelLabel='담당자 필터'
+				label='작성자'
+				panelLabel='작성자 필터'
 				options={userOptions}
 				value={selected}
 				onChange={setSelected}

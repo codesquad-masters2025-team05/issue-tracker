@@ -1,5 +1,6 @@
-import ExampleAssigneeDropdown from '@/features/issueList/widget/FilteringPanel/AssigneeDropdown';
+import AssigneeDropdown from '@/features/issueList/widget/FilteringPanel/AssigneeDropdown';
 import { Checkbox } from '../../shared/CheckBox';
+import AuthorDropdown from '../FilteringPanel/AuthorDropdown';
 
 export function IssueListHeader() {
 	return (
@@ -9,7 +10,8 @@ export function IssueListHeader() {
 				열린이슈/닫힌이슈
 			</div>
 			<div className='flex items-center gap-8'>
-				<ExampleAssigneeDropdown />
+				<AssigneeDropdown />
+				<AuthorDropdown />
 			</div>
 		</div>
 	);

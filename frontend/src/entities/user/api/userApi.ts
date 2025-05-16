@@ -1,7 +1,6 @@
-// src/entities/user/api/userApi.ts
 import { getJSON } from '@/shared/api/client';
 import type { ApiResponse } from '@/shared/api/types';
-import type { UserApiDto, UsersResponseDto } from './user.types';
+import type { UserApiDto, UsersResponseDto } from '../model/user.types';
 
 /** API에서 반환되는 data 필드 타입 */
 export type UserListData = UsersResponseDto['data'];
