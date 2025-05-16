@@ -1,4 +1,5 @@
-import { IssueList, useIssueList } from '@/features/issueList';
+import { useIssueList } from '@/entities/issue/hooks/useIssueList';
+import { IssueList } from '@/features/issueList';
 import {
 	IssueCreationButton,
 	IssueFilter,

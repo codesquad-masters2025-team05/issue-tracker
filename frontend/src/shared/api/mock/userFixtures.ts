@@ -1,18 +1,17 @@
-// src/entities/user/userFixtures.ts
+import type { UserListData } from '@/entities/user/api/userApi';
+import type { UserApiDto } from '@/entities/user/model/user.types';
 import type { ApiResponse } from '@/shared/api/types';
-import type { UserApiDto } from './user.types';
-import type { UserListData } from './userApi';
 
 // Mock user data
 const users: UserApiDto[] = [
 	{
 		id: 1,
-		username: 'alice',
+		username: 'user1',
 		imageUrl: 'https://example.com/alice.png',
 	},
 	{
 		id: 2,
-		username: 'bob',
+		username: 'user2',
 		imageUrl: 'https://example.com/bob.png',
 	},
 ];

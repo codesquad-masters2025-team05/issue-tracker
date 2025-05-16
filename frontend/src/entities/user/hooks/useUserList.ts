@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-// src/entities/user/hooks/useUserList.ts
-import type { UserListData } from './userApi';
-import { fetchUsers } from './userApi';
+import type { UserListData } from '../api/userApi';
+import { fetchUsers } from '../api/userApi';
 
 export function useUserList() {
 	const [data, setData] = useState<UserListData | null>(null);

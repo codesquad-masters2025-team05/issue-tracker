@@ -1,4 +1,4 @@
-import type { Issue } from '@/entities/issue/issue.types';
+import type { Issue } from '@/entities/issue/model/issue.types';
 import { IssueListHeader } from '../widget';
 import { IssueItem } from './IssueItem';
 
