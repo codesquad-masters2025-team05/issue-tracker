@@ -9,7 +9,7 @@ export type AuthorListData = AuthorsResponseDto['data'];
  * 전체 작성자(Author) 목록을 가져옵니다.
  */
 export async function fetchAuthors(): Promise<AuthorListData> {
-	const res = await getJSON<ApiResponse<AuthorListData>>('/api/issues/author');
+	const res = await getJSON<ApiResponse<AuthorListData>>('/api/issues/authors');
 	return res.data;
 }
 
@@ -18,7 +18,7 @@ export async function fetchAuthors(): Promise<AuthorListData> {
  */
 export async function fetchAuthorById(id: number): Promise<AuthorApiDto> {
 	const res = await getJSON<ApiResponse<AuthorApiDto>>(
-		`/api/issues/author/${id}`,
+		`/api/issues/authors/${id}`,
 	);
 	return res.data;
 }

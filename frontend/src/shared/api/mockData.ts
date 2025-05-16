@@ -13,7 +13,7 @@ const mockLoaders: Record<string, () => Promise<MockData>> = {
 		const { mockUserListResponse } = await import('./mock/userFixtures');
 		return mockUserListResponse;
 	},
-	'/api/issues/author': async () => {
+	'/api/issues/authors': async () => {
 		const { mockAuthorListResponse } = await import('./mock/authorFixture');
 		return mockAuthorListResponse;
 	},
