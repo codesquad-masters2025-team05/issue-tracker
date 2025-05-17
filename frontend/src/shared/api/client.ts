@@ -1,33 +1,19 @@
-import { getMockData } from './mockData';
+import { getMockData } from './mock';
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'; // .env에서 VITE_USE_MOCK=true로 설정 시 모킹 활성화
+const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
 
-/**
- * 실제 서버와 통신하는 getJSON 함수
- */
 async function realGetJSON<T>(path: string): Promise<T> {
 	const res = await fetch(`${path}`, {
 		method: 'GET',
 		headers: { Accept: 'application/json' },
 	});
 
-	/**
-	 * 응답 상태가 200~299가 아닐 경우 Error를 던집니다.
-	 * 호출자는 이 에러를 catch하여 토스트 메시지 표시, 재시도 로직 실행,
-	 * 에러 페이지 이동 등 적절한 처리를 수행해야 합니다.
-	 */
 	if (!res.ok) {
 		throw new Error(`API 요청 실패: ${res.status} ${res.statusText}`);
 	}
-
-	// 성공 응답일 경우 JSON 본문을 파싱하여 반환합니다.
 	return res.json();
 }
 
-/**
- * 모의 데이터를 반환하는 getJSON 함수
- * path에 따라 필요한 mock 데이터를 분기하여 반환하세요.
- */
 async function mockGetJSON<T>(path: string): Promise<T> {
 	// mockData 유틸에서 데이터 로드
 	const data = await getMockData(path);

@@ -20,13 +20,13 @@ const authors: AuthorApiDto[] = [
 ];
 
 // Mock API response for author list
-export const mockAuthorListResponse: ApiResponse<AuthorListData> = {
+export const mockAuthors: ApiResponse<AuthorListData> = {
 	success: true,
 	data: {
 		total: authors.length,
-		page: 0, // 0-based page index
-		perPage: authors.length,
-		authors,
+		page: 0,
+		perPage: 0,
+		users: authors,
 	},
 	error: null,
 };

@@ -12,7 +12,7 @@ export interface AuthorsResponseDto {
 		total: number;
 		page: number;
 		perPage: number;
-		authors: AuthorApiDto[];
+		users: AuthorApiDto[];
 	};
 	error: string | null;
 }
@@ -21,5 +21,5 @@ export interface AuthorsResponseDto {
 export interface Author {
 	id: number;
 	username: string;
-	avatarUrl: string; // DTO의 imageUrl을 매핑
+	imageUrl: string;
 }

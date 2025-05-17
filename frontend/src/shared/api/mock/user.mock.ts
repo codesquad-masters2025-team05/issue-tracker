@@ -17,7 +17,7 @@ const users: UserApiDto[] = [
 ];
 
 // Mock API response for user list
-export const mockUserListResponse: ApiResponse<UserListData> = {
+export const mockUsers: ApiResponse<UserListData> = {
 	success: true,
 	data: {
 		total: users.length,

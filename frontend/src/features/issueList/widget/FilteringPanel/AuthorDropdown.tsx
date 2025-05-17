@@ -19,7 +19,7 @@ export default function AuthorDropdown() {
 		};
 
 		const fetchedOptions: DropdownOption[] =
-			data?.authors.map((author) => ({
+			data?.users.map((author) => ({
 				id: author.id,
 				value: author.username,
 				display: author.username,

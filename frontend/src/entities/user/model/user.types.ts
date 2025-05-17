@@ -21,5 +21,5 @@ export interface UsersResponseDto {
 export interface User {
 	id: number;
 	username: string;
-	avatarUrl: string; // DTO의 imageUrl을 매핑
+	imageUrl: string;
 }
