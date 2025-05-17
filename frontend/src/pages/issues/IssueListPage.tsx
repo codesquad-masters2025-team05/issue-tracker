@@ -35,7 +35,7 @@ const IssueListPage: FC = () => {
 			<Outlet />
 			<div className='flex items-center gap-4 mt-8 mb-6 justify-between'>
 				<div className='w-140 flex border border-[var(--neutral-border-default)] rounded-2xl'>
-					<IssueDropdown className='w-32 h-10' />
+					<IssueDropdown className='w-32 h-10 hover:bg-[var(--neutral-surface-bold)] rounded-l-2xl' />
 					<div className='border-r border-[var(--neutral-border-default)]' />
 					<div className='w-full flex items-center gap-1 px-6 bg-[var(--neutral-surface-bold)] rounded-r-2xl'>
 						<SearchIcon />
@@ -44,11 +44,12 @@ const IssueListPage: FC = () => {
 				</div>
 
 				<div className='flex gap-4'>
-					<div className='flex border border-[var(--neutral-border-default)] rounded-2xl'>
-						<LabelListButton />
+					<div className='flex w-80 border border-[var(--neutral-border-default)] rounded-2xl'>
+						<LabelListButton total={0} className='flex-1' />
 						<div className='border-r border-[var(--neutral-border-default)]' />
-						<MilestoneListButton />
+						<MilestoneListButton total={0} className='flex-1' />
 					</div>
+
 					<IssueCreationButton />
 				</div>
 			</div>
