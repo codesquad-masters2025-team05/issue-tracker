@@ -1,3 +1,4 @@
+import Logo from '@/assets/logo_large.svg?react';
 import { Button } from '@/shared/ui/button';
 // src/pages/LoginPage.tsx
 import type { FC } from 'react';
@@ -20,6 +21,7 @@ const LoginPage: FC = () => {
 
 	return (
 		<div className='flex flex-col items-center justify-center min-h-screen p-4'>
+			<Logo className='w-[342px] h-[72px] text-[var(--neutral-text-strong)]' />
 			{/* 실제 폼 대신 버튼으로 간단 테스트 */}
 			<Button onClick={handleLogin}>로그인</Button>
 		</div>

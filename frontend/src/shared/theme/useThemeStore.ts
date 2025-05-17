@@ -31,7 +31,7 @@ export const useThemeStore = create<ThemeState>()(
 				}
 				localStorage.setItem('theme', name);
 				applyCssVariables(themesMap[name]);
-				flashThemeTransition(300);
+				flashThemeTransition(0);
 				set((state) => {
 					state.theme = name;
 				});
@@ -45,7 +45,7 @@ export const useThemeStore = create<ThemeState>()(
 
 				localStorage.setItem('theme', nextTheme);
 				applyCssVariables(themesMap[nextTheme]);
-				flashThemeTransition(300);
+				flashThemeTransition(0);
 				set((state) => {
 					state.theme = nextTheme;
 				});
