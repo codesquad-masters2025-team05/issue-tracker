@@ -1,12 +1,12 @@
+import SearchIcon from '@/assets/search.svg?react';
 import { useIssueList } from '@/entities/issue/hooks/useIssueList';
 import { IssueList } from '@/features/issueList';
 import {
 	IssueCreationButton,
-	IssueFilter,
-	IssueSearch,
 	LabelListButton,
 	MilestoneListButton,
 } from '@/features/issueList/widget';
+import IssueDropdown from '@/features/issueList/widget/FilteringPanel/IssueDropdown';
 import { Spinner } from '@/shared/ui/spinner';
 import type { FC } from 'react';
 import { Outlet } from 'react-router-dom';
@@ -33,11 +33,16 @@ const IssueListPage: FC = () => {
 	return (
 		<>
 			<Outlet />
-			<div className='flex items-center mt-8 mb-6 justify-between flex-wrap'>
-				<div className='flex'>
-					<IssueFilter />
-					<IssueSearch />
+			<div className='flex items-center gap-4 mt-8 mb-6 justify-between'>
+				<div className='w-140 flex border border-[var(--neutral-border-default)] rounded-2xl'>
+					<IssueDropdown className='w-32 h-10' />
+					<div className='border-r border-[var(--neutral-border-default)]' />
+					<div className='w-full flex items-center gap-1 px-6 bg-[var(--neutral-surface-bold)] rounded-r-2xl'>
+						<SearchIcon />
+						<input value='is:issue is:open' className='' />
+					</div>
 				</div>
+
 				<div className='flex gap-4'>
 					<div className='flex border border-[var(--neutral-border-default)] rounded-2xl'>
 						<LabelListButton />

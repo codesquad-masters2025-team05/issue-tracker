@@ -69,12 +69,12 @@ export function CustomDropdownPanel({
 	}, [open]);
 
 	return (
-		<div ref={selectRef} className={`relative ${className}`}>
+		<div ref={selectRef} className={`relative w-20 h-8 ${className}`}>
 			{/* Trigger Button */}
 			<button
 				ref={triggerRef}
 				type='button'
-				className='w-[80px] h-[32px] flex items-center justify-center gap-1 bg-transparent font-bold text-[16px] leading-6'
+				className='w-full h-full flex items-center justify-center gap-1 bg-transparent font-bold text-[16px] leading-6'
 				style={{ color: 'var(--neutral-text-default)' }}
 				onClick={() => setOpen((o) => !o)}
 				aria-haspopup='listbox'
