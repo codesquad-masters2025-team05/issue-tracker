@@ -3,6 +3,7 @@ import CheckOnCircleIcon from '@/assets/checkOnCircle.svg?react';
 import ChevronDownIcon from '@/assets/chevronDown.svg?react';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '../utils/shadcn-utils';
+import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 
 export interface DropdownOption {
 	id: number;
@@ -34,9 +35,6 @@ export function CustomDropdownPanel({
 	const selectRef = useRef<HTMLDivElement | null>(null);
 	const triggerRef = useRef<HTMLButtonElement | null>(null);
 
-	// value: null → 'none' (미선택 시 구분)
-	const currentValue = value ?? 'none';
-
 	// open 시 트리거 버튼의 x 위치로 정렬 방식 결정
 	useEffect(() => {
 		if (open && triggerRef.current) {
@@ -48,6 +46,7 @@ export function CustomDropdownPanel({
 	}, [open]);
 
 	// 패널 열기/닫기 애니메이션 제어
+	// biome-ignore lint: animating은 effect 실행 조건에 영향을 주지 않으므로 의도적으로 의존성 배열에서 제외함
 	useEffect(() => {
 		if (open) {
 			setAnimating('in');
@@ -103,12 +102,13 @@ export function CustomDropdownPanel({
 						visibility: open ? 'visible' : 'hidden',
 						pointerEvents: open ? 'auto' : 'none',
 					}}
+					// biome-ignore lint: 커스텀 UI 사용을 위한 ARIA role 사용
 					role='listbox'
 					tabIndex={-1}
 				>
 					{/* 헤더 */}
 					<div
-						className='font-display-bold-16 px-4 py-2'
+						className='font-display-medium-12 px-4 py-2'
 						style={{
 							background: 'var(--neutral-surface-default)',
 							color: 'var(--neutral-text-weak)',
@@ -125,45 +125,35 @@ export function CustomDropdownPanel({
 					{/* 옵션 목록 */}
 					<div>
 						{options.map((opt, idx) => {
-							const isSelected = currentValue === opt.value;
+							const isSelected = value === opt.value;
 							return (
 								<button
 									key={opt.id}
 									type='button'
 									className={`flex items-center gap-2 w-full text-left
                     px-4 py-2 min-h-[44px] h-[44px] cursor-pointer
-                    text-[var(--neutral-text-default)] font-display-medium-16
+                    text-[var(--neutral-text-default)] font-available-medium-16
                     bg-[var(--neutral-surface-strong)]
-                    border-b border-[var(--neutral-border-default)] last:border-b-0
-                    transition hover:bg-[var(--neutral-surface-bold)]
-                    ${idx === options.length - 1 ? 'rounded-b-[16px]' : ''}
+                    border-t border-[var(--neutral-border-default)] 
+                    hover:bg-[var(--neutral-surface-default)]
+                    ${idx === options.length - 1 && 'rounded-b-[16px]'}
+                    ${isSelected && 'font-selected-bold-16 text-[var(--neutral-text-strong)]'}
                   `}
-									style={{
-										background: 'var(--neutral-surface-strong)',
-										...(isSelected && {
-											fontWeight: 700,
-											color: 'var(--neutral-text-strong)',
-										}),
-									}}
 									onClick={() => {
 										setOpen(false);
-										onChange(opt.value === 'none' ? null : opt.value);
+										onChange(opt.value);
 									}}
 									aria-selected={isSelected}
+									// biome-ignore lint: 커스텀 UI 사용을 위한 ARIA role 사용
 									role='option'
 									tabIndex={0}
 								>
 									{/* 아바타 */}
-									{opt.imageUrl ? (
-										<img
-											src={opt.imageUrl}
-											alt={opt.display}
-											className='w-6 h-6 rounded-full object-cover'
-										/>
-									) : (
-										<div className='w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-500'>
-											{opt.display.charAt(0)}
-										</div>
+									{opt.imageUrl && (
+										<Avatar className='size-4'>
+											<AvatarImage src={opt.imageUrl} alt={opt.display} />
+											<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
+										</Avatar>
 									)}
 									{/* 텍스트 */}
 									<span>{opt.display}</span>
