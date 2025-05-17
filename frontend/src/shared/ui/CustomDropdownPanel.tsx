@@ -131,13 +131,12 @@ export function CustomDropdownPanel({
 									key={opt.id}
 									type='button'
 									className={`flex items-center gap-2 w-full text-left
-                    px-4 py-2 min-h-[44px] h-[44px] cursor-pointer
-                    text-[var(--neutral-text-default)] font-available-medium-16
+                    px-4 py-2 min-h-[44px] h-[44px] cursor-pointers
                     bg-[var(--neutral-surface-strong)]
                     border-t border-[var(--neutral-border-default)] 
                     hover:bg-[var(--neutral-surface-default)]
                     ${idx === options.length - 1 && 'rounded-b-[16px]'}
-                    ${isSelected && 'font-selected-bold-16 text-[var(--neutral-text-strong)]'}
+                    ${isSelected ? 'font-selected-bold-16 text-[var(--neutral-text-strong)]' : 'font-available-medium-16 text-[var(--neutral-text-default)]'}
                   `}
 									onClick={() => {
 										setOpen(false);
