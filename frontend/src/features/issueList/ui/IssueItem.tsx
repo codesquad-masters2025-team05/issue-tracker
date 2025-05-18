@@ -55,20 +55,10 @@ export function IssueItem({ issue }: IssueItemProps) {
 			</div>
 
 			{/* 3. 프로필 아이콘 영역 (겹쳐서) */}
-			<div className='flex-none px-4'>
-				<div className='flex -space-x-2'>
-					{/* 여러명일 때 map; here single author */}
-					<Avatar className='z-10 border-2 border-white'>
-						<AvatarImage
-							src={issue.author.imageUrl}
-							alt={issue.author.username}
-						/>
-						<AvatarFallback>
-							{issue.author.username[0].toUpperCase()}
-						</AvatarFallback>
-					</Avatar>
-				</div>
-			</div>
+			<Avatar className='size-5 my-[22px] mx-[54px]'>
+				<AvatarImage src={issue.author.imageUrl} alt={issue.author.username} />
+				<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
+			</Avatar>
 		</div>
 	);
 }

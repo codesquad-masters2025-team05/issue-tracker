@@ -149,7 +149,7 @@ export function CustomDropdownPanel({
 								>
 									{/* 아바타 */}
 									{opt.imageUrl && (
-										<Avatar className='size-4'>
+										<Avatar className='size-5'>
 											<AvatarImage src={opt.imageUrl} alt={opt.display} />
 											<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
 										</Avatar>
