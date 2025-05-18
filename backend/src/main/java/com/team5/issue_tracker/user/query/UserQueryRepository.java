@@ -1,6 +1,7 @@
 package com.team5.issue_tracker.user.query;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,5 +24,9 @@ public class UserQueryRepository {
             rs.getString("image_url")
         )
     );
+  }
+
+  public Map<Long, UserSummaryResponse> getAuthorsByIssueIds(List<Long> issueIds){
+    return Map.of();
   }
 }
