@@ -23,7 +23,7 @@ public class MilestoneQueryRepository {
         SELECT 
             i.id AS issue_id,
             m.id AS milestone_id,
-            m.title AS milestone_title
+            m.name AS milestone_name
         FROM issue i
         JOIN milestone m ON i.milestone_id = m.id
         WHERE i.id IN (:issueIds)
@@ -38,7 +38,7 @@ public class MilestoneQueryRepository {
             row -> ((Number) row.get("issue_id")).longValue(),
             row -> new MilestoneResponse(
                 ((Number) row.get("milestone_id")).longValue(),
-                (String) row.get("miles`tone_title")
+                (String) row.get("milestone_name")
             )
         ));
   }
