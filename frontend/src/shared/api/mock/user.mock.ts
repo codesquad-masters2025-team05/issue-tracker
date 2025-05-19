@@ -2,7 +2,6 @@ import type { UserListData } from '@/entities/user/api/userApi';
 import type { UserApiDto } from '@/entities/user/model/user.types';
 import type { ApiResponse } from '@/shared/api/types';
 
-// Mock user data
 const users: UserApiDto[] = [
 	{
 		id: 1,
@@ -16,8 +15,7 @@ const users: UserApiDto[] = [
 	},
 ];
 
-// Mock API response for user list
-export const mockUsers: ApiResponse<UserListData> = {
+export const mockUsersResponse: ApiResponse<UserListData> = {
 	success: true,
 	data: {
 		total: users.length,

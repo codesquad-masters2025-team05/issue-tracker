@@ -2,7 +2,6 @@ import type { AuthorListData } from '@/entities/user/api/authorApi';
 import type { AuthorApiDto } from '@/entities/user/model/author.types';
 import type { ApiResponse } from '@/shared/api/types';
 
-// Mock author data
 const authors: AuthorApiDto[] = [
 	{
 		id: 1,
@@ -19,8 +18,7 @@ const authors: AuthorApiDto[] = [
 	{ id: 5, username: 'eve', imageUrl: 'https://example.com/avatar/eve.png' },
 ];
 
-// Mock API response for author list
-export const mockAuthors: ApiResponse<AuthorListData> = {
+export const mockAuthorsResponse: ApiResponse<AuthorListData> = {
 	success: true,
 	data: {
 		total: authors.length,

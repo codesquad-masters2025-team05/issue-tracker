@@ -1,4 +1,4 @@
-import { getMockData } from './mock';
+import { getMockResponse } from './mock';
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
 
@@ -14,12 +14,6 @@ async function realGetJSON<T>(path: string): Promise<T> {
 	return res.json();
 }
 
-async function mockGetJSON<T>(path: string): Promise<T> {
-	// mockData 유틸에서 데이터 로드
-	const data = await getMockData(path);
-	return data as T;
-}
-
 /**
  * 주어진 경로(path)에 GET 요청을 보내고, JSON 응답을 파싱하여 반환합니다.
  *
@@ -31,4 +25,4 @@ async function mockGetJSON<T>(path: string): Promise<T> {
  *
  * 실제 통신 또는 mock 중 하나를 자동으로 선택하여 사용합니다.
  */
-export const getJSON = USE_MOCK ? mockGetJSON : realGetJSON;
+export const getJSON = USE_MOCK ? getMockResponse : realGetJSON;

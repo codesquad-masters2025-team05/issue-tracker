@@ -39,7 +39,7 @@ const issues: Issue[] = [
 	},
 ];
 
-export const mockIssues: ApiResponse<IssueListData> = {
+export const mockIssuesResponse: ApiResponse<IssueListData> = {
 	success: true,
 	data: {
 		total: issues.length,
