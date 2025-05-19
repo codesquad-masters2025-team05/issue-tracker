@@ -17,7 +17,25 @@ public class IssueQueryRepository {
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
   public List<IssueQueryDto> findAllIssues() {
-    return List.of();
+    String issueSql = """
+        SELECT 
+            i.id,
+            i.title,
+            i.is_open,
+            i.created_at,
+            i.updated_at
+        FROM issue i
+        ORDER BY i.created_at DESC
+        """;
+    return jdbcTemplate.query(issueSql, (rs, rowNum) ->
+        new IssueQueryDto(
+            rs.getLong("id"),
+            rs.getString("title"),
+            rs.getBoolean("is_open"),
+            rs.getTimestamp("created_at").toLocalDateTime(),
+            rs.getTimestamp("updated_at").toLocalDateTime()
+        )
+    );
   }
 
   public List<UserSummaryResponse> findDistinctAuthors() {
