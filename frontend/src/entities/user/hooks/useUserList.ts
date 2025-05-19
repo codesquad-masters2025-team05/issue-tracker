@@ -1,39 +1,11 @@
-import { useEffect, useState } from 'react';
-import type { UserListData } from '../api/userApi';
+import { useQuery } from '@tanstack/react-query';
 import { fetchUsers } from '../api/userApi';
+import type { UserListData } from '../api/userApi';
 
 export function useUserList() {
-	const [data, setData] = useState<UserListData | null>(null);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [error, setError] = useState<Error | null>(null);
-
-	useEffect(() => {
-		let mounted = true;
-
-		async function load() {
-			setIsLoading(true);
-			try {
-				const result = await fetchUsers();
-				if (mounted) {
-					setData(result);
-				}
-			} catch (err: unknown) {
-				if (mounted) {
-					setError(err as Error);
-				}
-			} finally {
-				if (mounted) {
-					setIsLoading(false);
-				}
-			}
-		}
-
-		load();
-
-		return () => {
-			mounted = false;
-		};
-	}, []);
-
-	return { data, isLoading, error };
+	return useQuery<UserListData, Error>({
+		queryKey: ['users'],
+		queryFn: fetchUsers,
+		// staleTime, retry, enabled 등 옵션 필요에 따라 추가
+	});
 }

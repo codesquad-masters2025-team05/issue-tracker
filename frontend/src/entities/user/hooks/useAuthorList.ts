@@ -1,39 +1,11 @@
-import { useEffect, useState } from 'react';
-import type { AuthorListData } from '../api/authorApi';
+import { useQuery } from '@tanstack/react-query';
 import { fetchAuthors } from '../api/authorApi';
+import type { AuthorListData } from '../api/authorApi';
 
 export function useAuthorList() {
-	const [data, setData] = useState<AuthorListData | null>(null);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [error, setError] = useState<Error | null>(null);
-
-	useEffect(() => {
-		let mounted = true;
-
-		async function load() {
-			setIsLoading(true);
-			try {
-				const result = await fetchAuthors();
-				if (mounted) {
-					setData(result);
-				}
-			} catch (err: unknown) {
-				if (mounted) {
-					setError(err as Error);
-				}
-			} finally {
-				if (mounted) {
-					setIsLoading(false);
-				}
-			}
-		}
-
-		load();
-
-		return () => {
-			mounted = false;
-		};
-	}, []);
-
-	return { data, isLoading, error };
+	return useQuery<AuthorListData, Error>({
+		queryKey: ['authors'],
+		queryFn: fetchAuthors,
+		// 필요 시 staleTime, enabled 등 옵션 추가 가능
+	});
 }
