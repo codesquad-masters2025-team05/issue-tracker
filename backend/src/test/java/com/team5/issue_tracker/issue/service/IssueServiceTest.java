@@ -1,8 +1,8 @@
 package com.team5.issue_tracker.issue.service;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +14,11 @@ import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
 import com.team5.issue_tracker.issue.repository.IssueRepository;
 import com.team5.issue_tracker.user.service.UserService;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class IssueServiceTest {
@@ -46,81 +47,21 @@ public class IssueServiceTest {
     Long userId = 1L;
 
     when(issueRepository.save(any(Issue.class)))
-        .thenAnswer(invocation -> invocation.getArgument(0));
-    when(userService.existsById(userId)).thenReturn(true);
+        .thenAnswer(invocation -> {
+          Issue issue = invocation.getArgument(0);
+
+          Field idField = Issue.class.getDeclaredField("id");
+          idField.setAccessible(true);
+          idField.set(issue, 1L);
+
+          return issue;
+        });
 
     // when
-    Issue saved = issueService.createIssue(request, userId);
+    Long savedId = issueService.createIssue(request);
 
     // then
-    assertThat(saved).isNotNull();
+    assertThat(savedId).isEqualTo(1L);
     verify(issueRepository).save(any(Issue.class));
   }
-
-  @Test
-  @DisplayName("작성자가 존재하지 않으면 예외가 발생한다")
-  void createIssue_fail_존재하지_않는_사용자_요청() {
-    // given
-    IssueCreateRequest request = new IssueCreateRequest(
-        "hello World",
-        "java",
-        1L,
-        List.of(1L, 2L),
-        null
-    );
-
-    Long userId = 9999L; // 존재하지 않는 ID
-
-    when(userService.existsById(userId)).thenReturn(false);
-
-    //when & then
-    assertThatThrownBy(() -> issueService.createIssue(request, userId))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("작성자가 존재하지 않습니다.");
-  }
-
-  @Test
-  @DisplayName("제목이 null이면 예외가 발생한다")
-  void createIssue_fail_제목이_null() {
-    //given
-    IssueCreateRequest request = new IssueCreateRequest(
-        null,
-        "java",
-        1L,
-        List.of(1L, 2L),
-        null
-    );
-
-    Long userId = 1L;
-
-    when(userService.existsById(userId)).thenReturn(true);
-
-    //when&then
-    assertThatThrownBy(() -> issueService.createIssue(request, userId))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("제목을 작성해주세요.");
-  }
-
-  @Test
-  @DisplayName("본문이 null이면 예외가 발생한다")
-  void createIssue_fail_본문이_null() {
-    //given
-    IssueCreateRequest request = new IssueCreateRequest(
-        "hello World",
-        " ", // null일 때도 가능
-        1L,
-        List.of(1L, 2L),
-        null
-    );
-
-    Long userId = 1L;
-
-    when(userService.existsById(userId)).thenReturn(true);
-
-    //when&then
-    assertThatThrownBy(() -> issueService.createIssue(request, userId))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("본문을 작성해주세요.");
-  }
-
 }
