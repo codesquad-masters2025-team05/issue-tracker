@@ -10,7 +10,6 @@ export default function AuthorDropdown() {
 	const [selected, setSelected] = useState<string | null>(null);
 	const { data, isLoading, error } = useAuthorList();
 
-	// 항상 최상단에서 useMemo 호출
 	const userOptions = useMemo<DropdownOption[]>(() => {
 		const noneOption: DropdownOption = {
 			id: 0,
@@ -29,18 +28,6 @@ export default function AuthorDropdown() {
 		return [noneOption, ...fetchedOptions];
 	}, [data]);
 
-	// 로딩 및 에러 상태 처리
-	if (isLoading) {
-		return <div>작성자 목록 로딩 중…</div>;
-	}
-	if (error) {
-		return (
-			<div className='text-destructive'>
-				작성자 목록을 불러오는 중 에러가 발생했습니다.
-			</div>
-		);
-	}
-
 	return (
 		<div className='flex justify-center'>
 			<CustomDropdownPanel
@@ -49,6 +36,8 @@ export default function AuthorDropdown() {
 				options={userOptions}
 				value={selected}
 				onChange={setSelected}
+				isLoading={isLoading}
+				error={!!error}
 			/>
 		</div>
 	);

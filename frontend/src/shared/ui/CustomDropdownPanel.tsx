@@ -1,7 +1,9 @@
 import CheckOffCircleIcon from '@/assets/checkOffCircle.svg?react';
 import CheckOnCircleIcon from '@/assets/checkOnCircle.svg?react';
 import ChevronDownIcon from '@/assets/chevronDown.svg?react';
+import { Spinner } from '@/shared/ui/spinner';
 import { useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 import { cn } from '../utils/shadcn-utils';
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 
@@ -19,6 +21,8 @@ interface CustomDropdownPanelProps {
 	value: string | null;
 	onChange: (value: string | null) => void;
 	className?: string;
+	isLoading?: boolean;
+	error?: boolean;
 }
 
 export function CustomDropdownPanel({
@@ -28,12 +32,21 @@ export function CustomDropdownPanel({
 	value,
 	onChange,
 	className = '',
+	isLoading,
+	error,
 }: CustomDropdownPanelProps) {
 	const [open, setOpen] = useState(false);
 	const [animating, setAnimating] = useState<'in' | 'out' | null>(null);
 	const [alignRight, setAlignRight] = useState(false);
 	const selectRef = useRef<HTMLDivElement | null>(null);
 	const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+	// 드롭다운 열 때 에러 발생 시 토스트 알림
+	useEffect(() => {
+		if (error && open) {
+			toast.error('목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+		}
+	}, [error, open]);
 
 	// open 시 트리거 버튼의 x 위치로 정렬 방식 결정
 	useEffect(() => {
@@ -124,13 +137,21 @@ export function CustomDropdownPanel({
 					</div>
 					{/* 옵션 목록 */}
 					<div>
-						{options.map((opt, idx) => {
-							const isSelected = value === opt.value;
-							return (
-								<button
-									key={opt.id}
-									type='button'
-									className={`flex items-center gap-2 w-full text-left
+						{/* spinner, error, none 에 대해 보여줄 컴포넌트는 리팩토링 필요. 현재는 간단하게 해둠 */}
+						{isLoading ? (
+							<Spinner />
+						) : error ? (
+							'데이터를 불러올 수 없습니다.'
+						) : options.length === 0 ? (
+							'항목이 없습니다.'
+						) : (
+							options.map((opt, idx) => {
+								const isSelected = value === opt.value;
+								return (
+									<button
+										key={opt.id}
+										type='button'
+										className={`flex items-center gap-2 w-full text-left
                     px-4 py-2 min-h-[44px] h-[44px] cursor-pointers
                     bg-[var(--neutral-surface-strong)]
                     border-t border-[var(--neutral-border-default)] 
@@ -138,35 +159,36 @@ export function CustomDropdownPanel({
                     ${idx === options.length - 1 && 'rounded-b-[16px]'}
                     ${isSelected ? 'font-selected-bold-16 text-[var(--neutral-text-strong)]' : 'font-available-medium-16 text-[var(--neutral-text-default)]'}
                   `}
-									onClick={() => {
-										setOpen(false);
-										onChange(opt.value);
-									}}
-									aria-selected={isSelected}
-									// biome-ignore lint: 커스텀 UI 사용을 위한 ARIA role 사용
-									role='option'
-									tabIndex={0}
-								>
-									{/* 아바타 */}
-									{opt.imageUrl && (
-										<Avatar className='size-5'>
-											<AvatarImage src={opt.imageUrl} alt={opt.display} />
-											<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
-										</Avatar>
-									)}
-									{/* 텍스트 */}
-									<span>{opt.display}</span>
-									{/* 체크박스 아이콘 */}
-									<span className='ml-auto relative w-4 h-4 flex items-center justify-center'>
-										{isSelected ? (
-											<CheckOnCircleIcon className='size-4' />
-										) : (
-											<CheckOffCircleIcon className='size-4' />
+										onClick={() => {
+											setOpen(false);
+											onChange(opt.value);
+										}}
+										aria-selected={isSelected}
+										// biome-ignore lint: 커스텀 UI 사용을 위한 ARIA role 사용
+										role='option'
+										tabIndex={0}
+									>
+										{/* 아바타 */}
+										{opt.imageUrl && (
+											<Avatar className='size-5'>
+												<AvatarImage src={opt.imageUrl} alt={opt.display} />
+												<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
+											</Avatar>
 										)}
-									</span>
-								</button>
-							);
-						})}
+										{/* 텍스트 */}
+										<span>{opt.display}</span>
+										{/* 체크박스 아이콘 */}
+										<span className='ml-auto relative w-4 h-4 flex items-center justify-center'>
+											{isSelected ? (
+												<CheckOnCircleIcon className='size-4' />
+											) : (
+												<CheckOffCircleIcon className='size-4' />
+											)}
+										</span>
+									</button>
+								);
+							})
+						)}
 					</div>
 				</div>
 			)}
