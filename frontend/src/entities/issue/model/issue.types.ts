@@ -35,8 +35,16 @@ export interface IssueListData {
 	issues: Issue[];
 }
 
-export interface ApiResponse<T, E = unknown> {
+export interface IssueCreateRequest {
+	title: string;
+	body: string;
+	assigneeId: number;
+	labelIds: number[];
+	milestoneId: number | null;
+}
+
+export interface IssueCreateResponse {
 	success: boolean;
-	data: T;
-	error: E | null;
+	data: number;
+	error: string | null;
 }
