@@ -1,4 +1,4 @@
-import { useLabelList } from '@/entities/lable/hooks/useLabelList';
+import { useLabelList } from '@/entities/label/hooks/useLabelList';
 import {
 	CustomDropdownPanel,
 	type DropdownOption,

@@ -1,5 +1,5 @@
-import type { LabelListData } from '@/entities/lable/api/labelApi';
-import type { LabelApiDto } from '@/entities/lable/model/label.types';
+import type { LabelListData } from '@/entities/label/api/labelApi';
+import type { LabelApiDto } from '@/entities/label/model/label.types';
 import type { ApiResponse } from '@/shared/api/types';
 
 const labels: LabelApiDto[] = [
