@@ -12,6 +12,7 @@ export interface DropdownOption {
 	value: string;
 	display: string;
 	imageUrl?: string;
+	color?: string;
 }
 
 interface CustomDropdownPanelProps {
@@ -168,13 +169,18 @@ export function CustomDropdownPanel({
 										role='option'
 										tabIndex={0}
 									>
-										{/* 아바타 */}
-										{opt.imageUrl && (
+										{/* 아바타(담당자) or 컬러원(레이블) */}
+										{opt.imageUrl ? (
 											<Avatar className='size-5'>
 												<AvatarImage src={opt.imageUrl} alt={opt.display} />
 												<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
 											</Avatar>
-										)}
+										) : opt.color ? (
+											<span
+												className='inline-block w-5 h-5 rounded-full'
+												style={{ backgroundColor: opt.color }}
+											/>
+										) : null}
 										{/* 텍스트 */}
 										<span>{opt.display}</span>
 										{/* 체크박스 아이콘 */}
