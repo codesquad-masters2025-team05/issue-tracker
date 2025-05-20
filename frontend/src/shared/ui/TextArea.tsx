@@ -1,8 +1,8 @@
 import GripIcon from '@/assets/Grip.svg?react';
 import PaperCilpIcon from '@/assets/paperclip.svg?react';
-import { type ChangeEvent, type InputHTMLAttributes, useId } from 'react';
+import { type ChangeEvent, type TextareaHTMLAttributes, useId } from 'react';
 
-interface TextAreaProps extends InputHTMLAttributes<HTMLInputElement> {
+interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 	label?: string;
 	value: string;
 	onFileSelect: (files: FileList) => void;
@@ -30,7 +30,6 @@ export function TextArea({
 		}
 	};
 
-	// ─── floating 모드 ───────────────────────────
 	return (
 		<div
 			className='
@@ -58,16 +57,18 @@ export function TextArea({
 					</label>
 				)}
 
-				<input
+				<textarea
 					id={`${baseId}-text`}
 					className='
-        w-full bg-transparent border-none outline-none
-        font-display-medium-16 text-[var(--neutral-text-default)]
-        placeholder:text-[var(--neutral-text-weak)]
-        '
+            flex flex-1 w-full bg-transparent border-none outline-none
+            font-display-medium-16 text-[var(--neutral-text-default)]
+            placeholder:text-[var(--neutral-text-weak)]
+            resize-none
+          '
 					placeholder={showLabel ? '' : placeholder}
 					value={value}
 					onChange={onChange}
+					rows={3}
 					{...props}
 				/>
 			</div>
