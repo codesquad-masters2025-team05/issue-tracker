@@ -88,14 +88,14 @@ export function CustomDropdownPanel({
 			<button
 				ref={triggerRef}
 				type='button'
-				className='w-full h-full flex items-center justify-center gap-1 bg-transparent font-bold text-[16px] leading-6'
+				className='w-full h-full flex items-center justify-center gap-1 bg-transparent font-available-medium-16'
 				style={{ color: 'var(--neutral-text-default)' }}
 				onClick={() => setOpen((o) => !o)}
 				aria-haspopup='listbox'
 				aria-expanded={open}
 			>
-				{label}
-				<ChevronDownIcon className='size-4 ml-1' />
+				<span className='whitespace-nowrap'>{label}</span>
+				<ChevronDownIcon className='size-4' />
 			</button>
 
 			{/* 애니메이션을 위해 animating이 있을 때만 패널 렌더 */}

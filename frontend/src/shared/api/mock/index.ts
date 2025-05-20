@@ -2,6 +2,7 @@ import type { ApiResponse } from '../types';
 import { mockAuthorsResponse } from './author.mock';
 import { mockIssuesResponse } from './issue.mock';
 import { mockLabelListResponse } from './label.mock';
+import { mockMilestoneListResponse } from './milestone.mock';
 import { mockUsersResponse } from './user.mock';
 
 /**s
@@ -13,6 +14,7 @@ export const mockLoaders = {
 	'/api/issues': mockIssuesResponse, // ApiResponse<IssueListData>
 	'/api/users': mockUsersResponse, // ApiResponse<UserListData>
 	'/api/labels': mockLabelListResponse,
+	'/api/issues/milestones': mockMilestoneListResponse,
 	'/api/issues/authors': mockAuthorsResponse, // ApiResponse<AuthorListData>
 } satisfies Record<string, ApiResponse<unknown>>;
 

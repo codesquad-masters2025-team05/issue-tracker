@@ -2,6 +2,7 @@ import AssigneeDropdown from '@/features/issueList/widget/FilteringPanel/Assigne
 import { Checkbox } from '../../shared/CheckBox';
 import AuthorDropdown from '../FilteringPanel/AuthorDropdown';
 import LabelDropdown from '../FilteringPanel/LabelDropdown';
+import MilestoneDropdown from '../FilteringPanel/MilestoneDropdown ';
 
 export function IssueListHeader() {
 	return (
@@ -13,6 +14,7 @@ export function IssueListHeader() {
 			<div className='flex items-center gap-8'>
 				<AssigneeDropdown />
 				<LabelDropdown />
+				<MilestoneDropdown />
 				<AuthorDropdown />
 			</div>
 		</div>
