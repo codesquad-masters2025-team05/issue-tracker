@@ -1,4 +1,4 @@
-import GripIcon from '@/assets/Grip.svg?react';
+import GripIcon from '@/assets/grip.svg?react';
 import PaperCilpIcon from '@/assets/paperclip.svg?react';
 import { type ChangeEvent, type TextareaHTMLAttributes, useId } from 'react';
 
