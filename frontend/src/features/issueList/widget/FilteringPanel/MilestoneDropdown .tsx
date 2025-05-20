@@ -1,4 +1,4 @@
-import { useMilestoneList } from '@/entities/milestone/hooks/useMilestoneList';
+import { useIssueMilestoneOptions } from '@/entities/issueMilestone/hooks/useIssueMilestoneOptions';
 import {
 	CustomDropdownPanel,
 	type DropdownOption,
@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react';
 
 export default function MilestoneDropdown() {
 	const [selected, setSelected] = useState<string | null>(null);
-	const { data, isLoading, error } = useMilestoneList();
+	const { data, isLoading, error } = useIssueMilestoneOptions();
 
 	const milestoneOptions = useMemo<DropdownOption[]>(() => {
 		const noneOption: DropdownOption = {
