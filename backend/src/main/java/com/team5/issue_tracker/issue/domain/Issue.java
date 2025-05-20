@@ -11,13 +11,13 @@ public class Issue {
   @Id
   private Long id;
 
-  private final String title;
-  private final String body;
-  private final Long userId;
-  private final Long milestoneId;
-  private final boolean isOpen;
+  private String title;
+  private String body;
+  private Long milestoneId;
+  private boolean isOpen;
 
-  private LocalDateTime createdAt;
+  private final Long userId;
+  private final LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
   public Issue(String title, String body, Long userId, Long milestoneId, boolean isOpen) {
@@ -26,5 +26,15 @@ public class Issue {
     this.userId = userId;
     this.milestoneId = milestoneId;
     this.isOpen = isOpen;
+    this.createdAt = LocalDateTime.now();
+    this.updatedAt = LocalDateTime.now();
+  }
+
+  public void update(String title, String body, Long milestoneId, boolean isOpen) {
+    this.title = title;
+    this.body = body;
+    this.milestoneId = milestoneId;
+    this.isOpen = isOpen;
+    this.updatedAt = LocalDateTime.now();
   }
 }

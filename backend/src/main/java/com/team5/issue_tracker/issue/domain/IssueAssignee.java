@@ -5,10 +5,10 @@ import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 
 @Getter
-@Table("issue_label")
+@Table("issue_assignee")
 public class IssueAssignee {
-  private Long issueId;
-  private Long assigneeId;
+  private final Long issueId;
+  private final Long assigneeId; //assignee id를 final로 한 이유는 변경시 삭제후 삽입방식으로 하려고 합니다.
 
   public IssueAssignee(Long issueId, Long assigneeId) {
     this.issueId = issueId;

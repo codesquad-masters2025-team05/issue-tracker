@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 @Table("issue_label")
 public class IssueLabel {
-  private Long issueId;
-  private Long labelId;
+  private final Long issueId;
+  private final Long labelId;
 
   public IssueLabel(Long issueId, Long labelId) {
     this.issueId = issueId;
