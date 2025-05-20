@@ -1,7 +1,8 @@
 export interface Label {
 	id: number;
 	name: string;
-	color: string;
+	textColor: string;
+	backgroundColor: string;
 }
 
 export interface Author {
@@ -12,7 +13,7 @@ export interface Author {
 
 export interface Milestone {
 	id: number;
-	title: string;
+	name: string;
 }
 
 export interface Issue {
@@ -38,7 +39,7 @@ export interface IssueListData {
 export interface IssueCreateRequest {
 	title: string;
 	body: string;
-	assigneeId: number;
+	assigneeIds: number[];
 	labelIds: number[];
 	milestoneId: number | null;
 }

@@ -10,16 +10,18 @@ export async function fetchIssues(): Promise<IssueListData> {
 	const res = await getJSON<ApiResponse<IssueListData>>('/api/issues');
 	return res.data;
 }
+
 export async function createIssue(
 	payload: IssueCreateRequest,
 ): Promise<IssueCreateResponse> {
-	const response = await fetch('/api/issues', {
+	const res = await fetch('/api/issues', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
+			// 인증 X
 		},
 		body: JSON.stringify(payload),
 	});
 
-	return response.json();
+	return res.json();
 }

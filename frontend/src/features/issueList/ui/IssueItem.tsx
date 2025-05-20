@@ -2,7 +2,6 @@ import IconInfo from '@/assets/icon_info.svg?react';
 import IconMilestone from '@/assets/milestone.svg?react';
 import type { Issue } from '@/entities/issue/model/issue.types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import { Badge } from '@/shared/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
 import { Checkbox } from '../shared/CheckBox';
@@ -32,10 +31,17 @@ export function IssueItem({ issue }: IssueItemProps) {
 					<span className='font-available-medium-20 text-[var(--neutral-text-strong)]'>
 						{issue.title}
 					</span>
-					{issue.labels.map((lbl) => (
-						<Badge key={lbl.id} color={lbl.color}>
-							{lbl.name}
-						</Badge>
+					{issue.labels.map((label) => (
+						<span
+							key={label.id}
+							className='text-xs px-2 py-0.5 rounded'
+							style={{
+								backgroundColor: label.backgroundColor,
+								color: label.textColor,
+							}}
+						>
+							{label.name}
+						</span>
 					))}
 				</div>
 
@@ -48,7 +54,7 @@ export function IssueItem({ issue }: IssueItemProps) {
 					{issue.milestone && (
 						<span className='flex items-center gap-1'>
 							<IconMilestone />
-							<span>{issue.milestone.title}</span>
+							<span>{issue.milestone.name}</span>
 						</span>
 					)}
 				</div>
