@@ -9,7 +9,6 @@ import {
 import IssueDropdown from '@/features/issueList/widget/FilteringPanel/IssueDropdown';
 import { Spinner } from '@/shared/ui/spinner';
 import type { FC } from 'react';
-import { Outlet } from 'react-router-dom';
 
 const IssueListPage: FC = () => {
 	const { data, isLoading, error } = useIssueList();
@@ -32,7 +31,6 @@ const IssueListPage: FC = () => {
 
 	return (
 		<>
-			<Outlet />
 			<div className='flex items-center gap-4 mt-8 mb-6 justify-between'>
 				<div className='w-140 flex border border-[var(--neutral-border-default)] rounded-2xl'>
 					<IssueDropdown className='w-32 h-10 hover:bg-[var(--neutral-surface-bold)] rounded-l-2xl' />

@@ -12,10 +12,9 @@ import NoHeaderLayout from '@/app/layout/NoHeaderLayout';
 import LabelListPage from '@/pages/LabelListPage';
 import LoginPage from '@/pages/LoginPage';
 import MilestoneListPage from '@/pages/MilestoneListPage';
+import IssueCreatePage from '@/pages/issues/IssueCreatePage';
 import IssueDetailPage from '@/pages/issues/IssueDetailPage';
 import IssueListPage from '@/pages/issues/IssueListPage';
-
-import IssueCreateModal from '@/pages/issues/IssueCreateModal';
 
 import AuthGuard from '@/shared/auth/AuthGuard';
 
@@ -37,11 +36,8 @@ const router = createBrowserRouter([
 		),
 		children: [
 			{ path: '/', element: <Navigate to='/issues' replace /> },
-			{
-				path: '/issues',
-				element: <IssueListPage />,
-				children: [{ path: 'new', element: <IssueCreateModal /> }],
-			},
+			{ path: '/issues', element: <IssueListPage /> },
+			{ path: '/issues/new', element: <IssueCreatePage /> },
 			{ path: '/issues/:id', element: <IssueDetailPage /> },
 			{ path: '/labels', element: <LabelListPage /> },
 			{ path: '/milestones', element: <MilestoneListPage /> },
