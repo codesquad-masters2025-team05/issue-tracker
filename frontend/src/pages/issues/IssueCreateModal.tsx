@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-export const IssueCreateModal: FC = () => {
+const IssueCreateModal: FC = () => {
 	return (
 		<div>
 			<h1>이슈 생성</h1>
@@ -8,3 +8,5 @@ export const IssueCreateModal: FC = () => {
 		</div>
 	);
 };
+
+export default IssueCreateModal;
