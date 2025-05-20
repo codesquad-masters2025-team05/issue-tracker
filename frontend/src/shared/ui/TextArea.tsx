@@ -34,7 +34,7 @@ export function TextArea({
 	return (
 		<div
 			className='
-        flex flex-col justify-center rounded-[16px]
+        flex flex-1 flex-col justify-center rounded-[16px]
 				min-h-[184px]
         focus-within:outline focus-within:outline-[var(--neutral-border-active)]
         bg-[var(--neutral-surface-bold)] focus-within:bg-[var(--neutral-surface-strong)]
