@@ -1,13 +1,13 @@
 package com.team5.issue_tracker.issue.parser;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
 
 public class IssueSearchRequestParser {
   public static IssueSearchRequest fromQueryString(String q) {
     IssueSearchRequest issueSearchRequest = new IssueSearchRequest();
-    issueSearchRequest.setLabelNames(new ArrayList<>());
+    issueSearchRequest.setLabelNames(new HashSet<>());
 
     if(q == null || q.isEmpty()) {
       return issueSearchRequest; // 쿼리 문자열이 비어있으면 기본값 반환

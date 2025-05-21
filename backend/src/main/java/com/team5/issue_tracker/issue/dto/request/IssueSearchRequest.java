@@ -1,6 +1,6 @@
 package com.team5.issue_tracker.issue.dto.request;
 
-import java.util.List;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import lombok.Setter;
 public class IssueSearchRequest {
   private Boolean isOpen;
   private String assigneeName;
-  private List<String> labelNames;
+  private Set<String> labelNames;
   private String milestoneName;
   private String authorName;
 }
