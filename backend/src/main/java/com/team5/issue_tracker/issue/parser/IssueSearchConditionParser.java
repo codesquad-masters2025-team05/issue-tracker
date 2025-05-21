@@ -9,6 +9,10 @@ public class IssueSearchConditionParser {
     IssueSearchCondition issueSearchCondition = new IssueSearchCondition();
     issueSearchCondition.setLabelNames(new ArrayList<>());
 
+    if(q == null || q.isEmpty()) {
+      return issueSearchCondition; // 쿼리 문자열이 비어있으면 기본값 반환
+    }
+
     String[] parts = q.trim().split("\\s+"); // 공백으로 구분
 
     for (String part : parts) {
