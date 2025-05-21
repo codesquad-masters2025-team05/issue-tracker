@@ -1,4 +1,4 @@
-package com.team5.issue_tracker.issue.dto;
+package com.team5.issue_tracker.issue.dto.request;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter //TODO: Setter를 나중에 빌더 패턴으로 변경할 것
 @NoArgsConstructor
 @AllArgsConstructor
-public class IssueSearchCondition {
+public class IssueSearchRequest {
   private Boolean isOpen;
   private String assigneeName;
   private List<String> labelNames;

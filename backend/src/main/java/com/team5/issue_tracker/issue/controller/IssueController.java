@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.team5.issue_tracker.common.dto.ApiResponse;
-import com.team5.issue_tracker.issue.dto.IssueSearchCondition;
+import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
 import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
 import com.team5.issue_tracker.issue.dto.response.IssuePageResponse;
-import com.team5.issue_tracker.issue.parser.IssueSearchConditionParser;
+import com.team5.issue_tracker.issue.parser.IssueSearchRequestParser;
 import com.team5.issue_tracker.issue.query.IssueQueryService;
 import com.team5.issue_tracker.issue.service.IssueService;
 import com.team5.issue_tracker.label.dto.response.IssueLabelPageResponse;
@@ -38,7 +38,7 @@ public class IssueController {
   public ResponseEntity<ApiResponse<IssuePageResponse>> getAllIssues(
       @RequestParam(required = false) String q) {
     log.info("GET /api/issues 요청");
-    IssueSearchCondition condition = IssueSearchConditionParser.fromQueryString(q);
+    IssueSearchRequest condition = IssueSearchRequestParser.fromQueryString(q);
     return ResponseEntity.ok(ApiResponse.success(issueQueryService.getIssuePage(condition)));
   }
 
