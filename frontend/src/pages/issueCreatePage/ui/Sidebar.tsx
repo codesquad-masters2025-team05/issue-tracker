@@ -71,18 +71,21 @@ export const Sidebar: FC<SidebarProps> = ({
 					className='w-[256px]'
 					isAlignRight={true}
 				/>
+
 				{/* 선택된 담당자 목록 */}
-				<div className='flex flex-col gap-4 px-4'>
-					{selectedAssignees.map((opt) =>
-						opt ? (
-							<OptionAvatarLabel
-								key={opt.id}
-								imageUrl={opt.imageUrl}
-								text={opt.username}
-							/>
-						) : null,
-					)}
-				</div>
+				{selectedAssignees.length > 0 && (
+					<div className='flex flex-col gap-4 px-4'>
+						{selectedAssignees.map((opt) =>
+							opt ? (
+								<OptionAvatarLabel
+									key={opt.id}
+									imageUrl={opt.imageUrl}
+									text={opt.username}
+								/>
+							) : null,
+						)}
+					</div>
+				)}
 			</Area>
 			<Division />
 			<Area>
@@ -96,20 +99,23 @@ export const Sidebar: FC<SidebarProps> = ({
 					error={labelError}
 					isAlignRight={true}
 				/>
+
 				{/* 선택된 레이블 목록 */}
-				<div className='flex flex-col gap-4 px-4'>
-					{selectedLabels.map((rawLabel) =>
-						rawLabel ? (
-							<LabelChip
-								key={rawLabel.id}
-								id={rawLabel.id}
-								name={rawLabel.name}
-								backgroundColor={rawLabel.backgroundColor}
-								textColor={rawLabel.textColor}
-							/>
-						) : null,
-					)}
-				</div>
+				{selectedLabels.length > 0 && (
+					<div className='flex flex-col gap-4 px-4'>
+						{selectedLabels.map((rawLabel) =>
+							rawLabel ? (
+								<LabelChip
+									key={rawLabel.id}
+									id={rawLabel.id}
+									name={rawLabel.name}
+									backgroundColor={rawLabel.backgroundColor}
+									textColor={rawLabel.textColor}
+								/>
+							) : null,
+						)}
+					</div>
+				)}
 			</Area>
 			<Division />
 			<Area>
