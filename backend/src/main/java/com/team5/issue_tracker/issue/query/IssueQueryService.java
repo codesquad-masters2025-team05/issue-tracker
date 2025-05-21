@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import com.team5.issue_tracker.issue.dto.IssueQueryDto;
+import com.team5.issue_tracker.issue.dto.IssueSearchCondition;
 import com.team5.issue_tracker.issue.dto.response.IssuePageResponse;
 import com.team5.issue_tracker.issue.dto.response.IssueSummaryResponse;
 import com.team5.issue_tracker.issue.mapper.IssueMapper;
@@ -28,9 +29,9 @@ public class IssueQueryService {
   private final MilestoneQueryRepository milestoneQueryRepository;
   private final UserQueryRepository userQueryRepository;
 
-  public IssuePageResponse getIssuePage() {
-    log.debug("전체 이슈 페이지 조회 요청");
-    List<IssueQueryDto> issueQueryDtos = issueQueryRepository.findAllIssues();
+  public IssuePageResponse getIssuePage(IssueSearchCondition condition) {
+    log.debug("조건에 맞는 이슈 조회 요청");
+    List<IssueQueryDto> issueQueryDtos = issueQueryRepository.findIssuesByCondition(condition);
     List<Long> issueIds = issueQueryDtos.stream()
         .map(IssueQueryDto::getId)
         .toList();

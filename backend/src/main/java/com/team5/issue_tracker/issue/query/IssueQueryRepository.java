@@ -1,6 +1,7 @@
 package com.team5.issue_tracker.issue.query;
 
 import com.team5.issue_tracker.issue.dto.IssueQueryDto;
+import com.team5.issue_tracker.issue.dto.IssueSearchCondition;
 import com.team5.issue_tracker.user.dto.UserSummaryResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class IssueQueryRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  public List<IssueQueryDto> findAllIssues() {
+  public List<IssueQueryDto> findIssuesByCondition(IssueSearchCondition condition) {
     String issueSql = """
         SELECT 
             i.id,
