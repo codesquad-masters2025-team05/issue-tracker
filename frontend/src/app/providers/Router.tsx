@@ -9,12 +9,12 @@ import { Toaster } from '@/shared/ui/sonner';
 import AppLayout from '@/app/layout/AppLayout';
 import NoHeaderLayout from '@/app/layout/NoHeaderLayout';
 
+import IssueDetailPage from '@/pages/IssueDetailPage';
+import IssueListPage from '@/pages/IssueListPage';
 import LabelListPage from '@/pages/LabelListPage';
 import LoginPage from '@/pages/LoginPage';
 import MilestoneListPage from '@/pages/MilestoneListPage';
 import IssueCreatePage from '@/pages/issueCreatePage';
-import IssueDetailPage from '@/pages/issues/IssueDetailPage';
-import IssueListPage from '@/pages/issues/IssueListPage';
 
 import AuthGuard from '@/shared/auth/AuthGuard';
 
