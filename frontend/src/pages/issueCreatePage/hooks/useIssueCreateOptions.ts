@@ -38,5 +38,9 @@ export function useIssueCreateOptions() {
 		labelError,
 		milestoneError,
 		userError,
+		//파싱 안 된 데이터
+		labelData,
+		milestoneData,
+		usersData,
 	};
 }

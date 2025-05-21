@@ -3,6 +3,7 @@ import CheckOnCircleIcon from '@/assets/checkOnCircle.svg?react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Spinner } from '@/shared/ui/spinner';
 import { cn } from '@/shared/utils/shadcn-utils';
+import { OptionAvatarLabel } from '../AvatarLabel';
 import type { DropdownOption } from './DropdownOption';
 
 interface DropdownPanelProps<T extends number | number[] | null> {
@@ -97,18 +98,22 @@ export function DropdownPanel<T extends number | number[] | null>({
 							>
 								{/* 아바타(담당자) or 컬러원(레이블) */}
 								{opt.imageUrl ? (
-									<Avatar className='size-5'>
-										<AvatarImage src={opt.imageUrl} alt={opt.display} />
-										<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
-									</Avatar>
-								) : opt.color ? (
-									<span
-										className='inline-block w-5 h-5 rounded-full'
-										style={{ backgroundColor: opt.color }}
+									<OptionAvatarLabel
+										key={opt.id}
+										imageUrl={opt.imageUrl}
+										text={opt.display}
 									/>
-								) : null}
-								{/* 텍스트 */}
-								<span>{opt.display}</span>
+								) : opt.color ? (
+									<>
+										<span
+											className='inline-block w-5 h-5 rounded-full'
+											style={{ backgroundColor: opt.color }}
+										/>
+										<span>{opt.display}</span>
+									</>
+								) : (
+									<span>{opt.display}</span>
+								)}
 								{/* 체크박스 아이콘 */}
 								<span className='ml-auto relative w-4 h-4 flex items-center justify-center'>
 									{isSelected ? (
