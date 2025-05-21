@@ -4,6 +4,9 @@ import java.util.HashSet;
 
 import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class IssueSearchRequestParser {
   public static IssueSearchRequest fromQueryString(String q) {
     IssueSearchRequest issueSearchRequest = new IssueSearchRequest();
@@ -38,6 +41,11 @@ public class IssueSearchRequestParser {
         }
       }
     }
+    log.debug("assigneeName: {}, labelNames: {}, milestoneName: {}, authorName: {}",
+        issueSearchRequest.getAssigneeName(),
+        issueSearchRequest.getLabelNames(),
+        issueSearchRequest.getMilestoneName(),
+        issueSearchRequest.getAuthorName());
 
     return issueSearchRequest;
   }

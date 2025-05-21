@@ -38,6 +38,7 @@ public class IssueController {
   public ResponseEntity<ApiResponse<IssuePageResponse>> getAllIssues(
       @RequestParam(required = false) String q) {
     log.info("GET /api/issues 요청");
+    log.debug("q: {}", q);
     IssueSearchRequest searchRequest = IssueSearchRequestParser.fromQueryString(q);
     return ResponseEntity.ok(ApiResponse.success(issueQueryService.getIssuePage(searchRequest)));
   }

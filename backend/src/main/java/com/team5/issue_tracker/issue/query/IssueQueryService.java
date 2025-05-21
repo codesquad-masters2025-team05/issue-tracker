@@ -68,6 +68,8 @@ public class IssueQueryService {
     Long milestoneId =
         milestoneQueryRepository.getMilestoneIdByName(searchRequest.getMilestoneName());
     Long authorId = userQueryRepository.getUserIdByUsername(searchRequest.getAuthorName());
+    log.info("assigneeId: {}, labelIds: {}, milestoneId: {}, authorId: {}",
+        assigneeId, labelIds, milestoneId, authorId);
 
     return new IssueSearchCondition(
         searchRequest.getIsOpen(),
