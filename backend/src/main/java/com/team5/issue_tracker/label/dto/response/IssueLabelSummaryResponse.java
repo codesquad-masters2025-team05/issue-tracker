@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LabelSummaryResponse {
+public class IssueLabelSummaryResponse {
   private Long id;
   private String name;
   private String textColor;
