@@ -3,43 +3,45 @@ import type { DropdownOption } from './DropdownOption';
 import { DropdownPanel } from './DropdownPanel';
 import { DropdownTrigger } from './DropdownTrigger';
 
-interface SidebarDropdownProps {
+interface DropdownProps<T extends number | number[] | null> {
 	label: string;
 	panelLabel?: string;
+	additionalOption?: DropdownOption;
 	options: DropdownOption[];
-	value: string | null;
-	onChange: (value: string | null) => void;
+	selectedOptions: T;
+	onChange: (selectedOptions: T) => void;
 	isLoading?: boolean;
 	error?: boolean;
-	renderOption?: (opt: DropdownOption, isSelected: boolean) => React.ReactNode;
 	disabled?: boolean;
 	className?: string;
+	isAlignRight?: boolean;
 }
 
-export function SidebarDropdown({
+export function Dropdown<T extends number | number[] | null>({
 	label,
 	panelLabel,
 	options,
-	value,
+	selectedOptions,
 	onChange,
 	isLoading,
 	error,
-	renderOption,
 	disabled,
 	className,
-}: SidebarDropdownProps) {
+	isAlignRight,
+}: DropdownProps<T>) {
 	const [open, setOpen] = useState(false);
 	const [alignRight, setAlignRight] = useState(false);
 	const triggerRef = useRef<HTMLButtonElement | null>(null);
 
 	// 정렬 방향 결정
 	useEffect(() => {
-		if (open && triggerRef.current) {
+		if (isAlignRight) setAlignRight(true);
+		else if (open && triggerRef.current) {
 			const rect = triggerRef.current.getBoundingClientRect();
 			const windowWidth = window.innerWidth;
 			setAlignRight(rect.left > windowWidth * 0.7);
 		}
-	}, [open]);
+	}, [open, isAlignRight]);
 
 	// 바깥 클릭 닫기
 	useEffect(() => {
@@ -65,15 +67,11 @@ export function SidebarDropdown({
 				open={open}
 				alignRight={alignRight}
 				options={options}
-				value={value}
-				onSelect={(v) => {
-					setOpen(false);
-					onChange(v);
-				}}
+				selectedOptions={selectedOptions}
+				onSelect={onChange}
 				isLoading={isLoading}
 				error={error}
 				panelLabel={panelLabel}
-				renderOption={renderOption}
 			/>
 		</div>
 	);

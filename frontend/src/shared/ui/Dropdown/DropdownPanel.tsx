@@ -5,31 +5,29 @@ import { Spinner } from '@/shared/ui/spinner';
 import { cn } from '@/shared/utils/shadcn-utils';
 import type { DropdownOption } from './DropdownOption';
 
-interface DropdownPanelProps {
+interface DropdownPanelProps<T extends number | number[] | null> {
 	open: boolean;
 	alignRight?: boolean;
 	options: DropdownOption[];
-	value: string | null;
-	onSelect: (value: string) => void;
+	selectedOptions: T;
+	onSelect: (selectedOptions: T) => void;
 	isLoading?: boolean;
 	error?: boolean;
 	panelLabel?: string;
-	renderOption?: (opt: DropdownOption, isSelected: boolean) => React.ReactNode;
 	className?: string;
 }
 
-export function DropdownPanel({
+export function DropdownPanel<T extends number | number[] | null>({
 	open,
 	alignRight,
 	options,
-	value,
+	selectedOptions,
 	onSelect,
 	isLoading,
 	error,
 	panelLabel,
-	renderOption,
 	className,
-}: DropdownPanelProps) {
+}: DropdownPanelProps<T>) {
 	if (!open) return null;
 
 	return (
@@ -56,7 +54,7 @@ export function DropdownPanel({
 			{/* 옵션 목록 */}
 			<div>
 				{isLoading ? (
-					<Spinner />
+					<Spinner className='flex items-center justify-center' />
 				) : error ? (
 					<div className='p-4 text-[var(--danger-text-default)]'>
 						데이터를 불러올 수 없습니다.
@@ -67,7 +65,9 @@ export function DropdownPanel({
 					</div>
 				) : (
 					options.map((opt, idx) => {
-						const isSelected = value === opt.value;
+						const isSelected = Array.isArray(selectedOptions)
+							? selectedOptions.includes(opt.id)
+							: selectedOptions === opt.id;
 						return (
 							<button
 								key={opt.id}
@@ -80,40 +80,43 @@ export function DropdownPanel({
 										? 'font-selected-bold-16 text-[var(--neutral-text-strong)]'
 										: 'font-available-medium-16 text-[var(--neutral-text-default)]',
 								)}
-								onClick={() => onSelect(opt.value)}
+								onClick={() => {
+									if (Array.isArray(selectedOptions)) {
+										const next = selectedOptions.includes(opt.id)
+											? selectedOptions.filter((id) => id !== opt.id)
+											: [...selectedOptions, opt.id];
+										onSelect(next as T);
+									} else {
+										onSelect(opt.id as T);
+									}
+								}}
 								aria-selected={isSelected}
 								// biome-ignore lint/a11y/useSemanticElements: <explanation>
 								role='option'
 								tabIndex={0}
 							>
-								{renderOption ? (
-									renderOption(opt, isSelected)
-								) : (
-									<>
-										{/* 아바타(담당자) or 컬러원(레이블) */}
-										{opt.imageUrl ? (
-											<Avatar className='size-5'>
-												<AvatarImage src={opt.imageUrl} alt={opt.display} />
-												<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
-											</Avatar>
-										) : opt.color ? (
-											<span
-												className='inline-block w-5 h-5 rounded-full'
-												style={{ backgroundColor: opt.color }}
-											/>
-										) : null}
-										{/* 텍스트 */}
-										<span>{opt.display}</span>
-										{/* 체크박스 아이콘 */}
-										<span className='ml-auto relative w-4 h-4 flex items-center justify-center'>
-											{isSelected ? (
-												<CheckOnCircleIcon className='size-4' />
-											) : (
-												<CheckOffCircleIcon className='size-4' />
-											)}
-										</span>
-									</>
-								)}
+								{/* 아바타(담당자) or 컬러원(레이블) */}
+								{opt.imageUrl ? (
+									<Avatar className='size-5'>
+										<AvatarImage src={opt.imageUrl} alt={opt.display} />
+										<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
+									</Avatar>
+								) : opt.color ? (
+									<span
+										className='inline-block w-5 h-5 rounded-full'
+										style={{ backgroundColor: opt.color }}
+									/>
+								) : null}
+								{/* 텍스트 */}
+								<span>{opt.display}</span>
+								{/* 체크박스 아이콘 */}
+								<span className='ml-auto relative w-4 h-4 flex items-center justify-center'>
+									{isSelected ? (
+										<CheckOnCircleIcon className='size-4' />
+									) : (
+										<CheckOffCircleIcon className='size-4' />
+									)}
+								</span>
 							</button>
 						);
 					})

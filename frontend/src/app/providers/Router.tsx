@@ -12,7 +12,7 @@ import NoHeaderLayout from '@/app/layout/NoHeaderLayout';
 import LabelListPage from '@/pages/LabelListPage';
 import LoginPage from '@/pages/LoginPage';
 import MilestoneListPage from '@/pages/MilestoneListPage';
-import IssueCreatePage from '@/pages/issues/IssueCreatePage';
+import IssueCreatePage from '@/pages/issueCreatePage';
 import IssueDetailPage from '@/pages/issues/IssueDetailPage';
 import IssueListPage from '@/pages/issues/IssueListPage';
 

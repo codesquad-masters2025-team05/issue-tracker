@@ -30,8 +30,19 @@ import type {
  * - 이 훅은 React Query의 useMutation을 래핑해서, 이슈 생성 요청을 보낼 수 있게 합니다.
  * - 요청 성공/실패/진행 상태 등을 쉽게 관리할 수 있습니다.
  */
-export function useCreateIssue() {
+export function useCreateIssue(
+	onSuccess?: (id: number) => void,
+	onError?: (err: Error) => void,
+) {
 	return useMutation<IssueCreateResponse, Error, IssueCreateRequest>({
 		mutationFn: createIssue,
+		onSuccess: (data) => {
+			if (data.success && typeof data.data === 'number') {
+				onSuccess?.(data.data);
+			} else {
+				onError?.(new Error(data.error || '이슈 생성에 실패했습니다.'));
+			}
+		},
+		onError,
 	});
 }
