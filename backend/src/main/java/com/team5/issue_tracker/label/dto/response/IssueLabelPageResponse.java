@@ -13,5 +13,5 @@ public class IssueLabelPageResponse {
   private Long total;
   private Long page;
   private Long perPage;
-  private List<IssueLabelSummaryResponse> labels;
+  private List<LabelSummaryResponse> labels;
 }

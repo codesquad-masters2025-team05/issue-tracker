@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class LabelSummaryResponse {
   private Long id;
   private String name;
-  private String description;
   private String textColor;
   private String backgroundColor;
 }
