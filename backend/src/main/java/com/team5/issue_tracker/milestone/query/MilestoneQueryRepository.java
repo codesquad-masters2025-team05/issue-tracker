@@ -51,4 +51,10 @@ public class MilestoneQueryRepository {
             )
         ));
   }
+
+  public Long getMilestoneIdByName(String milestoneName) {
+    String sql = "SELECT id FROM milestone WHERE name = :milestoneName";
+    MapSqlParameterSource params = new MapSqlParameterSource("milestoneName", milestoneName);
+    return jdbcTemplate.queryForObject(sql, params, Long.class);
+  }
 }

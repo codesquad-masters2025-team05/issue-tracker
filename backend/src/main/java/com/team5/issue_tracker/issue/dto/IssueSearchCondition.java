@@ -1,6 +1,6 @@
 package com.team5.issue_tracker.issue.dto;
 
-import java.util.Set;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class IssueSearchCondition {
   private Boolean isOpen;
   private Long assigneeId;
-  private Set<Long> labelId;
+  private List<Long> labelId;
   private Long milestoneId;
   private Long authorId;
 }
