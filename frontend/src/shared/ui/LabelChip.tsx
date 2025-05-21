@@ -28,7 +28,7 @@ export const LabelChip: React.FC<LabelChipProps> = ({
 
 	return (
 		<span
-			className={`font-display-medium-12 px-3 py-1 rounded-2xl inline-block ${className ?? ''}`}
+			className={`font-display-medium-12 px-3 py-1 rounded-2xl inline-block w-fit ${className ?? ''}`}
 			style={{
 				backgroundColor,
 				color: textColor,
