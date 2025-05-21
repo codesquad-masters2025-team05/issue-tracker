@@ -87,7 +87,8 @@ export function DropdownPanel<T extends number | number[] | null>({
 											: [...selectedOptions, opt.id];
 										onSelect(next as T);
 									} else {
-										onSelect(opt.id as T);
+										const next = selectedOptions === opt.id ? null : opt.id;
+										onSelect(next as T);
 									}
 								}}
 								aria-selected={isSelected}
