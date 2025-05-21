@@ -58,7 +58,7 @@ public class IssueController {
 
   @GetMapping("/milestones")
   public ResponseEntity<ApiResponse<IssueMilestonePageResponse>> getFilterMilestones() {
-    return ResponseEntity.ok(ApiResponse.success(milestonePageResponse.getFilterMilestons()));
+    return ResponseEntity.ok(ApiResponse.success(milestonePageResponse.getFilterMilestones()));
   }
 
 }
