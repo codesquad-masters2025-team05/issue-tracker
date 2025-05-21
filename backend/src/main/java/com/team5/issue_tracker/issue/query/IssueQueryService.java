@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.team5.issue_tracker.issue.dto.IssueQueryDto;
 import com.team5.issue_tracker.issue.dto.IssueSearchCondition;
 import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
@@ -30,6 +31,7 @@ public class IssueQueryService {
   private final MilestoneQueryRepository milestoneQueryRepository;
   private final UserQueryRepository userQueryRepository;
 
+  @Transactional(readOnly = true)
   public IssuePageResponse getIssuePage(IssueSearchRequest searchRequest) {
     log.debug("조건에 맞는 이슈 조회 요청");
     IssueSearchCondition searchCondition = getCondition(searchRequest);
