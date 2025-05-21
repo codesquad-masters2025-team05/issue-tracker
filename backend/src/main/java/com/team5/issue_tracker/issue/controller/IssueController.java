@@ -38,8 +38,8 @@ public class IssueController {
   public ResponseEntity<ApiResponse<IssuePageResponse>> getAllIssues(
       @RequestParam(required = false) String q) {
     log.info("GET /api/issues 요청");
-    IssueSearchRequest condition = IssueSearchRequestParser.fromQueryString(q);
-    return ResponseEntity.ok(ApiResponse.success(issueQueryService.getIssuePage(condition)));
+    IssueSearchRequest searchRequest = IssueSearchRequestParser.fromQueryString(q);
+    return ResponseEntity.ok(ApiResponse.success(issueQueryService.getIssuePage(searchRequest)));
   }
 
   @PostMapping
