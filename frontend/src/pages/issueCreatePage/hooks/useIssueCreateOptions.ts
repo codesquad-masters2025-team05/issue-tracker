@@ -9,17 +9,17 @@ export function useIssueCreateOptions() {
 	const {
 		data: labelData,
 		isLoading: labelLoading,
-		error: labelError,
+		isError: labelError,
 	} = useIssueLabelOptions();
 	const {
 		data: milestoneData,
 		isLoading: milestoneLoading,
-		error: milestoneError,
+		isError: milestoneError,
 	} = useIssueMilestoneOptions();
 	const {
 		data: usersData,
 		isLoading: userLoading,
-		error: userError,
+		isError: userError,
 	} = useUserList();
 
 	const labelOptions =

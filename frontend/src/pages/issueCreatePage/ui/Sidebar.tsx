@@ -48,6 +48,8 @@ export const Sidebar: FC<SidebarProps> = ({
 					options={userOptions}
 					selectedOptions={assigneeIds}
 					onChange={setAssigneeIds}
+					isLoading={userLoading}
+					error={userError}
 					className='w-[256px]'
 					isAlignRight={true}
 				/>
@@ -60,6 +62,8 @@ export const Sidebar: FC<SidebarProps> = ({
 					options={labelOptions}
 					selectedOptions={labelIds}
 					onChange={setLabelIds}
+					isLoading={labelLoading}
+					error={labelError}
 					isAlignRight={true}
 				/>
 			</Area>
@@ -71,6 +75,8 @@ export const Sidebar: FC<SidebarProps> = ({
 					options={milestoneOptions}
 					selectedOptions={milestoneId}
 					onChange={setMilestoneId}
+					isLoading={milestoneLoading}
+					error={milestoneError}
 					isAlignRight={true}
 				/>
 			</Area>
