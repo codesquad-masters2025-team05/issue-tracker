@@ -1,6 +1,5 @@
 import CheckOffCircleIcon from '@/assets/checkOffCircle.svg?react';
 import CheckOnCircleIcon from '@/assets/checkOnCircle.svg?react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Spinner } from '@/shared/ui/spinner';
 import { cn } from '@/shared/utils/shadcn-utils';
 import { OptionAvatarLabel } from '../AvatarLabel';
