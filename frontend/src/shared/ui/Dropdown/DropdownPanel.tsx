@@ -35,6 +35,7 @@ export function DropdownPanel<T extends number | number[] | null>({
 			className={cn(
 				'absolute mt-2 w-[240px] bg-[var(--neutral-surface-default)] rounded-[16px] shadow-lg border border-[var(--neutral-border-default)] overflow-hidden z-50',
 				alignRight ? 'right-0' : 'left-0',
+				'animate-in fade-in-0 zoom-in-95',
 				className,
 			)}
 			// biome-ignore lint/a11y/useSemanticElements: <explanation>
