@@ -41,7 +41,7 @@ public class IssueController {
   public ResponseEntity<ApiResponse<Long>> createIssue(
       @Valid @RequestBody IssueCreateRequest request
   ) {
-    log.info("GET /api/issues 요청");
+    log.info("POST /api/issues 요청");
     return ResponseEntity.ok(ApiResponse.success(issueService.createIssue(request)));
   }
 
