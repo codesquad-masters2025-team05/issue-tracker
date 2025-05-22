@@ -27,48 +27,29 @@ public class MilestoneQueryRepository {
 
   public List<MilestoneResponse> findAllMilestones() {
     String sql = """
-          SELECT 
-            m.id,
-            m.name,
-            m.description,
-            m.deadline,
-            m.is_open,
-            (
-              SELECT COUNT(i.id)
-              FROM issue i
-              WHERE i.milestone_id = m.id AND i.is_open = true
-            ) AS open_issue_count,
-            (
-              SELECT COUNT(i.id)
-              FROM issue i
-              WHERE i.milestone_id = m.id AND i.is_open = false
-            ) AS closed_issue_count,
-            CASE
-              WHEN (
-                SELECT COUNT(i.id)
-                FROM issue i
-                WHERE i.milestone_id = m.id
-              ) = 0
-              THEN 0
-              ELSE ROUND(
-                (
-                  SELECT COUNT(i.id)
-                  FROM issue i
-                  WHERE i.milestone_id = m.id AND i.is_open = false
-                ) * 100.0 /
-                (
-                  SELECT COUNT(i.id)
-                  FROM issue i
-                  WHERE i.milestone_id = m.id
-                )
-              )
-            END AS progress
-          FROM milestone m
-          ORDER BY m.id
-        """;
+      SELECT 
+        m.id,
+        m.name,
+        m.description,
+        m.deadline,
+        m.is_open,
+        (SELECT COUNT(*) FROM issue i WHERE i.milestone_id = m.id AND i.is_open = true) AS open_issue_count,
+        (SELECT COUNT(*) FROM issue i WHERE i.milestone_id = m.id AND i.is_open = false) AS closed_issue_count,
+        CASE
+          WHEN ((SELECT COUNT(*) FROM issue i WHERE i.milestone_id = m.id) = 0)
+            THEN 0
+          ELSE
+            ROUND((SELECT COUNT(*) FROM issue i WHERE i.milestone_id = m.id AND i.is_open = false) * 100.0 /
+                 (SELECT COUNT(*) FROM issue i WHERE i.milestone_id = m.id))
+        END AS progress
+      FROM milestone m
+      ORDER BY m.id
+    """;
 
     return jdbcTemplate.query(sql,
-        (rs, rowNum) -> new MilestoneResponse(rs.getLong("id"), rs.getString("name"),
+        (rs, rowNum) -> new MilestoneResponse(
+            rs.getLong("id"),
+            rs.getString("name"),
             rs.getString("description"),
             rs.getDate("deadline") != null ? rs.getDate("deadline").toLocalDate() : null,
             rs.getBoolean("is_open"), rs.getLong("open_issue_count"),
