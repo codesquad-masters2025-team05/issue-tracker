@@ -1,5 +1,6 @@
 package com.team5.issue_tracker.user.query;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +31,10 @@ public class UserQueryRepository {
   }
 
   public Map<Long, UserSummaryResponse> getAuthorsByIssueIds(List<Long> issueIds) {
+    if (issueIds == null || issueIds.isEmpty()) {
+      return Collections.emptyMap(); // 빈 결과 반환
+    }
+
     String authorSql = """
         SELECT DISTINCT 
             i.id AS issue_id,

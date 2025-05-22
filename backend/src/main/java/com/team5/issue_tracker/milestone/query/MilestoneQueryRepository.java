@@ -1,5 +1,6 @@
 package com.team5.issue_tracker.milestone.query;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,10 @@ public class MilestoneQueryRepository {
   }
 
   public Map<Long, MilestoneSummaryResponse> getMilestonesByIds(List<Long> issueIds) {
+    if (issueIds == null || issueIds.isEmpty()) {
+      return Collections.emptyMap(); // 빈 결과 반환
+    }
+
     String milestoneSql = """
         SELECT 
             i.id AS issue_id,
