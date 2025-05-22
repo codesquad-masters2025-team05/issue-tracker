@@ -1,15 +1,16 @@
 import CheckOffCircleIcon from '@/assets/checkOffCircle.svg?react';
 import CheckOnCircleIcon from '@/assets/checkOnCircle.svg?react';
+import { useQ } from '@/pages/IssueListPage/hooks/useQueryString';
+import { hasKeyValue } from '@/pages/IssueListPage/hooks/useQueryString';
 import { Spinner } from '@/shared/ui/spinner';
 import { cn } from '@/shared/utils/shadcn-utils';
-import { useSearchParams } from 'react-router-dom';
 import { OptionAvatarLabel } from '../AvatarLabel';
 import type { DropdownOption } from './DropdownOption';
 
 interface DropdownPanelProps {
 	open: boolean;
 	alignRight?: boolean;
-	categoryKey: string; // key → categoryKey로 네이밍 변경
+	categoryKey?: string;
 	options: DropdownOption[];
 	isLoading?: boolean;
 	error?: boolean;
@@ -28,8 +29,7 @@ export function DropdownPanel({
 	className,
 }: DropdownPanelProps) {
 	if (!open) return null;
-	const [searchParams, setSearchParams] = useSearchParams();
-	const q = searchParams.get('q') ?? '';
+	const { getQ, updateQ } = useQ();
 
 	return (
 		<div
@@ -67,9 +67,10 @@ export function DropdownPanel({
 					</div>
 				) : (
 					options.map((opt, idx) => {
-						const value = opt.display;
+						const value = opt.value || opt.display;
+						const selectedKey = categoryKey || opt.key || '';
 						const isSelected = value
-							? hasKeyValue(q, categoryKey, value)
+							? hasKeyValue(getQ(), selectedKey, value)
 							: false;
 
 						return (
@@ -84,10 +85,7 @@ export function DropdownPanel({
 										? 'font-selected-bold-16 text-[var(--neutral-text-strong)]'
 										: 'font-available-medium-16 text-[var(--neutral-text-default)]',
 								)}
-								onClick={() => {
-									const nextQ = addKeyValueToQ(q, categoryKey, value);
-									setSearchParams({ q: nextQ });
-								}}
+								onClick={() => updateQ(selectedKey, value)}
 								aria-selected={isSelected}
 								// biome-ignore lint/a11y/useSemanticElements: <explanation>
 								role='option'
@@ -126,29 +124,4 @@ export function DropdownPanel({
 			</div>
 		</div>
 	);
-}
-
-// 띄어쓰기가 있으면 쌍따옴표로 감싸기
-function formatValue(value: string) {
-	return /\s/.test(value) ? `"${value}"` : value;
-}
-
-// q에 key:value가 포함되는지 체크
-function hasKeyValue(q: string, key: string, value: string) {
-	const formattedValue = formatValue(value);
-	const pattern = new RegExp(`\\b${key}:${escapeRegExp(formattedValue)}\\b`);
-	return pattern.test(q);
-}
-
-// q에 key:value 추가 (공백으로 구분)
-function addKeyValueToQ(q: string, key: string, value: string) {
-	const formattedValue = formatValue(value);
-	return q.length > 0
-		? `${q} ${key}:${formattedValue}`
-		: `${key}:${formattedValue}`;
-}
-
-// 정규식 특수문자 이스케이프 (값에 :나 + 등이 들어올 경우 대비)
-function escapeRegExp(str: string) {
-	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

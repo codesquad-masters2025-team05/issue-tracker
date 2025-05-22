@@ -7,7 +7,7 @@ interface DropdownProps {
 	label: string;
 	panelLabel?: string;
 	additionalOption?: DropdownOption;
-	categoryKey: string;
+	categoryKey?: string;
 	options: DropdownOption[];
 	isLoading?: boolean;
 	error?: boolean;
@@ -60,6 +60,7 @@ export function Dropdown({
 				onClick={() => setOpen((o) => !o)}
 				disabled={disabled}
 				ref={triggerRef}
+				className={className}
 			/>
 			<DropdownPanel
 				open={open}
