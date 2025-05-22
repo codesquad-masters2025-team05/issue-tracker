@@ -98,13 +98,13 @@ export function DropdownPanel<T extends number | number[] | null>({
 								tabIndex={0}
 							>
 								{/* 아바타(담당자) or 컬러원(레이블) */}
-								{opt.imageUrl ? (
+								{'imageUrl' in opt ? (
 									<OptionAvatarLabel
 										key={opt.id}
 										imageUrl={opt.imageUrl}
 										text={opt.display}
 									/>
-								) : opt.color ? (
+								) : 'color' in opt ? (
 									<>
 										<span
 											className='inline-block w-5 h-5 rounded-full'
