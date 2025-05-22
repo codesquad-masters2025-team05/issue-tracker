@@ -6,8 +6,9 @@ import type {
 	IssueListData,
 } from '../model/issue.types';
 
-export async function fetchIssues(): Promise<IssueListData> {
-	const res = await getJSON<ApiResponse<IssueListData>>('/api/issues');
+export async function fetchIssues(queryString = ''): Promise<IssueListData> {
+	const url = `/api/issues${queryString}`;
+	const res = await getJSON<ApiResponse<IssueListData>>(url);
 	return res.data;
 }
 

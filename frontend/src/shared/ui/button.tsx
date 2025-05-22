@@ -32,9 +32,7 @@ const buttonVariants = cva(
 				],
 				ghost: [
 					'text-[var(--neutral-text-default)]',
-					'hover:bg-[var(--neutral-surface-bold)]/80',
-					'hover:opacity-[var(--opacity-hover)]',
-					'active:bg-[var(--color-accent-blue)/20]',
+					'hover:bg-[var(--neutral-surface-bold)]',
 					'disabled:opacity-[var(--opacity-disabled)]',
 					'disabled:pointer-events-none',
 				],
@@ -47,17 +45,17 @@ const buttonVariants = cva(
 			size: {
 				lg: [
 					'w-[240px] h-[56px] px-[24px]',
-					'font-[var(--font-display-medium-20)]',
+					'font-display-medium-20',
 					'rounded-[var(--radius-large)]',
 				],
 				md: [
 					'w-[184px] h-[48px] px-[24px]',
-					'font-[var(--font-display-medium-16)]',
+					'font-display-medium-16',
 					'rounded-[var(--radius-medium)]',
 				],
 				sm: [
 					'w-[128px] h-[40px] px-[16px]',
-					'font-[var(--font-display-medium-12)]',
+					'font-display-medium-12',
 					'rounded-[var(--radius-medium)]',
 				],
 			},

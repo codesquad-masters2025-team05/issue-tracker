@@ -68,7 +68,10 @@ export function Dropdown<T extends number | number[] | null>({
 				alignRight={alignRight}
 				options={options}
 				selectedOptions={selectedOptions}
-				onSelect={onChange}
+				onSelect={(v) => {
+					setOpen(false);
+					onChange(v);
+				}}
 				isLoading={isLoading}
 				error={error}
 				panelLabel={panelLabel}

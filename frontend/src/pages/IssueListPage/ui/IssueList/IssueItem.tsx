@@ -4,7 +4,7 @@ import type { Issue } from '@/entities/issue/model/issue.types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
-import { Checkbox } from '../shared/CheckBox';
+import { Checkbox } from './CheckBox';
 
 interface IssueItemProps {
 	issue: Issue;

@@ -27,10 +27,9 @@ export const mockLoaders = {
  * @param path API 엔드포인트 경로
  * @throws 정의되지 않은 경로일 경우 Error
  */
-export async function getMockResponse<T>(
-	path: keyof typeof mockLoaders,
-): Promise<T> {
-	const loader = mockLoaders[path];
+export async function getMockResponse<T>(path: string): Promise<T> {
+	const cleanPath = path.split('?')[0];
+	const loader = mockLoaders[cleanPath as keyof typeof mockLoaders];
 	if (!loader) {
 		throw new Error(`알 수 없는 mock 경로: ${path}`);
 	}

@@ -2,10 +2,9 @@ import { fetchIssues } from '@/entities/issue/api/issueAPI';
 import type { IssueListData } from '@/entities/issue/model/issue.types';
 import { useQuery } from '@tanstack/react-query';
 
-export function useIssueList() {
+export function useIssueList(queryString: string) {
 	return useQuery<IssueListData, Error>({
-		queryKey: ['issues'],
-		queryFn: fetchIssues,
-		// 필요에 따라 staleTime, enabled, refetchInterval 등 옵션 추가 가능
+		queryKey: ['issues', queryString], // queryString이 캐시키에 들어감!
+		queryFn: () => fetchIssues(queryString),
 	});
 }

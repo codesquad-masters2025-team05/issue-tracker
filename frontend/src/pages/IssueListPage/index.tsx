@@ -1,17 +1,33 @@
-import SearchIcon from '@/assets/search.svg?react';
 import { useIssueList } from '@/entities/issue/hooks/useIssueList';
-import { IssueList } from '@/features/issueList';
-import {
-	IssueCreationButton,
-	LabelListButton,
-	MilestoneListButton,
-} from '@/features/issueList/widget';
-import IssueDropdown from '@/features/issueList/widget/FilteringPanel/IssueDropdown';
 import { Spinner } from '@/shared/ui/spinner';
+import { NavigationButton } from '@/widgets/NavigationButton';
 import type { FC } from 'react';
+import { makeIssueListQuery } from '../lib/makeIssueListQuery';
+import { useISsueFilterOptions } from './hooks/useIssueFilterOptions';
+import { useIssueListFilterState } from './model/useIssueListFilterState';
+import { FilterBar } from './ui/FilterBar';
+import { IssueCreationButton } from './ui/IssueCreationButton';
+import { IssueList } from './ui/IssueList';
 
 const IssueListPage: FC = () => {
-	const { data, isLoading, error } = useIssueList();
+	const { labelOptions, milestoneOptions, userOptions, authorOptions } =
+		useISsueFilterOptions();
+	const filterState = useIssueListFilterState();
+
+	// 결과: "?q=is:open+label:bug+label:documentation+author:dorkem&page=1&perPage=10"
+	const q = makeIssueListQuery({
+		isOpen: filterState.isOpen,
+		assigneeId: filterState.assigneeId,
+		labelIds: filterState.labelIds,
+		milestoneId: filterState.milestoneId,
+		authorId: filterState.authorId,
+		labelOptions,
+		milestoneOptions,
+		userOptions,
+		authorOptions,
+	});
+
+	const { data, isLoading, error } = useIssueList(q);
 
 	if (isLoading) {
 		return (
@@ -32,26 +48,18 @@ const IssueListPage: FC = () => {
 	return (
 		<>
 			<div className='flex items-center gap-4 mt-8 mb-6 justify-between'>
-				<div className='w-140 flex border border-[var(--neutral-border-default)] rounded-2xl'>
-					<IssueDropdown className='w-32 h-10 hover:bg-[var(--neutral-surface-bold)] rounded-l-2xl' />
-					<div className='border-r border-[var(--neutral-border-default)]' />
-					<div className='w-full flex items-center gap-1 px-6 bg-[var(--neutral-surface-bold)] rounded-r-2xl'>
-						<SearchIcon />
-						<input value='is:issue is:open' className='' />
-					</div>
-				</div>
-
+				<FilterBar
+					isOpen={filterState.isOpen}
+					setIsOpen={filterState.setIsOpen}
+					stateId={filterState.stateId}
+					setStateId={filterState.setStateId}
+				/>
 				<div className='flex gap-4'>
-					<div className='flex w-80 border border-[var(--neutral-border-default)] rounded-2xl'>
-						<LabelListButton total={0} className='flex-1' />
-						<div className='border-r border-[var(--neutral-border-default)]' />
-						<MilestoneListButton total={0} className='flex-1' />
-					</div>
-
+					<NavigationButton />
 					<IssueCreationButton />
 				</div>
 			</div>
-			{data && <IssueList issues={data.issues} />}
+			{data && <IssueList issues={data.issues} {...filterState} />}
 		</>
 	);
 };
