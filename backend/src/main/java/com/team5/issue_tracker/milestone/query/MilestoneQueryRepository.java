@@ -3,6 +3,7 @@ package com.team5.issue_tracker.milestone.query;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -102,12 +103,14 @@ public class MilestoneQueryRepository {
             (String) row.get("milestone_name"))));
   }
 
-  public Long getMilestoneIdByName(String milestoneName) {
+  public Optional<Long> getMilestoneIdByName(String milestoneName) {
     if (milestoneName == null) {
-      return null;
+      return Optional.empty();
     }
     String sql = "SELECT id FROM milestone WHERE name = :milestoneName";
     MapSqlParameterSource params = new MapSqlParameterSource("milestoneName", milestoneName);
-    return jdbcTemplate.queryForObject(sql, params, Long.class);
+    List<Long> result = jdbcTemplate.queryForList(sql, params, Long.class);
+
+    return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
   }
 }

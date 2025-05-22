@@ -2,6 +2,7 @@ package com.team5.issue_tracker.user.query;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -55,12 +56,14 @@ public class UserQueryRepository {
         ));
   }
 
-  public Long getUserIdByUsername(String username) {
+  public Optional<Long> getUserIdByUsername(String username) {
     if (username == null) {
-      return null;
+      return Optional.empty();
     }
     String sql = "SELECT id FROM user WHERE username = :username";
     MapSqlParameterSource params = new MapSqlParameterSource("username", username);
-    return jdbcTemplate.queryForObject(sql, params, Long.class);
+    List<Long> result = jdbcTemplate.queryForList(sql, params, Long.class);
+
+    return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
   }
 }
