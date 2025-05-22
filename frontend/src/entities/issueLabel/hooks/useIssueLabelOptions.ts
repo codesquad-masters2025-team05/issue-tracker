@@ -9,5 +9,6 @@ export function useIssueLabelOptions() {
 	return useQuery<IssueLabelOptionsData, Error>({
 		queryKey: ['issueLabelOptions'],
 		queryFn: fetchIssueLabelOptions,
+		staleTime: 1000 * 60 * 10, // 10분 동안 캐시에서만 제공
 	});
 }
