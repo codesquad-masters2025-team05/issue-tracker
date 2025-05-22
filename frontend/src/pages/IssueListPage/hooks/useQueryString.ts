@@ -13,43 +13,48 @@ export function updateQueryString(
 	// 파싱: 쌍따옴표 지원
 	const regex = /(\w+):(?:"([^"]+)"|([^\s"]+))/g;
 	const items: { key: string; value: string; raw: string }[] = [];
-	let match: RegExpExecArray | null;
-	while (true) {
-		match = regex.exec(q);
-		if (!match) break;
+	let match: RegExpExecArray | null = regex.exec(q);
+	while (match) {
 		items.push({
 			key: match[1],
 			value: match[2] ?? match[3],
 			raw: match[0],
 		});
+		match = regex.exec(q);
 	}
 
 	// value에 공백 있으면 쌍따옴표
 	const valueWithQuote = /\s/.test(value) ? `"${value}"` : value;
 
 	if (key === 'is') {
-		// is: 로 시작하는 거 모두 제거
 		const filtered = items.filter((item) => item.key !== 'is');
-		// 맨 앞에 is:value 추가
 		return [`is:${valueWithQuote}`, ...filtered.map((i) => i.raw)]
 			.join(' ')
 			.trim();
 	}
 
 	if (value === '@me') {
-		// key: 로 시작하는 거 모두 제거
-		const filtered = items.filter((item) => item.key !== key);
-		// 맨 뒤에 key:@me 추가
+		// key:@me가 이미 있으면 → 그 쌍만 제거
+		const matchItem = items.find(
+			(item) => item.key === key && item.value === '@me',
+		);
+		if (matchItem) {
+			return items
+				.filter((item) => !(item.key === key && item.value === '@me'))
+				.map((i) => i.raw)
+				.join(' ')
+				.trim();
+		}
+		// 없으면 is:만 남기고 모두 제거 + key:@me만 뒤에 추가
+		const filtered = items.filter((item) => item.key === 'is');
 		return [...filtered.map((i) => i.raw), `${key}:@me`].join(' ').trim();
 	}
 
 	if (key === 'label') {
-		// label:value와 일치하는 거 있는지
 		const valueMatch = items.find(
 			(item) => item.key === 'label' && item.value === value,
 		);
 		if (valueMatch) {
-			// 있다면 제거
 			return items
 				.filter((item) => !(item.key === 'label' && item.value === value))
 				.map((i) => i.raw)
@@ -61,7 +66,6 @@ export function updateQueryString(
 			.trim();
 	}
 
-	// assignee, milestone, author
 	if (['assignee', 'milestone', 'author'].includes(key)) {
 		const valueMatch = items.find(
 			(item) => item.key === key && item.value === value,
@@ -79,7 +83,6 @@ export function updateQueryString(
 			.trim();
 	}
 
-	// 기타: 아무 동작도 안 함
 	return q.trim();
 }
 
