@@ -2,8 +2,8 @@ import { useIssueList } from '@/entities/issue/hooks/useIssueList';
 import { Spinner } from '@/shared/ui/spinner';
 import { NavigationButton } from '@/widgets/NavigationButton';
 import type { FC } from 'react';
-import { makeIssueListQuery } from '../lib/makeIssueListQuery';
 import { useISsueFilterOptions } from './hooks/useIssueFilterOptions';
+import { makeIssueListQuery } from './lib/makeIssueListQuery';
 import { useIssueListFilterState } from './model/useIssueListFilterState';
 import { FilterBar } from './ui/FilterBar';
 import { IssueCreationButton } from './ui/IssueCreationButton';
@@ -15,7 +15,7 @@ const IssueListPage: FC = () => {
 	const filterState = useIssueListFilterState();
 
 	// 결과: "?q=is:open+label:bug+label:documentation+author:dorkem&page=1&perPage=10"
-	const q = makeIssueListQuery({
+	const queryString = makeIssueListQuery({
 		isOpen: filterState.isOpen,
 		assigneeId: filterState.assigneeId,
 		labelIds: filterState.labelIds,
@@ -27,7 +27,7 @@ const IssueListPage: FC = () => {
 		authorOptions,
 	});
 
-	const { data, isLoading, error } = useIssueList(q);
+	const { data, isLoading, error } = useIssueList(queryString);
 
 	if (isLoading) {
 		return (
@@ -49,6 +49,7 @@ const IssueListPage: FC = () => {
 		<>
 			<div className='flex items-center gap-4 mt-8 mb-6 justify-between'>
 				<FilterBar
+					queryString={queryString}
 					isOpen={filterState.isOpen}
 					setIsOpen={filterState.setIsOpen}
 					stateId={filterState.stateId}

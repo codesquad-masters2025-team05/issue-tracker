@@ -1,7 +1,9 @@
 import SearchIcon from '@/assets/search.svg?react';
+import { parseQueryFilterString } from '../../lib/parseQueryFilterString';
 import IssueDropdown from './IssueDropdown';
 
 interface FilterBarProps {
+	queryString: string;
 	isOpen: boolean;
 	setIsOpen: (value: boolean) => void;
 	stateId: number | null;
@@ -9,6 +11,7 @@ interface FilterBarProps {
 }
 
 export function FilterBar({
+	queryString,
 	isOpen,
 	setIsOpen,
 	stateId,
@@ -26,7 +29,11 @@ export function FilterBar({
 			<div className='border-r border-[var(--neutral-border-default)]' />
 			<div className='w-full flex items-center gap-1 px-6 bg-[var(--neutral-surface-bold)] rounded-r-2xl'>
 				<SearchIcon />
-				<input value='is:issue is:open' className='' />
+				<input
+					value={parseQueryFilterString(queryString)}
+					className='w-full'
+					readOnly
+				/>
 			</div>
 		</div>
 	);

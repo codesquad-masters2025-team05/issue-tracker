@@ -52,13 +52,10 @@ export function makeIssueListQuery({
 		if (opt) filters.push(`author:${opt.display}`);
 	}
 
-	const q = filters.join('+');
+	// 여기서 q는 직접 문자열로 붙임
+	let queryString = `?q=${filters.join('+')}`;
+	if (page !== undefined) queryString += `&page=${page}`;
+	if (perPage !== undefined) queryString += `&perPage=${perPage}`;
 
-	const params = new URLSearchParams();
-	params.set('q', q);
-
-	if (page !== undefined) params.set('page', String(page));
-	if (perPage !== undefined) params.set('perPage', String(perPage));
-
-	return `?${params.toString()}`;
+	return queryString;
 }
