@@ -1,4 +1,4 @@
-import { Dropdown } from '@/shared/ui/Dropdown';
+import { Dropdown } from '@/shared/ui/Dropdown_v2';
 import { Button } from '@/shared/ui/button';
 import type { FC } from 'react';
 import { useISsueFilterOptions } from '../../hooks/useIssueFilterOptions';
@@ -9,15 +9,6 @@ export const IssueListHeader: FC<IssueListHeaderProps> = ({
 	isOpen,
 	setIsOpen,
 	stateId,
-	setStateId,
-	assigneeId,
-	setAssigneeId,
-	labelIds,
-	setLabelIds,
-	milestoneId,
-	setMilestoneId,
-	authorId,
-	setAuthorId,
 }) => {
 	const {
 		labelOptions,
@@ -62,8 +53,7 @@ export const IssueListHeader: FC<IssueListHeaderProps> = ({
 					label='담당자'
 					panelLabel='담당자 필터'
 					options={userOptions}
-					selectedOptions={assigneeId}
-					onChange={setAssigneeId}
+					categoryKey='assignee'
 					isLoading={userLoading}
 					error={userError}
 				/>
@@ -71,8 +61,7 @@ export const IssueListHeader: FC<IssueListHeaderProps> = ({
 					label='레이블'
 					panelLabel='레이블 필터'
 					options={labelOptions}
-					selectedOptions={labelIds}
-					onChange={setLabelIds}
+					categoryKey='label'
 					isLoading={labelLoading}
 					error={labelError}
 				/>
@@ -80,8 +69,7 @@ export const IssueListHeader: FC<IssueListHeaderProps> = ({
 					label='마일스톤'
 					panelLabel='마일스톤 필터'
 					options={milestoneOptions}
-					selectedOptions={milestoneId}
-					onChange={setMilestoneId}
+					categoryKey='milestone'
 					isLoading={milestoneLoading}
 					error={milestoneError}
 					isAlignRight={true}
@@ -90,8 +78,7 @@ export const IssueListHeader: FC<IssueListHeaderProps> = ({
 					label='작성자'
 					panelLabel='작성자 필터'
 					options={authorOptions}
-					selectedOptions={authorId}
-					onChange={setAuthorId}
+					categoryKey='author'
 					isLoading={authorLoading}
 					error={authorError}
 					isAlignRight={true}
