@@ -2,14 +2,11 @@ import { Dropdown } from '@/shared/ui/Dropdown_v2';
 import { Button } from '@/shared/ui/button';
 import type { FC } from 'react';
 import { useISsueFilterOptions } from '../../hooks/useIssueFilterOptions';
+import { hasKeyValue, useQ } from '../../hooks/useQueryString';
 import type { IssueListFilterState as IssueListHeaderProps } from '../../model/types';
 import { Checkbox } from './CheckBox';
 
-export const IssueListHeader: FC<IssueListHeaderProps> = ({
-	isOpen,
-	setIsOpen,
-	stateId,
-}) => {
+export const IssueListHeader: FC<IssueListHeaderProps> = () => {
 	const {
 		labelOptions,
 		milestoneOptions,
@@ -25,7 +22,8 @@ export const IssueListHeader: FC<IssueListHeaderProps> = ({
 		authorError,
 	} = useISsueFilterOptions();
 
-	const isOpenActive = stateId === 0 ? true : stateId === 4 ? false : isOpen;
+	const { getQ, updateQ } = useQ();
+	const isOpen = hasKeyValue(getQ(), 'is', 'open');
 
 	return (
 		<div className='w-full h-[64px] flex items-center justify-between px-8'>
@@ -33,17 +31,17 @@ export const IssueListHeader: FC<IssueListHeaderProps> = ({
 				<Checkbox className='mr-4' />
 				<Button
 					variant='ghost'
-					onClick={() => setIsOpen(true)}
+					onClick={() => updateQ('is', 'open')}
 					size='md'
-					className={`w-[102px] h-8 ${isOpenActive && 'font-selected-bold-16'}`}
+					className={`w-[102px] h-8 ${isOpen && 'font-selected-bold-16'}`}
 				>
 					열린 이슈
 				</Button>
 				<Button
 					variant='ghost'
-					onClick={() => setIsOpen(false)}
+					onClick={() => updateQ('is', 'closed')}
 					size='md'
-					className={`w-[102px] h-8 ${!isOpenActive && 'font-selected-bold-16'}`}
+					className={`w-[102px] h-8 ${!isOpen && 'font-selected-bold-16'}`}
 				>
 					닫힌 이슈
 				</Button>
