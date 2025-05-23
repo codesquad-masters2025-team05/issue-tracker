@@ -1,3 +1,4 @@
+import Archive from '@/assets/archive.svg?react';
 import IconInfo from '@/assets/icon_info.svg?react';
 import IconMilestone from '@/assets/milestone.svg?react';
 import type { Issue } from '@/entities/issue/model/issue.types';
@@ -28,7 +29,13 @@ export function IssueItem({ issue }: IssueItemProps) {
 			<div className='flex-1 flex flex-col justify-center gap-2'>
 				{/* 첫 번째 줄: 아이콘, 제목, 라벨 */}
 				<div className='flex items-center gap-2'>
-					<IconInfo />
+					<div className='text--[var(--brand-text-weak)]'>
+						{issue.open ? (
+							<IconInfo className='text-[var(--brand-text-weak)]' />
+						) : (
+							<Archive className='text-[var(--brand-text-weak)]' />
+						)}
+					</div>
 					<span className='font-available-medium-20 text-[var(--neutral-text-strong)]'>
 						{issue.title}
 					</span>
