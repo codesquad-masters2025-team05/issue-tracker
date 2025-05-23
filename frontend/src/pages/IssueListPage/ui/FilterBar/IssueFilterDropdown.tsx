@@ -24,7 +24,7 @@ export function IssueFilterDropdown({ className }: IssueFilterDropdownProps) {
 			label='필터'
 			panelLabel='이슈 필터'
 			options={filterDropdownOptions}
-			className={`w-32 h-10 hover:bg-[var(--neutral-surface-bold)] rounded-l-2xl ${className}`}
+			className={`w-24 hover:bg-[var(--neutral-surface-bold)] rounded-l-2xl ${className}`}
 		/>
 	);
 }

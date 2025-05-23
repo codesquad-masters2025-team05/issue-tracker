@@ -23,7 +23,7 @@ export const DropdownTrigger = React.forwardRef<
 			onClick={onClick}
 			disabled={disabled}
 			className={cn(
-				'flex items-center justify-between w-full h-10 px-4 rounded-xl bg-transparent font-bold text-[16px] transition',
+				'flex items-center justify-between w-full h-10 px-4 rounded-xl bg-transparent font-available-medium-16 transition',
 				'text-[var(--neutral-text-default)] hover:bg-[var(--neutral-surface-bold)]',
 				className,
 			)}
