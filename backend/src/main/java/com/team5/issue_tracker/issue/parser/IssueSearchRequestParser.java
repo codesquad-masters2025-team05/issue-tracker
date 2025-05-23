@@ -1,6 +1,10 @@
 package com.team5.issue_tracker.issue.parser;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
 
@@ -16,7 +20,11 @@ public class IssueSearchRequestParser {
       return issueSearchRequest; // 쿼리 문자열이 비어있으면 기본값 반환
     }
 
-    String[] parts = q.trim().split("\\s+"); // 공백으로 구분
+    List<String> parts = new ArrayList<>();
+    Matcher matcher = Pattern.compile("(\\w+:\"[^\"]*\"|\\w+:\\S+)").matcher(q);
+    while (matcher.find()) {
+      parts.add(matcher.group());
+    }
 
     for (String part : parts) {
       String[] pair = part.split(":", 2); // key:value
