@@ -1,17 +1,25 @@
 import { useThemeStore } from '@/shared/theme/useThemeStore';
-import { Button } from '@/shared/ui/button';
+import { Moon, Sun } from 'lucide-react';
 
 export function ThemeToggleButton() {
 	const { theme, cycleTheme } = useThemeStore();
 
 	return (
-		<Button
-			variant='theme'
-			size='sm'
-			onClick={() => cycleTheme()}
+		<button
+			type='button'
+			tabIndex={0}
 			aria-label='Toggle theme'
+			onClick={cycleTheme}
+			onKeyDown={(e) => {
+				if (e.key === 'Enter' || e.key === ' ') cycleTheme();
+			}}
+			className='p-2 inline-flex items-center justify-center w-10 h-10 cursor-pointer rounded-full hover:bg-[var(--neutral-surface-bold)]'
 		>
-			Theme {theme}
-		</Button>
+			{theme === 'dark' ? (
+				<Moon className='w-5 h-5' />
+			) : (
+				<Sun className='w-5 h-5' />
+			)}
+		</button>
 	);
 }

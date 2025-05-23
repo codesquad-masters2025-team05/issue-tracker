@@ -14,7 +14,7 @@ const Header: FC = () => {
 				<button
 					type='button'
 					aria-label='프로필'
-					className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition'
+					className='p-2 rounded-full cursor-pointer hover:bg-[var(--neutral-surface-bold)]'
 				>
 					<User className='w-6 h-6' />
 				</button>
