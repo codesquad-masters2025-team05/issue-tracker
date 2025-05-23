@@ -15,13 +15,14 @@ const IssueListPage: FC = () => {
 	const q = searchParams.get('q') ?? '';
 	const { data, isLoading, error } = useIssueList(q);
 
-	if (isLoading) {
-		return (
-			<div className='flex justify-center items-center h-full'>
-				<Spinner />
-			</div>
-		);
-	}
+	/* 추후 스켈레톤으로 변경 */
+	// if (isLoading) {
+	// 	return (
+	// 		<div className='flex justify-center items-center h-full'>
+	// 			<Spinner />
+	// 		</div>
+	// 	);
+	// }
 
 	if (error) {
 		return (
