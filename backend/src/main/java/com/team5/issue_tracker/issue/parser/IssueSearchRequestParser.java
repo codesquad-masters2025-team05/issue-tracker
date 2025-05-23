@@ -36,6 +36,9 @@ public class IssueSearchRequestParser {
       if (value.isEmpty()) {
         continue; // value가 비어있으면 무시
       }
+      if (value.startsWith("\"") && value.endsWith("\"")) { // 따옴표로 감싸진 경우 따옴표 제거
+        value = value.substring(1, value.length() - 1);
+      }
       switch (key) {
         case "is" -> {
           if (!value.equalsIgnoreCase("open") && !value.equalsIgnoreCase("closed")) {
