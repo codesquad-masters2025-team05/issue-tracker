@@ -101,7 +101,7 @@ export function useQ() {
 	// q 값 추출 (없으면 "is:open" 반환)
 	const getQ = () => {
 		const q = searchParams.get('q');
-		return q?.trim() ? q : 'is:open';
+		return q;
 	};
 
 	// q 값만 변경 (다른 파라미터 보존)
@@ -117,7 +117,7 @@ export function useQ() {
 
 	const updateQ = (key: string, value: string) => {
 		const currentQ = getQ();
-		const nextQ = updateQueryString(currentQ, key, value);
+		const nextQ = updateQueryString(currentQ as string, key, value);
 		setQ(nextQ);
 	};
 
