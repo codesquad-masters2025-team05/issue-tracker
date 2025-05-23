@@ -1,6 +1,7 @@
 import IconInfo from '@/assets/icon_info.svg?react';
 import IconMilestone from '@/assets/milestone.svg?react';
 import type { Issue } from '@/entities/issue/model/issue.types';
+import { LabelChip } from '@/shared/ui/LabelChip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
@@ -32,16 +33,13 @@ export function IssueItem({ issue }: IssueItemProps) {
 						{issue.title}
 					</span>
 					{issue.labels.map((label) => (
-						<span
+						<LabelChip
 							key={label.id}
-							className='text-xs px-2 py-0.5 rounded'
-							style={{
-								backgroundColor: label.backgroundColor,
-								color: label.textColor,
-							}}
-						>
-							{label.name}
-						</span>
+							id={label.id}
+							name={label.name}
+							textColor={label.textColor}
+							backgroundColor={label.backgroundColor}
+						/>
 					))}
 				</div>
 
@@ -59,8 +57,6 @@ export function IssueItem({ issue }: IssueItemProps) {
 					)}
 				</div>
 			</div>
-
-			{/* 3. 프로필 아이콘 영역 (겹쳐서) */}
 			<Avatar className='size-5 my-[22px] mx-[54px]'>
 				<AvatarImage src={issue.author.imageUrl} alt={issue.author.username} />
 				<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
