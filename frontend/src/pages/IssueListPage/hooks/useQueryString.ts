@@ -130,7 +130,8 @@ function formatValue(value: string) {
 }
 
 // q에 key:value가 포함되는지 체크
-export function hasKeyValue(q: string, key: string, value: string) {
+export function hasKeyValue(q: string | null, key: string, value: string) {
+	if (!q) return false;
 	const formattedValue = formatValue(value);
 	const pattern = new RegExp(`\\b${key}:${escapeRegExp(formattedValue)}\\b`);
 	return pattern.test(q);
