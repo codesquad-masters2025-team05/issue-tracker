@@ -1,7 +1,6 @@
 import AlertCircleIcon from '@/assets/alertCircle.svg?react';
 import ArchiveIcon from '@/assets/archive.svg?react';
 import { Dropdown } from '@/shared/ui/Dropdown_v2';
-import { Button } from '@/shared/ui/button';
 import type { FC } from 'react';
 import { useISsueFilterOptions } from '../../hooks/useIssueFilterOptions';
 import { hasKeyValue, useQ } from '../../hooks/useQueryString';
