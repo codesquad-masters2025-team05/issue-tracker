@@ -12,8 +12,6 @@ export function FilterBar() {
 	const q = searchParams.get('q') ?? '';
 	const [inputValue, setInputValue] = useState(q);
 
-	// URL이 바뀔 때 input 값도 자동 동기화
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setInputValue(q);
 	}, [q]);
@@ -21,7 +19,7 @@ export function FilterBar() {
 	// 엔터 시에만 q 변경
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
-			setSearchParams({ q: inputValue });
+			setSearchParams({ q: inputValue || 'is:open' });
 		}
 	};
 	return (
@@ -41,7 +39,7 @@ export function FilterBar() {
 					value={inputValue}
 					onChange={(e) => setInputValue(e.target.value)}
 					onKeyDown={handleKeyDown}
-					placeholder='is: open'
+					placeholder='is:open'
 					className='w-full outline-none'
 				/>
 			</div>
