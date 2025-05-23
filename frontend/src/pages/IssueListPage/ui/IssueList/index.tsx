@@ -43,7 +43,7 @@ export function IssueList(props: IssueListProps) {
 			{issues.map((issue, idx) => (
 				<div
 					key={issue.id}
-					className={`bg-[var(--neutral-surface-strong)] ${idx === issues.length - 1 ? 'rounded-b-2xl' : ''}`}
+					className={`bg-[var(--neutral-surface-strong)] hover:bg-[var(--neutral-surface-default)] ${idx === issues.length - 1 ? 'rounded-b-2xl' : ''}`}
 				>
 					<IssueItem issue={issue} />
 				</div>
