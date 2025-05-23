@@ -1,3 +1,5 @@
+import AlertCircleIcon from '@/assets/alertCircle.svg?react';
+import ArchiveIcon from '@/assets/archive.svg?react';
 import { Dropdown } from '@/shared/ui/Dropdown_v2';
 import { Button } from '@/shared/ui/button';
 import type { FC } from 'react';
@@ -24,27 +26,32 @@ export const IssueListHeader: FC<IssueListHeaderProps> = () => {
 
 	const { getQ, updateQ } = useQ();
 	const isOpen = hasKeyValue(getQ(), 'is', 'open');
-
+	const buttonClassName =
+		'flex items-center gap-1 px-4 h-10 rounded-2xl transiton hover:bg-[var(--neutral-surface-bold)]';
+	const defaultFontColor =
+		'font-available-medium-16 text-[var(--neutral-text-default)]';
+	const selectedFontColor =
+		'font-selected-bold-16 text-[var(--neutral-text-strong)]';
 	return (
 		<div className='w-full h-[64px] flex items-center justify-between px-8'>
-			<div>
+			<div className='flex items-center'>
 				<Checkbox className='mr-4' />
-				<Button
-					variant='ghost'
+				<button
+					type='button'
+					className={`${buttonClassName} ${isOpen ? selectedFontColor : defaultFontColor}`}
 					onClick={() => updateQ('is', 'open')}
-					size='md'
-					className={`w-[102px] h-8 ${isOpen && 'font-selected-bold-16'}`}
 				>
-					열린 이슈
-				</Button>
-				<Button
-					variant='ghost'
+					<AlertCircleIcon />
+					<span>{`열린 이슈(${0})`}</span>
+				</button>
+				<button
+					type='button'
+					className={`${buttonClassName} ${!isOpen ? selectedFontColor : defaultFontColor}`}
 					onClick={() => updateQ('is', 'closed')}
-					size='md'
-					className={`w-[102px] h-8 ${!isOpen && 'font-selected-bold-16'}`}
 				>
-					닫힌 이슈
-				</Button>
+					<ArchiveIcon />
+					<span>{`닫힌 이슈(${0})`}</span>
+				</button>
 			</div>
 			<div className='flex gap-3'>
 				<Dropdown
