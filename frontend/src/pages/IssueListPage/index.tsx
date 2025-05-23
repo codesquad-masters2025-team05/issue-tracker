@@ -1,5 +1,4 @@
 import { useIssueList } from '@/entities/issue/hooks/useIssueList';
-import { Spinner } from '@/shared/ui/spinner';
 import { NavigationButton } from '@/widgets/NavigationButton';
 import type { FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
