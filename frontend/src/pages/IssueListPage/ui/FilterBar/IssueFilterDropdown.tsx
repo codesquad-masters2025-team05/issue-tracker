@@ -3,7 +3,7 @@ import type { DropdownOption } from '@/shared/ui/Dropdown_v2/DropdownOption';
 
 const filterDropdownOptions: DropdownOption[] = [
 	{ id: 0, display: '열린 이슈', key: 'is', value: 'open' },
-	{ id: 1, display: '내가 작성한 이슈', key: 'assginee', value: '@me' },
+	{ id: 1, display: '내가 작성한 이슈', key: 'assignee', value: '@me' },
 	{ id: 2, display: '나에게 할당된 이슈', key: 'author', value: '@me' },
 	{
 		id: 3,
