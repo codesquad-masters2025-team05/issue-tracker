@@ -8,11 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.team5.issue_tracker.issue.dto.IssueQueryDto;
 import com.team5.issue_tracker.issue.dto.IssueSearchCondition;
 import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
+import com.team5.issue_tracker.issue.dto.response.IssueBaseResponse;
+import com.team5.issue_tracker.issue.dto.response.IssueDetailResponse;
 import com.team5.issue_tracker.issue.dto.response.IssuePageResponse;
 import com.team5.issue_tracker.issue.dto.response.IssueSummaryResponse;
 import com.team5.issue_tracker.issue.mapper.IssueMapper;
+import com.team5.issue_tracker.label.dto.response.LabelResponse;
 import com.team5.issue_tracker.label.dto.response.LabelSummaryResponse;
 import com.team5.issue_tracker.label.query.LabelQueryRepository;
+import com.team5.issue_tracker.milestone.dto.response.MilestoneResponse;
 import com.team5.issue_tracker.milestone.dto.response.MilestoneSummaryResponse;
 import com.team5.issue_tracker.milestone.query.MilestoneQueryRepository;
 import com.team5.issue_tracker.user.dto.UserPageResponse;
@@ -83,5 +87,15 @@ public class IssueQueryService {
         milestoneId,
         authorId
     );
+  }
+
+  public IssueDetailResponse getIssueById(Long issueId) {
+    IssueBaseResponse issueBase = issueQueryRepository.findIssueDetailById(issueId);
+    List<LabelResponse> labelList = labelQueryRepository.getLabelsByIssueId(issueId);
+    UserSummaryResponse author = userQueryRepository.getAuthorById(issueId);
+    List<UserSummaryResponse> assignees = userQueryRepository.getAssigneesByIssueId(issueId);
+    MilestoneResponse milestone = milestoneQueryRepository.getMilestoneByIssueId(issueId);
+
+    return IssueMapper.toDetailResponse(issueBase, labelList, author, assignees, milestone);
   }
 }

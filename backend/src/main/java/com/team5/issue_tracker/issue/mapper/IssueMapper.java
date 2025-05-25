@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.team5.issue_tracker.issue.dto.IssueQueryDto;
+import com.team5.issue_tracker.issue.dto.response.IssueBaseResponse;
+import com.team5.issue_tracker.issue.dto.response.IssueDetailResponse;
 import com.team5.issue_tracker.issue.dto.response.IssueSummaryResponse;
+import com.team5.issue_tracker.label.dto.response.LabelResponse;
 import com.team5.issue_tracker.label.dto.response.LabelSummaryResponse;
+import com.team5.issue_tracker.milestone.dto.response.MilestoneResponse;
 import com.team5.issue_tracker.milestone.dto.response.MilestoneSummaryResponse;
 import com.team5.issue_tracker.user.dto.UserSummaryResponse;
 
@@ -32,5 +36,26 @@ public class IssueMapper {
           );
         })
         .toList();
+  }
+
+  public static IssueDetailResponse toDetailResponse(
+      IssueBaseResponse issue,
+      List<LabelResponse> labels,
+      UserSummaryResponse author,
+      List<UserSummaryResponse> assignees,
+      MilestoneResponse milestone
+  ) {
+    return new IssueDetailResponse(
+        issue.getId(),
+        issue.getTitle(),
+        issue.getBody(),
+        issue.getIsOpen(),
+        labels,
+        author,
+        assignees,
+        milestone,
+        issue.getCreatedAt(),
+        issue.getUpdatedAt()
+    );
   }
 }
