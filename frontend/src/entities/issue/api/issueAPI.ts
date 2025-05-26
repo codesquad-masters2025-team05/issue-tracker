@@ -3,6 +3,7 @@ import type { ApiResponse } from '@/shared/api/types';
 import type {
 	IssueCreateRequest,
 	IssueCreateResponse,
+	IssueDeleteResponse,
 	IssueListData,
 	IssueUpdateRequest,
 	IssueUpdateResponse,
@@ -40,6 +41,15 @@ export async function updateIssue(
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(payload),
+	});
+
+	return res.json();
+}
+
+export async function deleteIssue(id: number): Promise<IssueDeleteResponse> {
+	const url = `/api/issues/${id}`;
+	const res = await fetch(url, {
+		method: 'DELETE',
 	});
 
 	return res.json();

@@ -64,3 +64,9 @@ export interface IssueUpdateResponse {
 	data: null;
 	error: string | null;
 }
+
+export interface IssueDeleteResponse {
+	success: boolean;
+	data: null;
+	error: string | null;
+}
