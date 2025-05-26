@@ -1,4 +1,4 @@
-import { useIssueList } from '@/entities/issue/hooks/useIssueList';
+import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
 import { NavigationButton } from '@/widgets/NavigationButton';
 import type { FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -12,7 +12,7 @@ const IssueListPage: FC = () => {
 
 	const [searchParams] = useSearchParams();
 	const q = searchParams.get('q') ?? '';
-	const { data, isLoading, error } = useIssueList(q);
+	const { data, isLoading, error } = useFetchIssueList(q);
 
 	/* 추후 스켈레톤으로 변경 */
 	// if (isLoading) {
