@@ -16,7 +16,9 @@ export async function fetchIssues(q = ''): Promise<IssueListData> {
 	return res.data;
 }
 
-export async function fetchIssue(id: number): Promise<IssueDetailResponse> {
+export async function fetchIssueDetail(
+	id: number,
+): Promise<IssueDetailResponse> {
 	const url = `/api/issues/${id}`;
 	const res = await fetch(url, {
 		method: 'GET',
