@@ -26,7 +26,7 @@ export const IssueListHeader: FC<IssueListHeaderProps> = () => {
 	const { getQ, updateQ } = useQ();
 	const isOpen = hasKeyValue(getQ(), 'is', 'open');
 	const isClosed = hasKeyValue(getQ(), 'is', 'closed');
-	console.log(`q: ${getQ()},`);
+
 	const buttonClassName =
 		'flex items-center gap-1 px-4 h-10 rounded-2xl transiton hover:bg-[var(--neutral-surface-bold)]';
 	const defaultFontColor =
