@@ -39,7 +39,7 @@ const IssueDetailPage: FC = () => {
 		});
 
 	return (
-		<div>
+		<div className='flex flex-col gap-6'>
 			<Header
 				title={issue.title}
 				id={issue.id}
@@ -50,8 +50,13 @@ const IssueDetailPage: FC = () => {
 				createdAt={issue.createdAt}
 				commentCount={issue.comments.length}
 			/>
+			<Division />
 		</div>
 	);
 };
 
 export default IssueDetailPage;
+
+function Division() {
+	return <div className='border-t border-[var(--neutral-border-default)]' />;
+}
