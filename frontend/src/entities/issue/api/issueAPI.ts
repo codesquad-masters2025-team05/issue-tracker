@@ -4,6 +4,7 @@ import type {
 	IssueCreateRequest,
 	IssueCreateResponse,
 	IssueDeleteResponse,
+	IssueDetailResponse,
 	IssueListData,
 	IssueUpdateRequest,
 	IssueUpdateResponse,
@@ -13,6 +14,18 @@ export async function fetchIssues(q = ''): Promise<IssueListData> {
 	const url = q ? `/api/issues?q=${encodeURIComponent(q)}` : '/api/issues';
 	const res = await getJSON<ApiResponse<IssueListData>>(url);
 	return res.data;
+}
+
+export async function fetchIssue(id: number): Promise<IssueDetailResponse> {
+	const url = `/api/issues/${id}`;
+	const res = await fetch(url, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	return res.json();
 }
 
 export async function createIssue(

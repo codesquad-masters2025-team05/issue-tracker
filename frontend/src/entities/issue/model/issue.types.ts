@@ -11,18 +11,44 @@ export interface Author {
 	imageUrl: string;
 }
 
-export interface Milestone {
+export interface MilestoneSummary {
 	id: number;
 	name: string;
 }
 
-export interface Issue {
+export interface MilestoneDetail {
+	id: number;
+	name: string;
+	description: string;
+	deadline: string;
+	open: boolean;
+	openIssueCount: number;
+	closedIssueCount: number;
+	progress: number;
+}
+
+export interface Attachment {
+	id: number;
+	fileName: string;
+	url: string;
+}
+
+export interface Comment {
+	id: number;
+	body: string;
+	author: Author;
+	createdAt: string;
+	updatedAt: string;
+	attachments: Attachment[];
+}
+
+export interface IssueListItem {
 	id: number;
 	number?: number;
 	title: string;
 	labels: Label[];
 	author: Author;
-	milestone: Milestone | null;
+	milestone: MilestoneSummary | null;
 	createdAt: string;
 	updatedAt: string | null;
 	commentsCount: number;
@@ -33,7 +59,20 @@ export interface IssueListData {
 	total: number;
 	page: number;
 	perPage: number;
-	issues: Issue[];
+	issues: IssueListItem[];
+}
+
+export interface IssueDetailResponse {
+	id: number;
+	title: string;
+	open: boolean;
+	labels: Label[];
+	author: Author;
+	assignees: Author[];
+	milestone: MilestoneDetail | null;
+	createdAt: string;
+	updatedAt: string;
+	comments: Comment[];
 }
 
 export interface IssueCreateRequest {
@@ -55,8 +94,8 @@ export interface IssueUpdateRequest {
 	body?: string;
 	assigneeIds?: number[];
 	labelIds?: number[];
-	milestoneId?: number;
-	state?: 'open' | 'closed';
+	milestoneId?: number | null;
+	open?: boolean;
 }
 
 export interface IssueUpdateResponse {
