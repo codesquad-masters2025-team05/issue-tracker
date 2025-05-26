@@ -52,7 +52,7 @@ public class MilestoneQueryRepository {
             ELSE ROUND((ic.closed_count) * 100.0 / ic.total)
           END AS progress
         FROM issue i
-        JOIN milestone m ON i.milestone_id = m.id
+        LEFT JOIN milestone m ON i.milestone_id = m.id
         LEFT JOIN issue_counts ic ON m.id = ic.milestone_id
         WHERE i.id = :issueId
         LIMIT 1
@@ -108,8 +108,10 @@ public class MilestoneQueryRepository {
             rs.getString("name"),
             rs.getString("description"),
             rs.getDate("deadline") != null ? rs.getDate("deadline").toLocalDate() : null,
-            rs.getBoolean("is_open"), rs.getLong("open_issue_count"),
-            rs.getLong("closed_issue_count"), rs.getLong("progress")));
+            rs.getBoolean("is_open"),
+            rs.getLong("open_issue_count"),
+            rs.getLong("closed_issue_count"),
+            rs.getLong("progress")));
   }
 
   public MilestoneCountResponse countMilestones() {
