@@ -1,10 +1,13 @@
 package com.team5.issue_tracker.issue.service;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.team5.issue_tracker.common.comment.domain.Comment;
+import com.team5.issue_tracker.common.comment.reqository.CommentRepository;
 import com.team5.issue_tracker.issue.domain.Issue;
 import com.team5.issue_tracker.issue.domain.IssueAssignee;
 import com.team5.issue_tracker.issue.domain.IssueLabel;
@@ -22,6 +25,7 @@ public class IssueService {
   private final IssueRepository issueRepository;
   private final IssueLabelRepository issueLabelRepository;
   private final IssueAssigneeRepository issueAssigneeRepository;
+  private final CommentRepository commentRepository;
   private final UserService userService;
 
   @Transactional
@@ -31,11 +35,14 @@ public class IssueService {
       throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
     } //TODO: 커스텀 에러 만들지 고민중
 
-    Issue issue =
-        new Issue(request.getTitle(), request.getBody(), userId, request.getMilestoneId(), true);
+    Instant now = Instant.now();
+    Issue issue = new Issue(request.getTitle(), userId, request.getMilestoneId(), true, now, now);
     Issue savedIssue = issueRepository.save(issue);
 
     Long savedIssueID = savedIssue.getId();
+    Comment comment = new Comment(userId, savedIssueID, request.getCommentBody(), now, now);
+    commentRepository.save(comment);
+
     saveIssueLabels(savedIssueID, request.getLabelIds());
     saveIssueAssignees(savedIssueID, request.getAssigneeIds());
 
