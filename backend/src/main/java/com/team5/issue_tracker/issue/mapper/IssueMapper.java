@@ -3,6 +3,7 @@ package com.team5.issue_tracker.issue.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.team5.issue_tracker.common.comment.dto.CommentResponse;
 import com.team5.issue_tracker.issue.dto.IssueQueryDto;
 import com.team5.issue_tracker.issue.dto.response.IssueBaseResponse;
 import com.team5.issue_tracker.issue.dto.response.IssueDetailResponse;
@@ -43,7 +44,8 @@ public class IssueMapper {
       List<LabelResponse> labels,
       UserSummaryResponse author,
       List<UserSummaryResponse> assignees,
-      MilestoneResponse milestone
+      MilestoneResponse milestone,
+      List<CommentResponse> comments
   ) {
     return new IssueDetailResponse(
         issue.getId(),
@@ -55,7 +57,8 @@ public class IssueMapper {
         assignees,
         milestone,
         issue.getCreatedAt(),
-        issue.getUpdatedAt()
+        issue.getUpdatedAt(),
+        comments
     );
   }
 }

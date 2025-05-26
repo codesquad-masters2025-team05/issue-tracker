@@ -3,6 +3,7 @@ package com.team5.issue_tracker.issue.dto.response;
 import java.time.Instant;
 import java.util.List;
 
+import com.team5.issue_tracker.common.comment.dto.CommentResponse;
 import com.team5.issue_tracker.label.dto.response.LabelResponse;
 import com.team5.issue_tracker.milestone.dto.response.MilestoneResponse;
 import com.team5.issue_tracker.user.dto.UserSummaryResponse;
@@ -25,5 +26,5 @@ public class IssueDetailResponse {
   private MilestoneResponse milestone;
   private Instant createdAt;
   private Instant updatedAt;
-//  private List<CommentResponse> comments;
+  private List<CommentResponse> comments;
 }
