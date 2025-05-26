@@ -19,7 +19,7 @@ public class IssueCreateRequest {
   private String title;
 
   @NotBlank(message = "본문을 작성해주세요.")
-  private String body;
+  private String commentBody;
 
   @NotNull(message = "담당자를 넣어주세요.")
   private List<Long> assigneeIds;
