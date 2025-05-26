@@ -49,3 +49,18 @@ export interface IssueCreateResponse {
 	data: number;
 	error: string | null;
 }
+
+export interface IssueUpdateRequest {
+	title?: string;
+	body?: string;
+	assigneeIds?: number[];
+	labelIds?: number[];
+	milestoneId?: number;
+	state?: 'open' | 'closed';
+}
+
+export interface IssueUpdateResponse {
+	success: boolean;
+	data: null;
+	error: string | null;
+}

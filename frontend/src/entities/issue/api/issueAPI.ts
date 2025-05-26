@@ -4,6 +4,8 @@ import type {
 	IssueCreateRequest,
 	IssueCreateResponse,
 	IssueListData,
+	IssueUpdateRequest,
+	IssueUpdateResponse,
 } from '../model/issue.types';
 
 export async function fetchIssues(q = ''): Promise<IssueListData> {
@@ -20,6 +22,22 @@ export async function createIssue(
 		headers: {
 			'Content-Type': 'application/json',
 			// 인증 X
+		},
+		body: JSON.stringify(payload),
+	});
+
+	return res.json();
+}
+
+export async function updateIssue(
+	id: number,
+	payload: IssueUpdateRequest,
+): Promise<IssueUpdateResponse> {
+	const url = `/api/issues/${id}`;
+	const res = await fetch(url, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(payload),
 	});
