@@ -29,14 +29,14 @@ export function Input({
 		return (
 			<div
 				className='
-          flex items-center h-10 rounded-[16px] px-4
+          flex items-center h-10 rounded-[16px] px-4 w-full
           focus-within:outline-[1px] focus-within:outline-[var(--brand-border-active)]
         	bg-[var(--neutral-surface-bold)] focus-within:bg-[var(--neutral-surface-strong)]'
 				style={{ outlineOffset: -1 }}
 			>
 				{/* 왼쪽에 고정 텍스트 */}
 				{fixedValue != null && (
-					<span className='mr-4 font-display-medium-12 text-[var(--neutral-text-weak)]'>
+					<span className='w-16 mr-2 font-display-medium-12 text-[var(--neutral-text-weak)]'>
 						{fixedValue}
 					</span>
 				)}
