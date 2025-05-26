@@ -1,6 +1,7 @@
+import { Info, type InfoProps } from './Info';
 import { Title } from './Title';
 
-interface HeaderProps {
+interface HeaderProps extends InfoProps {
 	title: string;
 	id: number;
 	onEditComplete: (title: string) => void;
@@ -12,14 +13,24 @@ export function Header({
 	id,
 	onEditComplete,
 	onCloseIssue,
+	open,
+	author,
+	createdAt,
+	commentCount,
 }: HeaderProps) {
 	return (
-		<div className='mt-8'>
+		<div className='flex flex-col mt-8 gap-4'>
 			<Title
 				title={title}
 				id={id}
 				onEditComplete={onEditComplete}
 				onCloseIssue={onCloseIssue}
+			/>
+			<Info
+				open={open}
+				author={author}
+				createdAt={createdAt}
+				commentCount={commentCount}
 			/>
 		</div>
 	);

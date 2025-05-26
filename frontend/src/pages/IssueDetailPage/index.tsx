@@ -45,6 +45,10 @@ const IssueDetailPage: FC = () => {
 				id={issue.id}
 				onCloseIssue={toggleOpen}
 				onEditComplete={onEditComplete}
+				open={issue.open}
+				author={issue.author}
+				createdAt={issue.createdAt}
+				commentCount={issue.comments.length}
 			/>
 		</div>
 	);
