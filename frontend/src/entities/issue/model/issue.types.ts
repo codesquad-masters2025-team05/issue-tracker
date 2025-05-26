@@ -5,7 +5,7 @@ export interface Label {
 	backgroundColor: string;
 }
 
-export interface Author {
+export interface User {
 	id: number;
 	username: string;
 	imageUrl: string;
@@ -36,7 +36,7 @@ export interface Attachment {
 export interface Comment {
 	id: number;
 	body: string;
-	author: Author;
+	author: User;
 	createdAt: string;
 	updatedAt: string;
 	attachments: Attachment[];
@@ -47,7 +47,7 @@ export interface IssueListItem {
 	number?: number;
 	title: string;
 	labels: Label[];
-	author: Author;
+	author: User;
 	milestone: MilestoneSummary | null;
 	createdAt: string;
 	updatedAt: string | null;
@@ -67,8 +67,8 @@ export interface IssueDetailResponse {
 	title: string;
 	open: boolean;
 	labels: Label[];
-	author: Author;
-	assignees: Author[];
+	author: User;
+	assignees: User[];
 	milestone: MilestoneDetail | null;
 	createdAt: string;
 	updatedAt: string;
