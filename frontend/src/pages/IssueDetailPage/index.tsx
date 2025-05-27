@@ -18,8 +18,8 @@ function Division() {
 const IssueDetailPage: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const { data, refetch } = useFetchIssueDetail(Number(id));
-	const { mutate } = useUpdateIssue();
-	const { mutate: commentMutate } = useUpdateComment();
+	const { mutate: issueUpdateMutate } = useUpdateIssue();
+	const { mutate: commentUpdateMutate } = useUpdateComment();
 	const { mutate: commentCreateMutate } = useCreateComment(refetch);
 	const issue = data ? data : mockIssue;
 
@@ -28,19 +28,19 @@ const IssueDetailPage: FC = () => {
 	const isEnabled = inputValue.trim().length > 0;
 
 	const toggleOpen = () =>
-		mutate({
+		issueUpdateMutate({
 			id: issue.id,
 			payload: { isOpen: !issue.isOpen },
 		});
 
 	const onEditComplete = (title: string) =>
-		mutate({
+		issueUpdateMutate({
 			id: issue.id,
 			payload: { title: title },
 		});
 
 	const onUpdateContent = (id: number, content: string) =>
-		commentMutate({
+		commentUpdateMutate({
 			commentId: id,
 			payload: { content: content },
 		});
