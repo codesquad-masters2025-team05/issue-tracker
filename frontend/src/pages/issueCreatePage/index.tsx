@@ -4,8 +4,6 @@ import { TextArea } from '@/shared/ui/TextArea';
 import { Button } from '@/shared/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
-
 import { useIssueCreateFormState } from './model/useIssueCreateFormState';
 import { Sidebar } from './ui/Sidebar';
 
@@ -17,14 +15,9 @@ export default function IssueCreatePage() {
 	const navigate = useNavigate();
 	const form = useIssueCreateFormState();
 
-	const { mutate } = useCreateIssue(
-		(issueId) => {
-			navigate(`/issues/${issueId}`);
-		},
-		(error) => {
-			toast.error(error.message || '이슈 생성에 실패했습니다.');
-		},
-	);
+	const { mutate } = useCreateIssue((issueId) => {
+		navigate(`/issues/${issueId}`);
+	});
 
 	const handleSubmit = () => {
 		mutate({
