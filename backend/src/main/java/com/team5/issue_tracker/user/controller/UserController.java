@@ -24,7 +24,7 @@ public class UserController {
   @GetMapping
   public ResponseEntity<ApiResponse<UserScrollResponse>> getScrolledUsers(
       @RequestParam(required = false) String cursor,
-      @RequestParam(required = false, defaultValue = "10") Long limit
+      @RequestParam(required = false, defaultValue = "10") Integer limit
   ) {
     log.info("GET /api/users 요청");
     return ResponseEntity.ok(ApiResponse.success(userQueryService.getScrolledUsers(cursor, limit)));

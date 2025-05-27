@@ -31,14 +31,14 @@ public class LabelQueryRepository {
     );
   }
 
-  public List<LabelResponse> findLabels(Long page, Long perPage) {
+  public List<LabelResponse> findLabels(Integer page, Integer perPage) {
     String lableSql =
         "SELECT id, name, description, text_color, background_color FROM label LIMIT :limit OFFSET :offset";
 
     MapSqlParameterSource params = new MapSqlParameterSource();
 
-    long limit = perPage;
-    long offset = (page - 1) * perPage;
+    int limit = perPage;
+    int offset = (page - 1) * perPage;
     params.addValue("limit", limit);
     params.addValue("offset", offset);
 

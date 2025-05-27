@@ -22,8 +22,8 @@ public class LabelController {
 
   @GetMapping
   public ResponseEntity<ApiResponse<LabelPageResponse>> getPagedLabels(
-      @RequestParam(required = false, defaultValue = "1") Long page,
-      @RequestParam(required = false, defaultValue = "10") Long perPage) {
+      @RequestParam(required = false, defaultValue = "1") Integer page,
+      @RequestParam(required = false, defaultValue = "10") Integer perPage) {
     return ResponseEntity.ok(ApiResponse.success(labelQueryService.getPagedLabels(page, perPage)));
   }
 }

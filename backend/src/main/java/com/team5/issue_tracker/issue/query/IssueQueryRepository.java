@@ -19,8 +19,8 @@ public class IssueQueryRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  public List<IssueQueryDto> findIssuesByCondition(IssueSearchCondition searchCondition, Long page,
-      Long perPage) {
+  public List<IssueQueryDto> findIssuesByCondition(IssueSearchCondition searchCondition, Integer page,
+      Integer perPage) {
     StringBuilder issueSql = new StringBuilder("""
             SELECT 
                 i.id,
@@ -79,8 +79,8 @@ public class IssueQueryRepository {
 
     issueSql.append(" ORDER BY i.created_at DESC");
 
-    long limit = perPage;
-    long offset = (page - 1) * perPage;
+    int limit = perPage;
+    int offset = (page - 1) * perPage;
     issueSql.append(" LIMIT :limit OFFSET :offset");
     params.addValue("limit", limit);
     params.addValue("offset", offset);

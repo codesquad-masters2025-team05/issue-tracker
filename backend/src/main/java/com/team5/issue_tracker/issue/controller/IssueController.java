@@ -42,8 +42,8 @@ public class IssueController {
   @GetMapping
   public ResponseEntity<ApiResponse<IssuePageResponse>> getPagedIssues(
       @RequestParam(required = false) String q,
-      @RequestParam(required = false, defaultValue = "1") Long page,
-      @RequestParam(required = false, defaultValue = "10") Long perPage) {
+      @RequestParam(required = false, defaultValue = "1") Integer page,
+      @RequestParam(required = false, defaultValue = "10") Integer perPage) {
     log.info("GET /api/issues 요청");
     log.debug("q: {}", q);
     IssueSearchRequest searchRequest = IssueSearchRequestParser.fromQueryString(q);

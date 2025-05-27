@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class UserQueryRepository {
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  public List<UserSummaryResponse> getScrolledUsers(String cursor, Long limit) {
+  public List<UserSummaryResponse> getScrolledUsers(String cursor, Integer limit) {
     String userSql = """        
         SELECT id, username, image_url
         FROM user WHERE (:cursor IS NULL OR username > :cursor) 

@@ -39,7 +39,7 @@ public class IssueQueryService {
   private final CommentQueryRepository commentQueryRepository;
 
   @Transactional(readOnly = true)
-  public IssuePageResponse getPagedIssues(IssueSearchRequest searchRequest, Long page, Long perPage) {
+  public IssuePageResponse getPagedIssues(IssueSearchRequest searchRequest, Integer page, Integer perPage) {
     log.debug("조건에 맞는 이슈 조회 요청");
     IssueSearchCondition searchCondition = getCondition(searchRequest);
     List<IssueQueryDto> issueQueryDtos =
@@ -61,7 +61,7 @@ public class IssueQueryService {
         IssueMapper.toSummaryResponse(issueQueryDtos,
             labelMap, authorMap, milestoneMap, assigneeMap);
 
-    return new IssuePageResponse((long) issueSummaryResponseList.size(), page, perPage,
+    return new IssuePageResponse(issueSummaryResponseList.size(), page, perPage,
         searchRequest.toQueryString(), issueSummaryResponseList);
   }
 

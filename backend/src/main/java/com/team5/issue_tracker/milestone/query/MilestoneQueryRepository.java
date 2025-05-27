@@ -74,7 +74,7 @@ public class MilestoneQueryRepository {
     );
   }
 
-  public List<MilestoneResponse> findMilestones(Long page, Long perPage) {
+  public List<MilestoneResponse> findMilestones(Integer page, Integer perPage) {
     String sql = """
           WITH issue_counts AS (
             SELECT
@@ -104,8 +104,8 @@ public class MilestoneQueryRepository {
         """;
     MapSqlParameterSource params = new MapSqlParameterSource();
 
-    long limit = perPage;
-    long offset = (page - 1) * perPage;
+    int limit = perPage;
+    int offset = (page - 1) * perPage;
     params.addValue("limit", limit);
     params.addValue("offset", offset);
 
