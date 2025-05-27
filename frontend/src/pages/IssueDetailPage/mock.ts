@@ -37,8 +37,8 @@ export const mockIssue = {
 			id: 101,
 			content: '저도 동일 현상 보고했습니다. 크롬 113.0.0에서 발생하네요.',
 			author: {
-				id: 9,
-				username: 'bob',
+				id: 7,
+				username: 'alice',
 				imageUrl: 'https://example.com/avatar/bob.png',
 			},
 			createdAt: '2025-05-01T10:02:00Z',
@@ -47,7 +47,8 @@ export const mockIssue = {
 		},
 		{
 			id: 102,
-			body: '해당 이슈 수정 PR(#256) 머지되어 배포됐습니다. 확인 부탁드립니다.',
+			content:
+				'해당 이슈 수정 PR(#256) 머지되어 배포됐습니다. 확인 부탁드립니다.',
 			author: {
 				id: 8,
 				username: 'carol',
