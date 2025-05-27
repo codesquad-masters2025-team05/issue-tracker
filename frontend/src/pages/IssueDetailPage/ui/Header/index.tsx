@@ -1,10 +1,11 @@
+import type { OnUpdateIssue } from '../..';
 import { Info, type InfoProps } from './Info';
 import { Title } from './Title';
 
 interface HeaderProps extends InfoProps {
 	title: string;
 	id: number;
-	onEditComplete: (title: string) => void;
+	onEditComplete: OnUpdateIssue;
 	onCloseIssue: () => void;
 }
 

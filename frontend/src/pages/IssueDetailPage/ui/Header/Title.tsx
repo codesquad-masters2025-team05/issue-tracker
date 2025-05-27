@@ -4,11 +4,12 @@ import XSquareIcon from '@/assets/xSquare.svg?react';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/button';
 import { useState } from 'react';
+import type { OnUpdateIssue } from '../..';
 
 interface TitleProps {
 	title: string;
 	id: number;
-	onEditComplete: (nextTitle: string) => void;
+	onEditComplete: OnUpdateIssue;
 	onCloseIssue: () => void;
 }
 
@@ -31,7 +32,7 @@ export function Title({ title, id, onEditComplete, onCloseIssue }: TitleProps) {
 	// 편집 완료
 	const handleComplete = () => {
 		if (editTitle.trim() && editTitle !== title) {
-			onEditComplete(editTitle);
+			onEditComplete({ title: editTitle });
 		}
 		setIsEditing(false);
 	};

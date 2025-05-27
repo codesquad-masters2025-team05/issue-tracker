@@ -3,6 +3,7 @@ import { useCreateComment } from '@/entities/comment/hooks/useCreateComment';
 import { useUpdateComment } from '@/entities/comment/hooks/useUpdateComment';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
 import { useUpdateIssue } from '@/entities/issue/hooks/useUpdateIssue';
+import type { IssueUpdateRequest } from '@/entities/issue/model/issue.types';
 import { TextArea } from '@/shared/ui/TextArea';
 import { Button } from '@/shared/ui/button';
 import { type FC, useState } from 'react';
@@ -10,6 +11,8 @@ import { useParams } from 'react-router-dom';
 import { mockIssue } from './mock';
 import { Comment } from './ui/Comment';
 import { Header } from './ui/Header';
+
+export type OnUpdateIssue = (payload: IssueUpdateRequest) => void;
 
 function Division() {
 	return <div className='border-t border-[var(--neutral-border-default)]' />;
@@ -36,10 +39,10 @@ const IssueDetailPage: FC = () => {
 			payload: { isOpen: !issue.isOpen },
 		});
 
-	const onEditComplete = (title: string) =>
+	const onUpdateIssue = (payload: IssueUpdateRequest) =>
 		issueUpdateMutate({
 			id: issue.id,
-			payload: { title: title },
+			payload,
 		});
 
 	const onUpdateContent = (id: number, content: string) =>
@@ -61,7 +64,7 @@ const IssueDetailPage: FC = () => {
 				title={issue.title}
 				id={issue.id}
 				onCloseIssue={toggleOpen}
-				onEditComplete={onEditComplete}
+				onEditComplete={onUpdateIssue}
 				open={issue.isOpen}
 				author={issue.author}
 				createdAt={issue.createdAt}
