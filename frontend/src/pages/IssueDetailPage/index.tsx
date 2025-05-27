@@ -1,33 +1,31 @@
+import PlusIcon from '@/assets/plus.svg?react';
+import { useCreateComment } from '@/entities/comment/hooks/useCreateComment';
 import { useUpdateComment } from '@/entities/comment/hooks/useUpdateComment';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
 import { useUpdateIssue } from '@/entities/issue/hooks/useUpdateIssue';
-import type { FC } from 'react';
+import { TextArea } from '@/shared/ui/TextArea';
+import { Button } from '@/shared/ui/button';
+import { type FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { mockIssue } from './mock';
 import { Comment } from './ui/Comment';
 import { Header } from './ui/Header';
 
-/*
-export interface IssueDetailResponse {
-	id: number;
-	title: string;
-	open: boolean;
-	labels: Label[];
-	author: User;
-	assignees: User[];
-	milestone: MilestoneDetail | null;
-	createdAt: string;
-	updatedAt: string;
-	comments: Comment[];
+function Division() {
+	return <div className='border-t border-[var(--neutral-border-default)]' />;
 }
-*/
 
 const IssueDetailPage: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const { data } = useFetchIssueDetail(Number(id));
 	const { mutate } = useUpdateIssue();
 	const { mutate: commentMutate } = useUpdateComment();
+	const { mutate: commentCreateMutate } = useCreateComment();
 	const issue = data ? data : mockIssue;
+
+	const [inputValue, setInputValue] = useState('');
+
+	const isEnabled = inputValue.trim().length > 0;
 
 	const toggleOpen = () =>
 		mutate({
@@ -47,8 +45,15 @@ const IssueDetailPage: FC = () => {
 			payload: { content: content },
 		});
 
+	const onCreateContent = () =>
+		commentCreateMutate({
+			issueId: Number(id),
+			payload: { content: inputValue },
+		});
+
 	return (
 		<div className='flex flex-col gap-6'>
+			{/** Title, Buttons, Information */}
 			<Header
 				title={issue.title}
 				id={issue.id}
@@ -59,7 +64,9 @@ const IssueDetailPage: FC = () => {
 				createdAt={issue.createdAt}
 				commentCount={issue.comments?.length}
 			/>
+			{/** Division */}
 			<Division />
+			{/** Comment, TextArea, CreateButton */}
 			<div className='flex flex-col gap-6'>
 				{issue.comments?.map((comment) => {
 					return (
@@ -75,13 +82,31 @@ const IssueDetailPage: FC = () => {
 						/>
 					);
 				})}
+				{/** TextArea, CreateButton */}
+				<div className='flex flex-col gap-6'>
+					<TextArea
+						label='코멘트를 입력하세요'
+						placeholder='코멘트를 입력하세요'
+						id={id}
+						value={inputValue}
+						onChange={(e) => setInputValue(e.target.value)}
+						showCounter={true}
+					/>
+					<div className='flex justify-end'>
+						<Button
+							variant='contained'
+							size='sm'
+							onClick={onCreateContent}
+							disabled={!isEnabled}
+						>
+							<PlusIcon />
+							코멘트 작성
+						</Button>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
 };
 
 export default IssueDetailPage;
-
-function Division() {
-	return <div className='border-t border-[var(--neutral-border-default)]' />;
-}

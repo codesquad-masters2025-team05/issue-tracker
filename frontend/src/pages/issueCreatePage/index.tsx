@@ -22,7 +22,7 @@ export default function IssueCreatePage() {
 			navigate(`/issues/${issueId}`);
 		},
 		(error) => {
-			toast.error('이슈 생성에 실패했습니다.');
+			toast.error(error.message || '이슈 생성에 실패했습니다.');
 		},
 	);
 

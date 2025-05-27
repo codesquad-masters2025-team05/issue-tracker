@@ -5,7 +5,7 @@ import { type ChangeEvent, type TextareaHTMLAttributes, useId } from 'react';
 interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 	label?: string;
 	value: string;
-	onFileSelect: (files: FileList) => void;
+	onFileSelect?: (files: FileList) => void;
 	showCounter: boolean;
 }
 
