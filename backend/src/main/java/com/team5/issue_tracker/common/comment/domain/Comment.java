@@ -18,6 +18,15 @@ public class Comment {
   private Instant createdAt;
   private Instant updatedAt;
 
+  public Comment(Long userId, Long issueId, String content) {
+    this.userId = userId;
+    this.issueId = issueId;
+    this.content = content;
+    Instant now = Instant.now();
+    this.createdAt = now;
+    this.updatedAt = now;
+  }
+
   public Comment(Long userId, Long issueId, String content, Instant createdAt, Instant updatedAt) {
     this.userId = userId;
     this.issueId = issueId;
@@ -27,7 +36,8 @@ public class Comment {
   }
 
   @PersistenceCreator
-  public Comment(Long id, Long userId, Long issueId, String content, Instant createdAt, Instant updatedAt) {
+  public Comment(Long id, Long userId, Long issueId, String content, Instant createdAt,
+      Instant updatedAt) {
     this.id = id;
     this.userId = userId;
     this.issueId = issueId;

@@ -21,7 +21,18 @@ public class Issue {
   private final Instant createdAt;
   private Instant updatedAt;
 
-  public Issue(String title, Long userId, Long milestoneId, Boolean isOpen, Instant createdAt, Instant updatedAt) {
+  public Issue(String title, Long userId, Long milestoneId, Boolean isOpen) {
+    this.title = title;
+    this.userId = userId;
+    this.milestoneId = milestoneId;
+    this.isOpen = isOpen;
+    Instant now = Instant.now();
+    this.createdAt = now;
+    this.updatedAt = now;
+  }
+
+  public Issue(String title, Long userId, Long milestoneId, Boolean isOpen, Instant createdAt,
+      Instant updatedAt) {
     this.title = title;
     this.userId = userId;
     this.milestoneId = milestoneId;
@@ -31,7 +42,8 @@ public class Issue {
   }
 
   @PersistenceConstructor
-  public Issue(Long id, String title, Long userId, Long milestoneId, Boolean isOpen, Instant createdAt, Instant updatedAt) {
+  public Issue(Long id, String title, Long userId, Long milestoneId, Boolean isOpen,
+      Instant createdAt, Instant updatedAt) {
     this.id = id;
     this.title = title;
     this.userId = userId;
@@ -39,12 +51,5 @@ public class Issue {
     this.isOpen = isOpen;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-  }
-
-  public void update(String title, Long milestoneId, Boolean isOpen) {
-    this.title = title;
-    this.milestoneId = milestoneId;
-    this.isOpen = isOpen;
-    this.updatedAt = Instant.now();
   }
 }
