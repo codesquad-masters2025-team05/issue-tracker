@@ -20,7 +20,10 @@ const IssueDetailPage: FC = () => {
 	const { data, refetch } = useFetchIssueDetail(Number(id));
 	const { mutate: issueUpdateMutate } = useUpdateIssue();
 	const { mutate: commentUpdateMutate } = useUpdateComment();
-	const { mutate: commentCreateMutate } = useCreateComment(refetch);
+	const { mutate: commentCreateMutate } = useCreateComment(() => {
+		refetch();
+		setInputValue('');
+	});
 	const issue = data ? data : mockIssue;
 
 	const [inputValue, setInputValue] = useState('');
