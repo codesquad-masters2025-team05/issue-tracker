@@ -1,7 +1,7 @@
 import Archive from '@/assets/archive.svg?react';
 import IconInfo from '@/assets/icon_info.svg?react';
 import IconMilestone from '@/assets/milestone.svg?react';
-import type { Issue } from '@/entities/issue/model/issue.types';
+import type { IssueListItem } from '@/entities/issue/model/issue.types';
 import { LabelChip } from '@/shared/ui/LabelChip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { formatDistanceToNow } from 'date-fns';
@@ -9,10 +9,11 @@ import { ko } from 'date-fns/locale/ko';
 import { Checkbox } from './CheckBox';
 
 interface IssueItemProps {
-	issue: Issue;
+	issue: IssueListItem;
+	onClickTitle: () => void;
 }
 
-export function IssueItem({ issue }: IssueItemProps) {
+export function IssueItem({ issue, onClickTitle }: IssueItemProps) {
 	const when = formatDistanceToNow(new Date(issue.createdAt), {
 		addSuffix: true,
 		locale: ko,
@@ -36,9 +37,13 @@ export function IssueItem({ issue }: IssueItemProps) {
 							<Archive className='text-[var(--brand-text-weak)]' />
 						)}
 					</div>
-					<span className='font-available-medium-20 text-[var(--neutral-text-strong)]'>
+					<button
+						type='button'
+						className='font-available-medium-20 text-[var(--neutral-text-strong)] hover:underline cursor-default'
+						onClick={onClickTitle}
+					>
 						{issue.title}
-					</span>
+					</button>
 					{issue.labels.map((label) => (
 						<LabelChip
 							key={label.id}
