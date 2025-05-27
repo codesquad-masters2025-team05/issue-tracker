@@ -39,11 +39,11 @@ public class IssueQueryService {
   private final CommentQueryRepository commentQueryRepository;
 
   @Transactional(readOnly = true)
-  public IssuePageResponse getIssuePage(IssueSearchRequest searchRequest) {
+  public IssuePageResponse getIssuePage(IssueSearchRequest searchRequest, Long page, Long perPage) {
     log.debug("조건에 맞는 이슈 조회 요청");
     IssueSearchCondition searchCondition = getCondition(searchRequest);
     List<IssueQueryDto> issueQueryDtos =
-        issueQueryRepository.findIssuesByCondition(searchCondition);
+        issueQueryRepository.findIssuesByCondition(searchCondition, page, perPage);
 
     List<Long> issueIds = issueQueryDtos.stream()
         .map(IssueQueryDto::getId)
@@ -61,9 +61,8 @@ public class IssueQueryService {
         IssueMapper.toSummaryResponse(issueQueryDtos,
             labelMap, authorMap, milestoneMap, assigneeMap);
 
-    return new IssuePageResponse((long) issueSummaryResponseList.size(), 0L, //TODO: 페이지 기능
-        (long) issueSummaryResponseList.size(), searchRequest.toQueryString(),
-        issueSummaryResponseList);
+    return new IssuePageResponse((long) issueSummaryResponseList.size(), page, perPage,
+        searchRequest.toQueryString(), issueSummaryResponseList);
   }
 
   public UserPageResponse getIssueAuthors() {
