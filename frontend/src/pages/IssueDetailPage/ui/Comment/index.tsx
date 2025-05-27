@@ -32,7 +32,6 @@ export function Comment({
 	const [editing, setEditing] = useState(false);
 	const [editValue, setEditValue] = useState(content);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: filesAreDifferent is a pure function defined inline and does not need to be in deps.
 	const hasChanged = editValue !== content && editValue.trim().length > 0;
 
 	return (
