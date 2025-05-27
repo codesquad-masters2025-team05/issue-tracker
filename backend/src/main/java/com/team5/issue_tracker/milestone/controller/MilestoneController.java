@@ -21,10 +21,10 @@ public class MilestoneController {
   private final MilestoneQueryService milestoneQueryService;
 
   @GetMapping
-  public ResponseEntity<ApiResponse<MilestonePageResponse>> getLabels(
+  public ResponseEntity<ApiResponse<MilestonePageResponse>> getPagedMilestones(
       @RequestParam(value = "page", defaultValue = "1") Long page,
       @RequestParam(value = "perPage", defaultValue = "10") Long perPage
   ) {
-    return ResponseEntity.ok(ApiResponse.success(milestoneQueryService.getMilestones(page, perPage)));
+    return ResponseEntity.ok(ApiResponse.success(milestoneQueryService.getPagedMilestones(page, perPage)));
   }
 }

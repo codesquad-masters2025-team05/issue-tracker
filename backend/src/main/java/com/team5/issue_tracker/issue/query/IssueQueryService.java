@@ -39,7 +39,7 @@ public class IssueQueryService {
   private final CommentQueryRepository commentQueryRepository;
 
   @Transactional(readOnly = true)
-  public IssuePageResponse getIssuePage(IssueSearchRequest searchRequest, Long page, Long perPage) {
+  public IssuePageResponse getPagedIssues(IssueSearchRequest searchRequest, Long page, Long perPage) {
     log.debug("조건에 맞는 이슈 조회 요청");
     IssueSearchCondition searchCondition = getCondition(searchRequest);
     List<IssueQueryDto> issueQueryDtos =

@@ -40,7 +40,7 @@ public class IssueController {
   private final MilestoneQueryService milestonePageResponse;
 
   @GetMapping
-  public ResponseEntity<ApiResponse<IssuePageResponse>> getIssues(
+  public ResponseEntity<ApiResponse<IssuePageResponse>> getPagedIssues(
       @RequestParam(required = false) String q,
       @RequestParam(required = false, defaultValue = "1") Long page,
       @RequestParam(required = false, defaultValue = "10") Long perPage) {
@@ -48,7 +48,7 @@ public class IssueController {
     log.debug("q: {}", q);
     IssueSearchRequest searchRequest = IssueSearchRequestParser.fromQueryString(q);
     return ResponseEntity.ok(
-        ApiResponse.success(issueQueryService.getIssuePage(searchRequest, page, perPage)));
+        ApiResponse.success(issueQueryService.getPagedIssues(searchRequest, page, perPage)));
   }
 
   @GetMapping("/{issueId}")

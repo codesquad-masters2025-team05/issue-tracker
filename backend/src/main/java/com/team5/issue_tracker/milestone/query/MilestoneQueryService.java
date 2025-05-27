@@ -22,7 +22,7 @@ public class MilestoneQueryService {
         milestones);
   }
 
-  public MilestonePageResponse getMilestones(Long page, Long perPage) {
+  public MilestonePageResponse getPagedMilestones(Long page, Long perPage) {
     List<MilestoneResponse> milestones = milestoneQueryRepository.findMilestones(page, perPage);
     MilestoneCountResponse count = milestoneQueryRepository.countMilestones();
 
