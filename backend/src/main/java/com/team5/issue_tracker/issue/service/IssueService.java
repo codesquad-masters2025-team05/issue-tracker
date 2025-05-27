@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.team5.issue_tracker.common.comment.domain.Comment;
+import com.team5.issue_tracker.common.comment.domain.CommentAttachment;
+import com.team5.issue_tracker.common.comment.dto.CommentRequestDto;
+import com.team5.issue_tracker.common.comment.reqository.CommentAttachmentRepository;
 import com.team5.issue_tracker.common.comment.reqository.CommentRepository;
 import com.team5.issue_tracker.issue.domain.Issue;
 import com.team5.issue_tracker.issue.domain.IssueAssignee;
@@ -26,6 +29,7 @@ public class IssueService {
   private final IssueLabelRepository issueLabelRepository;
   private final IssueAssigneeRepository issueAssigneeRepository;
   private final CommentRepository commentRepository;
+  private final CommentAttachmentRepository commentAttachmentRepository;
   private final UserService userService;
 
   @Transactional
@@ -38,13 +42,16 @@ public class IssueService {
     Instant now = Instant.now();
     Issue issue = new Issue(request.getTitle(), userId, request.getMilestoneId(), true, now, now);
     Issue savedIssue = issueRepository.save(issue);
-
     Long savedIssueID = savedIssue.getId();
-    Comment comment = new Comment(userId, savedIssueID, request.getCommentBody(), now, now);
-    commentRepository.save(comment);
 
     saveIssueLabels(savedIssueID, request.getLabelIds());
     saveIssueAssignees(savedIssueID, request.getAssigneeIds());
+
+    CommentRequestDto commentRequestDto = request.getComment();
+    Comment comment = new Comment(userId, savedIssueID, commentRequestDto.getContent(), now, now);
+    Comment savedComment = commentRepository.save(comment);
+
+    saveCommentAttachment(commentRequestDto, savedComment);
 
     return savedIssueID;
   }
@@ -58,6 +65,19 @@ public class IssueService {
   private void saveIssueAssignees(Long issueId, List<Long> assigneeIds) {
     for (Long assigneeId : assigneeIds) {
       issueAssigneeRepository.save(new IssueAssignee(issueId, assigneeId));
+    }
+  }
+
+  private void saveCommentAttachment(CommentRequestDto commentRequestDto, Comment savedComment) {
+    List<String> attachments = commentRequestDto.getAttachments();
+    if (attachments != null && !attachments.isEmpty()) {
+      for (String fileUrl : attachments) {
+        CommentAttachment attachment = new CommentAttachment(
+            savedComment.getId(),
+            fileUrl
+        );
+        commentAttachmentRepository.save(attachment);
+      }
     }
   }
 }

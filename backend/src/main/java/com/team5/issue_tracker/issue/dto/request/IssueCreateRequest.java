@@ -2,6 +2,8 @@ package com.team5.issue_tracker.issue.dto.request;
 
 import java.util.List;
 
+import com.team5.issue_tracker.common.comment.dto.CommentRequestDto;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,8 +20,8 @@ public class IssueCreateRequest {
   @NotBlank(message = "제목을 작성해주세요.")
   private String title;
 
-  @NotBlank(message = "본문을 작성해주세요.")
-  private String commentBody;
+  @NotNull(message = "댓글 내용을 넣어주세요.")
+  private CommentRequestDto comment;
 
   @NotNull(message = "담당자를 넣어주세요.")
   private List<Long> assigneeIds;
