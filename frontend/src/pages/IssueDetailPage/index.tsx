@@ -20,7 +20,7 @@ const IssueDetailPage: FC = () => {
 	const { data, refetch } = useFetchIssueDetail(Number(id));
 	const { mutate } = useUpdateIssue();
 	const { mutate: commentMutate } = useUpdateComment();
-	const { mutate: commentCreateMutate } = useCreateComment();
+	const { mutate: commentCreateMutate } = useCreateComment(refetch);
 	const issue = data ? data : mockIssue;
 
 	const [inputValue, setInputValue] = useState('');
@@ -96,10 +96,7 @@ const IssueDetailPage: FC = () => {
 						<Button
 							variant='contained'
 							size='sm'
-							onClick={() => {
-								onCreateContent();
-								refetch();
-							}}
+							onClick={onCreateContent}
 							disabled={!isEnabled}
 						>
 							<PlusIcon />
