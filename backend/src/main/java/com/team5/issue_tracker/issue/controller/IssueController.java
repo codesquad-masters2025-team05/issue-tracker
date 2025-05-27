@@ -23,6 +23,7 @@ import com.team5.issue_tracker.label.query.LabelQueryService;
 import com.team5.issue_tracker.issue.dto.response.IssueMilestonePageResponse;
 import com.team5.issue_tracker.milestone.query.MilestoneQueryService;
 import com.team5.issue_tracker.user.dto.UserPageResponse;
+import com.team5.issue_tracker.user.dto.UserScrollResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -74,9 +75,13 @@ public class IssueController {
   }
 
   @GetMapping("/authors")
-  public ResponseEntity<ApiResponse<UserPageResponse>> getAllAuthors() {
+  public ResponseEntity<ApiResponse<UserScrollResponse>> getScrolledAuthors(
+      @RequestParam(required = false) String cursor,
+      @RequestParam(required = false, defaultValue = "10") Integer limit
+  ) {
     log.info("GET /api/issues/authors 요청");
-    return ResponseEntity.ok(ApiResponse.success(issueQueryService.getIssueAuthors()));
+    return ResponseEntity.ok(
+        ApiResponse.success(issueQueryService.getScrolledIssueAuthors(cursor, limit)));
   }
 
   @GetMapping("/labels")
@@ -88,5 +93,4 @@ public class IssueController {
   public ResponseEntity<ApiResponse<IssueMilestonePageResponse>> getFilterMilestones() {
     return ResponseEntity.ok(ApiResponse.success(milestonePageResponse.getFilterMilestones()));
   }
-
 }

@@ -22,6 +22,7 @@ import com.team5.issue_tracker.milestone.dto.response.MilestoneResponse;
 import com.team5.issue_tracker.milestone.dto.response.MilestoneSummaryResponse;
 import com.team5.issue_tracker.milestone.query.MilestoneQueryRepository;
 import com.team5.issue_tracker.user.dto.UserPageResponse;
+import com.team5.issue_tracker.user.dto.UserScrollResponse;
 import com.team5.issue_tracker.user.dto.UserSummaryResponse;
 import com.team5.issue_tracker.user.query.UserQueryRepository;
 
@@ -39,7 +40,8 @@ public class IssueQueryService {
   private final CommentQueryRepository commentQueryRepository;
 
   @Transactional(readOnly = true)
-  public IssuePageResponse getPagedIssues(IssueSearchRequest searchRequest, Integer page, Integer perPage) {
+  public IssuePageResponse getPagedIssues(IssueSearchRequest searchRequest, Integer page,
+      Integer perPage) {
     log.debug("조건에 맞는 이슈 조회 요청");
     IssueSearchCondition searchCondition = getCondition(searchRequest);
     List<IssueQueryDto> issueQueryDtos =
@@ -65,11 +67,16 @@ public class IssueQueryService {
         searchRequest.toQueryString(), issueSummaryResponseList);
   }
 
-  public UserPageResponse getIssueAuthors() {
-    log.debug("전체 작성자 조회 요청");
-    List<UserSummaryResponse> authorSummaries = issueQueryRepository.findDistinctAuthors();
-    return new UserPageResponse((long) authorSummaries.size(), 0L, (long) authorSummaries.size(),
-        authorSummaries);
+  public UserScrollResponse getScrolledIssueAuthors(String cursor, Integer limit) {
+    log.debug("전체 작성자 스크롤 조회 요청");
+    List<UserSummaryResponse> usersPlusOne =
+        issueQueryRepository.findDistinctAuthors(cursor, limit);
+
+    Boolean hasNext = usersPlusOne.size() > limit;
+    List<UserSummaryResponse> users = hasNext ? usersPlusOne.subList(0, limit) : usersPlusOne;
+    String nextCursor = hasNext ? users.getLast().getUsername() : null;
+
+    return new UserScrollResponse(hasNext, nextCursor, users);
   }
 
   private IssueSearchCondition getCondition(IssueSearchRequest searchRequest) {

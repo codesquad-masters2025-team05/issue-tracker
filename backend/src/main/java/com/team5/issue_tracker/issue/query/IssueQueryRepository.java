@@ -96,14 +96,20 @@ public class IssueQueryRepository {
     );
   }
 
-  public List<UserSummaryResponse> findDistinctAuthors() {
+  public List<UserSummaryResponse> findDistinctAuthors(String cursor, Integer limit) {
     String authorSql = """
         SELECT DISTINCT u.id, u.username, u.image_url
         FROM issue i
         JOIN user u ON i.user_id = u.id
+        WHERE (:cursor IS NULL OR username > :cursor) 
+        ORDER BY username ASC
+        LIMIT :limitPlusOne;
         """;
+    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.addValue("cursor", cursor);
+    params.addValue("limitPlusOne", limit + 1);
 
-    return jdbcTemplate.query(authorSql, (rs, rowNum) ->
+    return jdbcTemplate.query(authorSql, params, (rs, rowNum) ->
         new UserSummaryResponse(
             rs.getLong("id"),
             rs.getString("username"),
