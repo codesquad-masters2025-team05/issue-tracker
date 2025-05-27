@@ -1,5 +1,5 @@
 export interface IssueLabelOption {
-	id: number;
+	id?: number;
 	name: string;
 	backgroundColor: string;
 	textColor: string;
@@ -22,6 +22,7 @@ export const LabelChip: React.FC<LabelChipProps> = ({
 		'#FFFFFF',
 		'#fefefe',
 		'#FEFEFE',
+		'var(--neutral-surface-bold)',
 	]);
 
 	const isBright = BRIGHT_COLORS.has(backgroundColor);
