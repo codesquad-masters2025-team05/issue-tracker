@@ -17,7 +17,7 @@ function Division() {
 
 const IssueDetailPage: FC = () => {
 	const { id } = useParams<{ id: string }>();
-	const { data } = useFetchIssueDetail(Number(id));
+	const { data, refetch } = useFetchIssueDetail(Number(id));
 	const { mutate } = useUpdateIssue();
 	const { mutate: commentMutate } = useUpdateComment();
 	const { mutate: commentCreateMutate } = useCreateComment();
@@ -96,7 +96,10 @@ const IssueDetailPage: FC = () => {
 						<Button
 							variant='contained'
 							size='sm'
-							onClick={onCreateContent}
+							onClick={() => {
+								onCreateContent();
+								refetch();
+							}}
 							disabled={!isEnabled}
 						>
 							<PlusIcon />
