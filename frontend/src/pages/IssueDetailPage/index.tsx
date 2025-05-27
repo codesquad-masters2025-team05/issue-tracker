@@ -61,7 +61,7 @@ const IssueDetailPage: FC = () => {
 			/>
 			<Division />
 			<div className='flex flex-col gap-6'>
-				{issue.comments.map((comment) => {
+				{issue.comments?.map((comment) => {
 					return (
 						<Comment
 							key={comment.id}
