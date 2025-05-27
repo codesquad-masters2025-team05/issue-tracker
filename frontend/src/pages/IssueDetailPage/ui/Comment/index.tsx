@@ -2,7 +2,7 @@ import EditIcon from '@/assets/edit.svg?react';
 import PaperCilpIcon from '@/assets/paperclip.svg?react';
 import SmileIcon from '@/assets/smile.svg?react';
 import XSquareIcon from '@/assets/xSquare.svg?react';
-import type { Attachment, User } from '@/entities/issue/model/issue.types';
+import type { User } from '@/entities/issue/model/issue.types';
 import { LabelChip } from '@/shared/ui/LabelChip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
@@ -14,7 +14,6 @@ interface CommentProps {
 	id: number;
 	isAuthor: boolean;
 	content: string;
-	initialFiles: Attachment[];
 	commentAuthor: User;
 	createdAt: string;
 	updatedAt: string;
@@ -25,7 +24,6 @@ export function Comment({
 	id,
 	isAuthor,
 	content,
-	initialFiles,
 	commentAuthor,
 	createdAt,
 	updatedAt,

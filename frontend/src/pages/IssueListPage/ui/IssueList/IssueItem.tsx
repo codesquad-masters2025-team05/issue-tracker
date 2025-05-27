@@ -10,24 +10,28 @@ import { Checkbox } from './CheckBox';
 
 interface IssueItemProps {
 	issue: IssueListItem;
-	onClickTitle: () => void;
+	onClickIssue: () => void;
 }
 
-export function IssueItem({ issue, onClickTitle }: IssueItemProps) {
+export function IssueItem({ issue, onClickIssue }: IssueItemProps) {
 	const when = formatDistanceToNow(new Date(issue.createdAt), {
 		addSuffix: true,
 		locale: ko,
 	}); // e.g. "8분 전"
 
 	return (
-		<div className='flex w-full  items-center py-4'>
+		<div className='flex w-full items-center py-4'>
 			{/* 1. 체크박스 영역 */}
 			<div className='flex-none px-8 h-8 flex items-center'>
 				<Checkbox />
 			</div>
 
 			{/* 2. 정보 영역 */}
-			<div className='flex-1 flex flex-col justify-center gap-2'>
+			<button
+				type='button'
+				className='group flex-1 flex flex-col justify-center gap-2 cursor-pointer'
+				onClick={onClickIssue}
+			>
 				{/* 첫 번째 줄: 아이콘, 제목, 라벨 */}
 				<div className='flex items-center gap-2'>
 					<div className='text--[var(--brand-text-weak)]'>
@@ -37,13 +41,9 @@ export function IssueItem({ issue, onClickTitle }: IssueItemProps) {
 							<Archive className='text-[var(--brand-text-weak)]' />
 						)}
 					</div>
-					<button
-						type='button'
-						className='font-available-medium-20 text-[var(--neutral-text-strong)] hover:underline cursor-default'
-						onClick={onClickTitle}
-					>
+					<span className='font-available-medium-20 text-[var(--neutral-text-strong)] group-hover:underline'>
 						{issue.title}
-					</button>
+					</span>
 					{issue.labels.map((label) => (
 						<LabelChip
 							key={label.id}
@@ -68,8 +68,9 @@ export function IssueItem({ issue, onClickTitle }: IssueItemProps) {
 						</span>
 					)}
 				</div>
-			</div>
-			<div className='flex mr-[54px]'>
+			</button>
+
+			<div className='flex mx-[54px]'>
 				{issue.assignees.map((assignee, i) => (
 					<Avatar
 						key={assignee.id}

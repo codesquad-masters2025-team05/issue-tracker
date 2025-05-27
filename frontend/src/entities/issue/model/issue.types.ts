@@ -33,19 +33,12 @@ export interface MilestoneDetail {
 	progress: number;
 }
 
-export interface Attachment {
-	id: number;
-	fileName: string;
-	url: string;
-}
-
 export interface Comment {
 	id: number;
 	content: string;
 	author: User;
 	createdAt: string;
 	updatedAt: string;
-	attachments?: Attachment[];
 }
 
 export interface IssueListItem {
@@ -84,7 +77,6 @@ export interface IssueDetailData {
 
 export interface IssueCreateComment {
 	content: string;
-	attachments: Attachment[];
 }
 
 export interface IssueCreateRequest {

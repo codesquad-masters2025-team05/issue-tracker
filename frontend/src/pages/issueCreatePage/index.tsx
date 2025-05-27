@@ -31,7 +31,6 @@ export default function IssueCreatePage() {
 			title: form.title,
 			comment: {
 				content: form.body,
-				attachments: [],
 			},
 			assigneeIds: form.assigneeIds,
 			labelIds: form.labelIds,

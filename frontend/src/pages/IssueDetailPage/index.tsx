@@ -68,8 +68,6 @@ const IssueDetailPage: FC = () => {
 							id={comment.id}
 							isAuthor={issue.author.id === comment.author.id}
 							content={comment.content || ''}
-							// 현재 api에 attachments가 미포함이어서 || [] 추가했음. 추후에 api 수정되면 삭제 필요
-							initialFiles={[]}
 							commentAuthor={comment.author}
 							createdAt={comment.createdAt}
 							updatedAt={comment.updatedAt}

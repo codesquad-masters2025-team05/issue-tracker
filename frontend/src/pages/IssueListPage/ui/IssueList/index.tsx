@@ -54,7 +54,7 @@ export function IssueList(props: IssueListProps) {
 				>
 					<IssueItem
 						issue={issue}
-						onClickTitle={() => handleClickIssue(issue.id)}
+						onClickIssue={() => handleClickIssue(issue.id)}
 					/>
 				</div>
 			))}
