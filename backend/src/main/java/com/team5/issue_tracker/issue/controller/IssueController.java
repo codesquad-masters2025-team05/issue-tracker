@@ -18,11 +18,10 @@ import com.team5.issue_tracker.issue.dto.response.IssuePageResponse;
 import com.team5.issue_tracker.issue.parser.IssueSearchRequestParser;
 import com.team5.issue_tracker.issue.query.IssueQueryService;
 import com.team5.issue_tracker.issue.service.IssueService;
-import com.team5.issue_tracker.issue.dto.response.IssueLabelPageResponse;
+import com.team5.issue_tracker.issue.dto.response.IssueLabelScrollResponse;
 import com.team5.issue_tracker.label.query.LabelQueryService;
 import com.team5.issue_tracker.issue.dto.response.IssueMilestonePageResponse;
 import com.team5.issue_tracker.milestone.query.MilestoneQueryService;
-import com.team5.issue_tracker.user.dto.UserPageResponse;
 import com.team5.issue_tracker.user.dto.UserScrollResponse;
 
 import jakarta.validation.Valid;
@@ -85,8 +84,11 @@ public class IssueController {
   }
 
   @GetMapping("/labels")
-  public ResponseEntity<ApiResponse<IssueLabelPageResponse>> getFilterLabels() {
-    return ResponseEntity.ok(ApiResponse.success(labelQueryService.getFilterLabels()));
+  public ResponseEntity<ApiResponse<IssueLabelScrollResponse>> getScrolledFilterLabels(
+      @RequestParam(required = false) String cursor,
+      @RequestParam(required = false, defaultValue = "10") Integer limit
+  ) {
+    return ResponseEntity.ok(ApiResponse.success(labelQueryService.getScrolledFilterLabels(cursor, limit)));
   }
 
   @GetMapping("/milestones")

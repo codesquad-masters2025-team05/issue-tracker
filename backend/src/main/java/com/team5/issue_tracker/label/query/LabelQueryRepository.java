@@ -19,9 +19,18 @@ import lombok.RequiredArgsConstructor;
 public class LabelQueryRepository {
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  public List<LabelSummaryResponse> findIssueLabels() {
-    String lableSql = "SELECT id, name, text_color, background_color FROM label";
-    return jdbcTemplate.query(lableSql, (rs, rowNum) ->
+  public List<LabelSummaryResponse> findIssueLabels(String cursor, Integer limit) {
+    String lableSql = """
+        SELECT id, name, text_color, background_color FROM label
+        WHERE (:cursor IS NULL OR name > :cursor)
+        ORDER BY name ASC
+        LIMIT :limitPlusOne;
+        """;
+    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.addValue("cursor", cursor);
+    params.addValue("limitPlusOne", limit + 1);
+
+    return jdbcTemplate.query(lableSql, params, (rs, rowNum) ->
         new LabelSummaryResponse(
             rs.getLong("id"),
             rs.getString("name"),
