@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 interface CommentProps {
 	id: number;
@@ -33,21 +33,9 @@ export function Comment({
 }: CommentProps) {
 	const [editing, setEditing] = useState(false);
 	const [editValue, setEditValue] = useState(content);
-	const [files, setFiles] = useState<Attachment[]>(initialFiles);
-
-	const filesAreDifferent = (a: Attachment[], b: Attachment[]) => {
-		if (a.length !== b.length) return true;
-		// 순서까지 비교. (순서 상관없게 하려면 sort 후 비교)
-		return a.some((file, i) => file.url !== b[i]?.url);
-	};
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: filesAreDifferent is a pure function defined inline and does not need to be in deps.
-	const hasChanged = useMemo(
-		() =>
-			(editValue !== content && editValue.trim().length > 0) ||
-			filesAreDifferent(files, initialFiles),
-		[editValue, content, files, initialFiles],
-	);
+	const hasChanged = editValue !== content && editValue.trim().length > 0;
 
 	return (
 		<div>
