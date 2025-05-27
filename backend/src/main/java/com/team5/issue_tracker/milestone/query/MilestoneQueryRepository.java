@@ -74,7 +74,7 @@ public class MilestoneQueryRepository {
     );
   }
 
-  public List<MilestoneResponse> findAllMilestones() {
+  public List<MilestoneResponse> findMilestones(Long page, Long perPage) {
     String sql = """
           WITH issue_counts AS (
             SELECT
@@ -99,10 +99,17 @@ public class MilestoneQueryRepository {
             END AS progress
           FROM milestone m
           LEFT JOIN issue_counts ic ON m.id = ic.milestone_id
-          ORDER BY m.id;
+          ORDER BY m.id
+          LIMIT :limit OFFSET :offset;
         """;
+    MapSqlParameterSource params = new MapSqlParameterSource();
 
-    return jdbcTemplate.query(sql,
+    long limit = perPage;
+    long offset = (page - 1) * perPage;
+    params.addValue("limit", limit);
+    params.addValue("offset", offset);
+
+    return jdbcTemplate.query(sql, params,
         (rs, rowNum) -> new MilestoneResponse(
             rs.getLong("id"),
             rs.getString("name"),

@@ -22,14 +22,14 @@ public class MilestoneQueryService {
         milestones);
   }
 
-  public MilestonePageResponse getAllMilestones() {
-    List<MilestoneResponse> milestones = milestoneQueryRepository.findAllMilestones();
+  public MilestonePageResponse getMilestones(Long page, Long perPage) {
+    List<MilestoneResponse> milestones = milestoneQueryRepository.findMilestones(page, perPage);
     MilestoneCountResponse count = milestoneQueryRepository.countMilestones();
 
     return new MilestonePageResponse(
-        count.getTotal(),
-        1L,
         (long) milestones.size(),
+        page,
+        perPage,
         count.getOpenCount(),
         count.getClosedCount(),
         milestones
