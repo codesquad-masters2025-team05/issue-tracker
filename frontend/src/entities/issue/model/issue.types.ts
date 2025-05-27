@@ -35,7 +35,7 @@ export interface Attachment {
 
 export interface Comment {
 	id: number;
-	body: string;
+	content: string;
 	author: User;
 	createdAt: string;
 	updatedAt: string;

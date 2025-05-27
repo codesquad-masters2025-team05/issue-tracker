@@ -5,12 +5,12 @@ export interface CommentAttachment {
 }
 
 export interface CommentCreateRequest {
-	body: string;
+	content: string;
 	attachments: CommentAttachment[];
 }
 
 export interface CommentUpdateRequest {
-	body?: string;
+	content?: string;
 	attachments?: CommentAttachment[];
 }
 
