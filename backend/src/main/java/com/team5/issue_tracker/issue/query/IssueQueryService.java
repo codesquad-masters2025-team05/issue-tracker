@@ -21,7 +21,6 @@ import com.team5.issue_tracker.label.query.LabelQueryRepository;
 import com.team5.issue_tracker.milestone.dto.response.MilestoneResponse;
 import com.team5.issue_tracker.milestone.dto.response.MilestoneSummaryResponse;
 import com.team5.issue_tracker.milestone.query.MilestoneQueryRepository;
-import com.team5.issue_tracker.user.dto.UserPageResponse;
 import com.team5.issue_tracker.user.dto.UserScrollResponse;
 import com.team5.issue_tracker.user.dto.UserSummaryResponse;
 import com.team5.issue_tracker.user.query.UserQueryRepository;
