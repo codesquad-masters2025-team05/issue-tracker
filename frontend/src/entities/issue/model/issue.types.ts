@@ -75,13 +75,9 @@ export interface IssueDetailData {
 	comments: Comment[];
 }
 
-export interface IssueCreateComment {
-	content: string;
-}
-
 export interface IssueCreateRequest {
 	title: string;
-	comment: IssueCreateComment;
+	content: string;
 	assigneeIds: number[];
 	labelIds: number[];
 	milestoneId: number | null;
