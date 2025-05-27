@@ -20,7 +20,7 @@ export function IssueItem({ issue, onClickTitle }: IssueItemProps) {
 	}); // e.g. "8분 전"
 
 	return (
-		<div className='flex w-full items-start py-4'>
+		<div className='flex w-full  items-center py-4'>
 			{/* 1. 체크박스 영역 */}
 			<div className='flex-none px-8 h-8 flex items-center'>
 				<Checkbox />
@@ -31,7 +31,7 @@ export function IssueItem({ issue, onClickTitle }: IssueItemProps) {
 				{/* 첫 번째 줄: 아이콘, 제목, 라벨 */}
 				<div className='flex items-center gap-2'>
 					<div className='text--[var(--brand-text-weak)]'>
-						{issue.open ? (
+						{issue.isOpen ? (
 							<IconInfo className='text-[var(--brand-text-weak)]' />
 						) : (
 							<Archive className='text-[var(--brand-text-weak)]' />
@@ -69,10 +69,17 @@ export function IssueItem({ issue, onClickTitle }: IssueItemProps) {
 					)}
 				</div>
 			</div>
-			<Avatar className='size-5 my-[22px] mx-[54px]'>
-				<AvatarImage src={issue.author.imageUrl} alt={issue.author.username} />
-				<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
-			</Avatar>
+			<div className='flex mr-[54px]'>
+				{issue.assignees.map((assignee, i) => (
+					<Avatar
+						key={assignee.id}
+						className={`size-5 ${i > 0 ? '-ml-2' : ''} border-2 border-white`}
+					>
+						<AvatarImage src={assignee.imageUrl} alt={assignee.username} />
+						<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
+					</Avatar>
+				))}
+			</div>
 		</div>
 	);
 }

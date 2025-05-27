@@ -32,7 +32,7 @@ const IssueDetailPage: FC = () => {
 	const toggleOpen = () =>
 		mutate({
 			id: issue.id,
-			payload: { open: !issue.open },
+			payload: { isOpen: !issue.isOpen },
 		});
 
 	const onEditComplete = (title: string) =>
@@ -54,10 +54,10 @@ const IssueDetailPage: FC = () => {
 				id={issue.id}
 				onCloseIssue={toggleOpen}
 				onEditComplete={onEditComplete}
-				open={issue.open}
+				open={issue.isOpen}
 				author={issue.author}
 				createdAt={issue.createdAt}
-				commentCount={issue.comments.length}
+				commentCount={issue.comments?.length}
 			/>
 			<Division />
 			<div className='flex flex-col gap-6'>
@@ -68,7 +68,8 @@ const IssueDetailPage: FC = () => {
 							id={comment.id}
 							isAuthor={issue.author.id === comment.author.id}
 							content={comment.content || ''}
-							initialFiles={comment.attachments}
+							// 현재 api에 attachments가 미포함이어서 || [] 추가했음. 추후에 api 수정되면 삭제 필요
+							initialFiles={comment.attachments || []}
 							commentAuthor={comment.author}
 							createdAt={comment.createdAt}
 							updatedAt={comment.updatedAt}

@@ -1,6 +1,7 @@
 export interface Label {
 	id: number;
 	name: string;
+	description: string;
 	textColor: string;
 	backgroundColor: string;
 }
@@ -9,6 +10,11 @@ export interface User {
 	id: number;
 	username: string;
 	imageUrl: string;
+}
+
+export interface UserSummary {
+	id: number;
+	username: string;
 }
 
 export interface MilestoneSummary {
@@ -21,7 +27,7 @@ export interface MilestoneDetail {
 	name: string;
 	description: string;
 	deadline: string;
-	open: boolean;
+	isOpen: boolean;
 	openIssueCount: number;
 	closedIssueCount: number;
 	progress: number;
@@ -39,33 +45,34 @@ export interface Comment {
 	author: User;
 	createdAt: string;
 	updatedAt: string;
-	attachments: Attachment[];
+	attachments?: Attachment[];
 }
 
 export interface IssueListItem {
 	id: number;
-	number?: number;
 	title: string;
+	isOpen: boolean;
 	labels: Label[];
-	author: User;
+	author: UserSummary;
+	assignees: User[];
 	milestone: MilestoneSummary | null;
 	createdAt: string;
-	updatedAt: string | null;
+	updatedAt: string;
 	commentsCount: number;
-	open: boolean;
 }
 
 export interface IssueListData {
 	total: number;
 	page: number;
 	perPage: number;
+	q: string;
 	issues: IssueListItem[];
 }
 
 export interface IssueDetailResponse {
 	id: number;
 	title: string;
-	open: boolean;
+	isOpen: boolean;
 	labels: Label[];
 	author: User;
 	assignees: User[];
@@ -77,7 +84,7 @@ export interface IssueDetailResponse {
 
 export interface IssueCreateRequest {
 	title: string;
-	body: string;
+	content: string;
 	assigneeIds: number[];
 	labelIds: number[];
 	milestoneId: number | null;
@@ -91,11 +98,10 @@ export interface IssueCreateResponse {
 
 export interface IssueUpdateRequest {
 	title?: string;
-	body?: string;
 	assigneeIds?: number[];
 	labelIds?: number[];
 	milestoneId?: number | null;
-	open?: boolean;
+	isOpen?: boolean;
 }
 
 export interface IssueUpdateResponse {

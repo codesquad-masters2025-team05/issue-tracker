@@ -3,7 +3,7 @@ export const mockIssue = {
 	// number 제거
 	title: '버튼 클릭 시 모달이 열리지 않는 문제',
 	// body 제거
-	open: true,
+	isOpen: true,
 	labels: [
 		{ id: 1, name: 'bug', textColor: '#d73a4a', backgroundColor: '#d73a4a' },
 		{ id: 3, name: 'ui', textColor: '#d73a4a', backgroundColor: '#d73a4a' },
@@ -25,7 +25,7 @@ export const mockIssue = {
 		name: 'v1.0',
 		description: '첫 번째 정식 버전 릴리즈',
 		deadline: '2025-06-01',
-		open: true,
+		isOpen: true,
 		openIssueCount: 2,
 		closedIssueCount: 5,
 		progress: 71,
