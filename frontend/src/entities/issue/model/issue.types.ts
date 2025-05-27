@@ -82,9 +82,14 @@ export interface IssueDetailData {
 	comments: Comment[];
 }
 
+export interface IssueCreateComment {
+	content: string;
+	attachments: Attachment[];
+}
+
 export interface IssueCreateRequest {
 	title: string;
-	content: string;
+	comment: IssueCreateComment;
 	assigneeIds: number[];
 	labelIds: number[];
 	milestoneId: number | null;
