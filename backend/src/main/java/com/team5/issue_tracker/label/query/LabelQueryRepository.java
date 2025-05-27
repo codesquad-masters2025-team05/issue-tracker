@@ -31,9 +31,18 @@ public class LabelQueryRepository {
     );
   }
 
-  public List<LabelResponse> findAllLabels() {
-    String lableSql = "SELECT id, name, description, text_color, background_color FROM label";
-    return jdbcTemplate.query(lableSql, (rs, rowNum) ->
+  public List<LabelResponse> findLabels(Long page, Long perPage) {
+    String lableSql =
+        "SELECT id, name, description, text_color, background_color FROM label LIMIT :limit OFFSET :offset";
+
+    MapSqlParameterSource params = new MapSqlParameterSource();
+
+    long limit = perPage;
+    long offset = (page - 1) * perPage;
+    params.addValue("limit", limit);
+    params.addValue("offset", offset);
+
+    return jdbcTemplate.query(lableSql, params, (rs, rowNum) ->
         new LabelResponse(
             rs.getLong("id"),
             rs.getString("name"),

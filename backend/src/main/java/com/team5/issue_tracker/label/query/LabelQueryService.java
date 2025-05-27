@@ -20,8 +20,8 @@ public class LabelQueryService {
     return new IssueLabelPageResponse((long) labels.size(), 0L, (long) labels.size(), labels);
   }
 
-  public LabelPageResponse getAllLabels() {
-    List<LabelResponse> labels = labelQueryRepository.findAllLabels();
-    return new LabelPageResponse((long) labels.size(), 0L, (long) labels.size(), labels);
+  public LabelPageResponse getLabels(Long page, Long perPage) {
+    List<LabelResponse> labels = labelQueryRepository.findLabels(page, perPage);
+    return new LabelPageResponse((long) labels.size(), page, perPage, labels);
   }
 }
