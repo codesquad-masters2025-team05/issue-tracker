@@ -69,7 +69,7 @@ export interface IssueListData {
 	issues: IssueListItem[];
 }
 
-export interface IssueDetailResponse {
+export interface IssueDetailData {
 	id: number;
 	title: string;
 	isOpen: boolean;
