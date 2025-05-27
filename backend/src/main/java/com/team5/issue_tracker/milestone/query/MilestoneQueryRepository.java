@@ -22,9 +22,19 @@ public class MilestoneQueryRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  public List<MilestoneSummaryResponse> findIssueMilestones() {
-    String milestoneSql = "SELECT id, name FROM milestone";
-    return jdbcTemplate.query(milestoneSql,
+  public List<MilestoneSummaryResponse> findIssueMilestones(String cursor, Integer limit) {
+    String milestoneSql = """
+    SELECT id, name FROM milestone
+    WHERE (:cursor IS NULL OR name > :cursor)
+    ORDER BY name ASC
+    LIMIT :limitPlusOne;
+    """;
+
+    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.addValue("cursor", cursor);
+    params.addValue("limitPlusOne", limit + 1);
+
+    return jdbcTemplate.query(milestoneSql, params,
         (rs, rowNum) -> new MilestoneSummaryResponse(rs.getLong("id"), rs.getString("name")));
   }
 
