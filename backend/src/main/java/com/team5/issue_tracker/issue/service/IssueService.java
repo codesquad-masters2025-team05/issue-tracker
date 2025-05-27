@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.team5.issue_tracker.common.comment.domain.Comment;
 import com.team5.issue_tracker.common.comment.domain.CommentAttachment;
-import com.team5.issue_tracker.common.comment.dto.CommentRequestDto;
+import com.team5.issue_tracker.common.comment.dto.CommentRequest;
 import com.team5.issue_tracker.common.comment.reqository.CommentAttachmentRepository;
 import com.team5.issue_tracker.common.comment.reqository.CommentRepository;
 import com.team5.issue_tracker.issue.domain.Issue;
@@ -47,11 +47,11 @@ public class IssueService {
     saveIssueLabels(savedIssueID, request.getLabelIds());
     saveIssueAssignees(savedIssueID, request.getAssigneeIds());
 
-    CommentRequestDto commentRequestDto = request.getComment();
-    Comment comment = new Comment(userId, savedIssueID, commentRequestDto.getContent(), now, now);
+    CommentRequest commentRequest = request.getComment();
+    Comment comment = new Comment(userId, savedIssueID, commentRequest.getContent(), now, now);
     Comment savedComment = commentRepository.save(comment);
 
-    saveCommentAttachment(commentRequestDto, savedComment);
+    saveCommentAttachment(commentRequest, savedComment);
 
     return savedIssueID;
   }
@@ -68,8 +68,8 @@ public class IssueService {
     }
   }
 
-  private void saveCommentAttachment(CommentRequestDto commentRequestDto, Comment savedComment) {
-    List<String> attachments = commentRequestDto.getAttachments();
+  private void saveCommentAttachment(CommentRequest commentRequest, Comment savedComment) {
+    List<String> attachments = commentRequest.getAttachments();
     if (attachments != null && !attachments.isEmpty()) {
       for (String fileUrl : attachments) {
         CommentAttachment attachment = new CommentAttachment(

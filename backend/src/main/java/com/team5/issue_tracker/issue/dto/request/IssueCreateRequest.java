@@ -2,7 +2,7 @@ package com.team5.issue_tracker.issue.dto.request;
 
 import java.util.List;
 
-import com.team5.issue_tracker.common.comment.dto.CommentRequestDto;
+import com.team5.issue_tracker.common.comment.dto.CommentRequest;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +21,7 @@ public class IssueCreateRequest {
   private String title;
 
   @NotNull(message = "댓글 내용을 넣어주세요.")
-  private CommentRequestDto comment;
+  private CommentRequest comment;
 
   @NotNull(message = "담당자를 넣어주세요.")
   private List<Long> assigneeIds;
