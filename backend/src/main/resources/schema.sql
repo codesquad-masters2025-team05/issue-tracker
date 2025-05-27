@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS comment_attachment;
 DROP TABLE IF EXISTS issue_assignee;
 DROP TABLE IF EXISTS issue_label;
 DROP TABLE IF EXISTS comment;
@@ -76,4 +77,12 @@ CREATE TABLE issue_assignee
     UNIQUE (issue_id, assignee_id),
     FOREIGN KEY (issue_id) REFERENCES issue (id) ON DELETE CASCADE,
     FOREIGN KEY (assignee_id) REFERENCES user (id) ON DELETE CASCADE
+);
+
+CREATE TABLE comment_attachment
+(
+    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
+    comment_id BIGINT       NOT NULL,
+    file_url   VARCHAR(500) NOT NULL,
+    FOREIGN KEY (comment_id) REFERENCES comment (id) ON DELETE CASCADE
 );
