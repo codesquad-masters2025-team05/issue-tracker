@@ -19,8 +19,9 @@ public class IssueSummaryResponse {
   private String title;
   private Boolean isOpen;
   private List<LabelSummaryResponse> labels;
-  private UserSummaryResponse author;
+  private UserPreviewResponse author;
   private MilestoneSummaryResponse milestone;
+  private List<UserSummaryResponse> assignees;
   private Instant createdAt;
   private Instant updatedAt;
   private Long commentsCount;
