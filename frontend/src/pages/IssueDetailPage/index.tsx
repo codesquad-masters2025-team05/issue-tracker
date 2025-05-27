@@ -19,7 +19,7 @@ const IssueDetailPage: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const { data, refetch } = useFetchIssueDetail(Number(id));
 	const { mutate: issueUpdateMutate } = useUpdateIssue();
-	const { mutate: commentUpdateMutate } = useUpdateComment();
+	const { mutate: commentUpdateMutate } = useUpdateComment(refetch);
 	const { mutate: commentCreateMutate } = useCreateComment(() => {
 		refetch();
 		setInputValue('');
