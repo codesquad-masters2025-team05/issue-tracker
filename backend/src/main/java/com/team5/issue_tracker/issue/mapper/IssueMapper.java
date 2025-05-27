@@ -10,7 +10,6 @@ import com.team5.issue_tracker.issue.dto.response.IssueDetailResponse;
 import com.team5.issue_tracker.issue.dto.response.IssueSummaryResponse;
 import com.team5.issue_tracker.issue.dto.response.UserPreviewResponse;
 import com.team5.issue_tracker.label.dto.response.LabelResponse;
-import com.team5.issue_tracker.label.dto.response.LabelSummaryResponse;
 import com.team5.issue_tracker.milestone.dto.response.MilestoneResponse;
 import com.team5.issue_tracker.milestone.dto.response.MilestoneSummaryResponse;
 import com.team5.issue_tracker.user.dto.UserSummaryResponse;
@@ -18,7 +17,7 @@ import com.team5.issue_tracker.user.dto.UserSummaryResponse;
 public class IssueMapper {
   public static List<IssueSummaryResponse> toSummaryResponse(
       List<IssueQueryDto> issueQueryDtos,
-      Map<Long, List<LabelSummaryResponse>> labels,
+      Map<Long, List<LabelResponse>> labels,
       Map<Long, UserPreviewResponse> userDto,
       Map<Long, MilestoneSummaryResponse> milestoneDto,
       Map<Long, List<UserSummaryResponse>> assignees
