@@ -1,7 +1,9 @@
 package com.team5.issue_tracker.issue.service;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,20 +78,22 @@ public class IssueService {
 
   @Transactional
   public void updateIssueLabels(Long issueId, UpdateIssueLabelsRequest request) {
-    List<Long> labelIds = request.getLabelIds();
+    Set<Long> labelIds = request.getLabelIds();
 
     if (!issueRepository.existsById(issueId)) {
       throw new IllegalArgumentException("존재하지 않는 이슈입니다.");
     } //TODO: 커스텀 에러 만들지 고민중
 
-    issueLabelRepository.deleteByIssueId(issueId);
+    // 스프링 데이터 jdbc에서는 한 번에 지우는게 안되는 것 같아서 분리
+    List<IssueLabel> issueLabels = issueLabelRepository.findAllByIssueId(issueId);
+    issueLabelRepository.deleteAll(issueLabels);
 
     if (labelIds != null && !labelIds.isEmpty()) {
       saveIssueLabels(issueId, labelIds);
     }
   }
 
-  private void saveIssueLabels(Long issueId, List<Long> labelIds) {
+  private void saveIssueLabels(Long issueId, Collection<Long> labelIds) {
     List<IssueLabel> issueLabels = labelIds.stream()
         .map(labelId -> new IssueLabel(issueId, labelId))
         .toList();

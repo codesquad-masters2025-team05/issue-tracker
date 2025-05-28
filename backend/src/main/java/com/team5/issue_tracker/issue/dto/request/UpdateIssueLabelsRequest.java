@@ -1,6 +1,6 @@
 package com.team5.issue_tracker.issue.dto.request;
 
-import java.util.List;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,5 +12,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateIssueLabelsRequest {
-  private List<Long> labelIds;
+  private Set<Long> labelIds;
 }
