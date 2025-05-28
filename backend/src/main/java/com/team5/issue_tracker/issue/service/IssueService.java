@@ -15,6 +15,7 @@ import com.team5.issue_tracker.issue.domain.Issue;
 import com.team5.issue_tracker.issue.domain.IssueAssignee;
 import com.team5.issue_tracker.issue.domain.IssueLabel;
 import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
+import com.team5.issue_tracker.issue.dto.request.UpdateIssueAssigneesRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateIssueLabelsRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateIssueMilestoneRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateIssueStatusRequest;
@@ -104,12 +105,37 @@ public class IssueService {
     issueRepository.save(issue);
   }
 
+  @Transactional
+  public void updateIssueAssignees(Long issueId, UpdateIssueAssigneesRequest request) {
+    Set<Long> assigneeIds = request.getAssigneeIds();
+
+    if (!issueRepository.existsById(issueId)) {
+      throw new IllegalArgumentException("존재하지 않는 이슈입니다.");
+    } //TODO: 커스텀 에러 만들지 고민중
+
+    // 스프링 데이터 jdbc에서는 한 번에 지우는게 안되는 것 같아서 분리
+    List<IssueAssignee> issueAssignees = issueAssigneeRepository.findAllByIssueId(issueId);
+    issueAssigneeRepository.deleteAll(issueAssignees);
+
+    if (assigneeIds != null && !assigneeIds.isEmpty()) {
+      saveIssueAssignees(issueId, assigneeIds);
+    }
+  }
+
   private void saveIssueLabels(Long issueId, Collection<Long> labelIds) {
     List<IssueLabel> issueLabels = labelIds.stream()
         .map(labelId -> new IssueLabel(issueId, labelId))
         .toList();
 
     issueLabelRepository.saveAll(issueLabels);
+  }
+
+  private void saveIssueAssignees(Long issueId, Collection<Long> assigneeIds) {
+    List<IssueAssignee> issueAssignees = assigneeIds.stream()
+        .map(assigneeId -> new IssueAssignee(issueId, assigneeId))
+        .toList();
+
+    issueAssigneeRepository.saveAll(issueAssignees);
   }
 
   private void saveIssueAssignees(Long issueId, List<Long> assigneeIds) {

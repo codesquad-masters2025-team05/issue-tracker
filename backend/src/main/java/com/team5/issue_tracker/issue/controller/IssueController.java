@@ -14,6 +14,7 @@ import com.team5.issue_tracker.common.comment.service.CommentService;
 import com.team5.issue_tracker.common.dto.ApiResponse;
 import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
 import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
+import com.team5.issue_tracker.issue.dto.request.UpdateIssueAssigneesRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateIssueLabelsRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateIssueMilestoneRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateIssueStatusRequest;
@@ -139,6 +140,15 @@ public class IssueController {
       @Valid @RequestBody UpdateIssueMilestoneRequest request
   ) {
     issueService.updateIssueMilestone(issueId, request);
+    return ResponseEntity.noContent().build();
+  }
+
+  @PatchMapping("/{issueId}/assignees")
+  public ResponseEntity<Void> updateIssueAssignees(
+      @PathVariable Long issueId,
+      @Valid @RequestBody UpdateIssueAssigneesRequest request
+  ) {
+    issueService.updateIssueAssignees(issueId, request);
     return ResponseEntity.noContent().build();
   }
 }
