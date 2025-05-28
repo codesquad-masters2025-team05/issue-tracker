@@ -50,8 +50,9 @@ export async function updateIssue(
 	id: number,
 	payload: IssueUpdateRequest,
 ): Promise<void> {
-	// 반환값 없음
-	const url = `/api/issues/${id}`;
+	const [key] = Object.keys(payload);
+
+	const url = `/api/issues/${id}/${key === 'isOpen' ? 'status' : key}`;
 	const res = await fetch(url, {
 		method: 'PATCH',
 		headers: { 'Content-Type': 'application/json' },
