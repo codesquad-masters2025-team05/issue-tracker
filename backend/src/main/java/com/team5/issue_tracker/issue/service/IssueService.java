@@ -13,8 +13,9 @@ import com.team5.issue_tracker.issue.domain.Issue;
 import com.team5.issue_tracker.issue.domain.IssueAssignee;
 import com.team5.issue_tracker.issue.domain.IssueLabel;
 import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
-import com.team5.issue_tracker.issue.dto.request.UpdateStatusRequest;
-import com.team5.issue_tracker.issue.dto.request.UpdateTitleRequest;
+import com.team5.issue_tracker.issue.dto.request.UpdateIssueLabelsRequest;
+import com.team5.issue_tracker.issue.dto.request.UpdateIssueStatusRequest;
+import com.team5.issue_tracker.issue.dto.request.UpdateIssueTitleRequest;
 import com.team5.issue_tracker.issue.repository.IssueAssigneeRepository;
 import com.team5.issue_tracker.issue.repository.IssueLabelRepository;
 import com.team5.issue_tracker.issue.repository.IssueRepository;
@@ -54,7 +55,7 @@ public class IssueService {
   }
 
   @Transactional
-  public void updateIssueTitle(Long issueId, UpdateTitleRequest request) {
+  public void updateIssueTitle(Long issueId, UpdateIssueTitleRequest request) {
     String title = request.getTitle();
     Issue issue = issueRepository.findById(issueId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이슈입니다."));
@@ -64,13 +65,28 @@ public class IssueService {
   }
 
   @Transactional
-  public void updateIssueStatus(Long issueId, UpdateStatusRequest request) {
+  public void updateIssueStatus(Long issueId, UpdateIssueStatusRequest request) {
     Boolean isOpen = request.getIsOpen();
     Issue issue = issueRepository.findById(issueId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이슈입니다."));
 
     issue.setIsOpen(isOpen);
     issueRepository.save(issue);
+  }
+
+  @Transactional
+  public void updateIssueLabels(Long issueId, UpdateIssueLabelsRequest request) {
+    List<Long> labelIds = request.getLabelIds();
+
+    if (!issueRepository.existsById(issueId)) {
+      throw new IllegalArgumentException("존재하지 않는 이슈입니다.");
+    } //TODO: 커스텀 에러 만들지 고민중
+
+    issueLabelRepository.deleteByIssueId(issueId);
+
+    if (labelIds != null && !labelIds.isEmpty()) {
+      saveIssueLabels(issueId, labelIds);
+    }
   }
 
   private void saveIssueLabels(Long issueId, List<Long> labelIds) {
