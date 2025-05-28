@@ -13,6 +13,7 @@ import com.team5.issue_tracker.issue.domain.Issue;
 import com.team5.issue_tracker.issue.domain.IssueAssignee;
 import com.team5.issue_tracker.issue.domain.IssueLabel;
 import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
+import com.team5.issue_tracker.issue.dto.request.UpdateTitleRequest;
 import com.team5.issue_tracker.issue.repository.IssueAssigneeRepository;
 import com.team5.issue_tracker.issue.repository.IssueLabelRepository;
 import com.team5.issue_tracker.issue.repository.IssueRepository;
@@ -51,6 +52,16 @@ public class IssueService {
     return savedIssueID;
   }
 
+  @Transactional
+  public void updateIssueTitle(Long issueId, UpdateTitleRequest request) {
+    String title = request.getTitle();
+    Issue issue = issueRepository.findById(issueId)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이슈입니다."));
+
+    issue.setTitle(title);
+    issueRepository.save(issue);
+  }
+
   private void saveIssueLabels(Long issueId, List<Long> labelIds) {
     for (Long labelId : labelIds) {
       issueLabelRepository.save(new IssueLabel(issueId, labelId));
@@ -62,5 +73,4 @@ public class IssueService {
       issueAssigneeRepository.save(new IssueAssignee(issueId, assigneeId));
     }
   }
-
 }
