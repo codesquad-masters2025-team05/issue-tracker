@@ -6,6 +6,7 @@ import type { DropdownOption } from './DropdownOption';
 
 interface DropdownPanelProps {
 	open: boolean;
+	closePanel: () => void;
 	alignRight?: boolean;
 	options: DropdownOption[];
 	isLoading?: boolean;
@@ -16,6 +17,7 @@ interface DropdownPanelProps {
 
 export function DropdownPanel({
 	open,
+	closePanel,
 	alignRight,
 	options,
 	isLoading,
@@ -72,7 +74,10 @@ export function DropdownPanel({
 									? 'font-selected-bold-16 text-[var(--neutral-text-strong)]'
 									: 'font-available-medium-16 text-[var(--neutral-text-default)]',
 							)}
-							onClick={opt.onClick}
+							onClick={() => {
+								opt.onClick();
+								closePanel();
+							}}
 							aria-selected={opt.isSelected}
 							// biome-ignore lint/a11y/useSemanticElements: <explanation>
 							role='option'

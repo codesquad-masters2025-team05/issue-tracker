@@ -62,6 +62,7 @@ export function Dropdown({
 			/>
 			<DropdownPanel
 				open={open}
+				closePanel={() => setOpen(false)}
 				alignRight={alignRight}
 				options={options}
 				isLoading={isLoading}
