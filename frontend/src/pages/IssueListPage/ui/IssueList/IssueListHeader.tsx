@@ -34,8 +34,6 @@ export const IssueListHeader = ({
 	const isOpen = hasKeyValue(getQ(), 'is', 'open');
 	const isClosed = hasKeyValue(getQ(), 'is', 'closed');
 
-	const isFirstMounted = !isOpen && !isClosed;
-
 	const buttonClassName =
 		'flex items-center gap-1 px-4 h-10 rounded-2xl transiton hover:bg-[var(--neutral-surface-bold)]';
 	const defaultFontColor =
@@ -48,7 +46,7 @@ export const IssueListHeader = ({
 				<Checkbox className='mr-4' />
 				<button
 					type='button'
-					className={`${buttonClassName} ${isFirstMounted || isOpen ? selectedFontColor : defaultFontColor}`}
+					className={`${buttonClassName} ${isOpen ? selectedFontColor : defaultFontColor}`}
 					onClick={() => updateQ('is', 'open')}
 				>
 					<AlertCircleIcon />

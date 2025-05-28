@@ -1,7 +1,7 @@
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
 import { NavigationButton } from '@/widgets/NavigationButton';
 import type { FC } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useQ } from './hooks/useQueryString';
 import { useIssueListFilterState } from './model/useIssueListFilterState';
 import { FilterBar } from './ui/FilterBar';
 import { IssueCreationButton } from './ui/IssueCreationButton';
@@ -10,9 +10,14 @@ import { IssueList } from './ui/IssueList';
 const IssueListPage: FC = () => {
 	const filterState = useIssueListFilterState();
 
-	const [searchParams] = useSearchParams();
-	const q = searchParams.get('q') ?? 'is:open';
-	const { data: IssueListData, isLoading, error } = useFetchIssueList(q);
+	const { getQ, setQ } = useQ();
+	if (!getQ()) setQ('is:open');
+
+	const {
+		data: IssueListData,
+		isLoading,
+		error,
+	} = useFetchIssueList(getQ() as string);
 
 	/* 추후 스켈레톤으로 변경 */
 	// if (isLoading) {

@@ -92,13 +92,12 @@ import { useSearchParams } from 'react-router-dom';
  * useQ - 쿼리 문자열 q 파라미터의 get/set을 위한 커스텀 훅
  *
  * @returns
- *   getQ: () => string (없으면 "is:open" 반환)
+ *   getQ: () => string (없으면 null 반환)
  *   setQ: (newQ: string) => void
  */
 export function useQ() {
 	const [searchParams, setSearchParams] = useSearchParams();
 
-	// q 값 추출 (없으면 "is:open" 반환)
 	const getQ = () => {
 		const q = searchParams.get('q');
 		return q;
