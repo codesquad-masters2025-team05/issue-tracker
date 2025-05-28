@@ -1,6 +1,6 @@
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
 import { NavigationButton } from '@/widgets/NavigationButton';
-import type { FC } from 'react';
+import { type FC, useEffect } from 'react';
 import { useQ } from './hooks/useQueryString';
 import { useIssueListFilterState } from './model/useIssueListFilterState';
 import { FilterBar } from './ui/FilterBar';
@@ -11,7 +11,10 @@ const IssueListPage: FC = () => {
 	const filterState = useIssueListFilterState();
 
 	const { getQ, setQ } = useQ();
-	if (!getQ()) setQ('is:open');
+
+	useEffect(() => {
+		if (!getQ()) setQ('is:open');
+	}, [getQ, setQ]);
 
 	const {
 		data: IssueListData,
