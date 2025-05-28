@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.team5.issue_tracker.common.comment.dto.CommentRequest;
 import com.team5.issue_tracker.common.comment.service.CommentService;
 import com.team5.issue_tracker.common.dto.ApiResponse;
+import com.team5.issue_tracker.issue.dto.request.IssueDeleteRequest;
 import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
 import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateIssueAssigneesRequest;
@@ -64,6 +65,14 @@ public class IssueController {
   ) {
     log.info("POST /api/issues 요청");
     return ResponseEntity.ok(ApiResponse.success(issueService.createIssue(request)));
+  }
+
+  @DeleteMapping
+  public ResponseEntity<ApiResponse<Void>> deleteIssues(
+      @Valid @RequestBody IssueDeleteRequest request
+  ) {
+    issueQueryService.deleteIssues(request);
+    return ResponseEntity.ok(ApiResponse.success(null));
   }
 
   @GetMapping("/{issueId}")
