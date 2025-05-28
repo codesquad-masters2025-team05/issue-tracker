@@ -6,6 +6,7 @@ import { LabelChip } from '@/shared/ui/LabelChip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import type { FC } from 'react';
 import { useParams } from 'react-router-dom';
+import { MilestoneBox } from './MilestoneBox';
 import { useIssueInitialIds } from './useIssueInitialIds';
 import { useIssueSelectOptions } from './useIssueSelectOptions';
 
@@ -177,10 +178,8 @@ export const Sidebar = () => {
 					isAlignRight={true}
 				/>
 				{/* 선택된 마일스톤 */}
-				{selectedMilestone && (
-					<span className='inline-block mx-2 px-4 py-1 rounded-full bg-[var(--neutral-surface-bold)]'>
-						{selectedMilestone.name}
-					</span>
+				{selectedMilestone != null && (
+					<MilestoneBox milestone={selectedMilestone} />
 				)}
 			</Area>
 		</div>
