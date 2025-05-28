@@ -9,7 +9,7 @@ import type { IssueUpdateRequest } from '@/entities/issue/model/issue.types';
 import { TextArea } from '@/shared/ui/TextArea';
 import { Button } from '@/shared/ui/button';
 import { type FC, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { mockIssue } from './mock';
 import { Comment } from './ui/Comment';
 import { Header } from './ui/Header';
@@ -63,6 +63,8 @@ const IssueDetailPage: FC = () => {
 		});
 
 	const onDeleteIssue = () => issueDeleteMutate(Number(id));
+
+	const navigate = useNavigate();
 
 	return (
 		<div className='flex flex-col gap-6'>
@@ -126,7 +128,10 @@ const IssueDetailPage: FC = () => {
 						variant='ghost'
 						size='sm'
 						className='text-[var(--danger-text-default)]'
-						onClick={onDeleteIssue}
+						onClick={() => {
+							navigate('/issues');
+							onDeleteIssue();
+						}}
 					>
 						<TrashIcon className='size-4' />
 						이슈 삭제
