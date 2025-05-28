@@ -116,7 +116,7 @@ public class IssueService {
 
   @Transactional
   public void deleteIssue(Long issueId) {
-    // todo: 이슈가 있는지 없는지 검증
+    validateIssueExists(issueId);
     issueRepository.deleteById(issueId);
   }
 
