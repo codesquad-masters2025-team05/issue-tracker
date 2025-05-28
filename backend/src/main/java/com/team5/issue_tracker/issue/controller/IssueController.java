@@ -14,6 +14,7 @@ import com.team5.issue_tracker.common.comment.service.CommentService;
 import com.team5.issue_tracker.common.dto.ApiResponse;
 import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
 import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
+import com.team5.issue_tracker.issue.dto.request.UpdateStatusRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateTitleRequest;
 import com.team5.issue_tracker.issue.dto.response.IssueDetailResponse;
 import com.team5.issue_tracker.issue.dto.response.IssuePageResponse;
@@ -109,6 +110,15 @@ public class IssueController {
       @Valid @RequestBody UpdateTitleRequest request
   ) {
     issueService.updateIssueTitle(issueId, request);
+    return ResponseEntity.noContent().build();
+  }
+
+  @PatchMapping("/{issueId}/status")
+  public ResponseEntity<Void> updateIssueStatus(
+      @PathVariable Long issueId,
+      @Valid @RequestBody UpdateStatusRequest request
+  ) {
+    issueService.updateIssueStatus(issueId, request);
     return ResponseEntity.noContent().build();
   }
 }

@@ -13,6 +13,7 @@ import com.team5.issue_tracker.issue.domain.Issue;
 import com.team5.issue_tracker.issue.domain.IssueAssignee;
 import com.team5.issue_tracker.issue.domain.IssueLabel;
 import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
+import com.team5.issue_tracker.issue.dto.request.UpdateStatusRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateTitleRequest;
 import com.team5.issue_tracker.issue.repository.IssueAssigneeRepository;
 import com.team5.issue_tracker.issue.repository.IssueLabelRepository;
@@ -59,6 +60,16 @@ public class IssueService {
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이슈입니다."));
 
     issue.setTitle(title);
+    issueRepository.save(issue);
+  }
+
+  @Transactional
+  public void updateIssueStatus(Long issueId, UpdateStatusRequest request) {
+    Boolean isOpen = request.getIsOpen();
+    Issue issue = issueRepository.findById(issueId)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이슈입니다."));
+
+    issue.setIsOpen(isOpen);
     issueRepository.save(issue);
   }
 
