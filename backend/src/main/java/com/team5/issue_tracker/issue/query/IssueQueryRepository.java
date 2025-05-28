@@ -4,6 +4,7 @@ import com.team5.issue_tracker.issue.dto.FilterSql;
 import com.team5.issue_tracker.issue.dto.IssueQueryDto;
 import com.team5.issue_tracker.issue.dto.IssueSearchCondition;
 import com.team5.issue_tracker.issue.dto.response.IssueBaseResponse;
+import com.team5.issue_tracker.issue.dto.response.IssueCountResponse;
 import com.team5.issue_tracker.user.dto.UserSummaryResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,28 @@ public class IssueQueryRepository {
         )
     );
   }
+
+  public IssueCountResponse getIssueCountByCondition(IssueSearchCondition searchCondition) {
+    StringBuilder countSql = new StringBuilder("""
+            SELECT 
+               COALESCE(SUM(CASE WHEN i.is_open THEN 1 ELSE 0 END), 0) AS open_count,
+               COALESCE(SUM(CASE WHEN NOT i.is_open THEN 1 ELSE 0 END), 0) AS closed_count
+            FROM issue i
+            WHERE 1 = 1 
+        """);
+
+    FilterSql filterSql = buildFilterSql(searchCondition);
+    countSql.append(filterSql.getSql());
+    MapSqlParameterSource params = filterSql.getParams();
+
+    return jdbcTemplate.queryForObject(countSql.toString(), params, (rs, rowNum) ->
+        new IssueCountResponse(
+            rs.getLong("open_count"),
+            rs.getLong("closed_count")
+        )
+    );
+  }
+
 
   public List<UserSummaryResponse> findDistinctAuthors(String cursor, Integer limit) {
     String authorSql = """
