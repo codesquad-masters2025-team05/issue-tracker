@@ -12,9 +12,7 @@ import type {
 
 // 이슈 목록 조회
 export async function fetchIssues(q = ''): Promise<IssueListData> {
-	const url = q
-		? `/api/issues?q=${encodeURIComponent(q)}`
-		: '/api/issues?q=is:open';
+	const url = q ? `/api/issues?q=${encodeURIComponent(q)}` : '/api/issues';
 	const res = await getJSON<ApiResponse<IssueListData>>(url);
 	if (!res.success) throw new Error(res.error ?? '이슈 목록 조회 실패');
 	return res.data;

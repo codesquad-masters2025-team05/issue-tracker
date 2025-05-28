@@ -11,7 +11,7 @@ const IssueListPage: FC = () => {
 	const filterState = useIssueListFilterState();
 
 	const [searchParams] = useSearchParams();
-	const q = searchParams.get('q') ?? '';
+	const q = searchParams.get('q') ?? 'is:open';
 	const { data: IssueListData, isLoading, error } = useFetchIssueList(q);
 
 	/* 추후 스켈레톤으로 변경 */
