@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateStatusRequest {
+public class UpdateIssueStatusRequest {
   @NotNull(message = "isOpen 값은 필수입니다.")
   private Boolean isOpen;
 }

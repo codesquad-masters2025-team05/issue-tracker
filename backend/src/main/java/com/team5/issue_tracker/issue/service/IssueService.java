@@ -90,9 +90,11 @@ public class IssueService {
   }
 
   private void saveIssueLabels(Long issueId, List<Long> labelIds) {
-    for (Long labelId : labelIds) {
-      issueLabelRepository.save(new IssueLabel(issueId, labelId));
-    }
+    List<IssueLabel> issueLabels = labelIds.stream()
+        .map(labelId -> new IssueLabel(issueId, labelId))
+        .toList();
+
+    issueLabelRepository.saveAll(issueLabels);
   }
 
   private void saveIssueAssignees(Long issueId, List<Long> assigneeIds) {

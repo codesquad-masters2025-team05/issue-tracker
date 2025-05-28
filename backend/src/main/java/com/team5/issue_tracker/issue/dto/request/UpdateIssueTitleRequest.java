@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateTitleRequest {
+public class UpdateIssueTitleRequest {
   @NotBlank(message = "제목을 작성해주세요.")
   String title;
 }
