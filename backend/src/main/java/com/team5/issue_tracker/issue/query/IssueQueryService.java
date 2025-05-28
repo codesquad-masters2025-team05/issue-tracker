@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.team5.issue_tracker.common.comment.query.CommentQueryRepository;
 import com.team5.issue_tracker.issue.dto.IssueQueryDto;
 import com.team5.issue_tracker.issue.dto.IssueSearchCondition;
-import com.team5.issue_tracker.issue.dto.request.IssueDeleteRequest;
 import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
 import com.team5.issue_tracker.issue.dto.response.IssueBaseResponse;
 import com.team5.issue_tracker.common.comment.dto.CommentResponse;
@@ -113,17 +112,5 @@ public class IssueQueryService {
     List<CommentResponse> comments = commentQueryRepository.getCommentsByIssueId(issueId);
     return IssueMapper.toDetailResponse(issueBase, labelList, author, assignees, milestone,
         comments);
-  }
-
-  @Transactional(readOnly = false)
-  public void deleteIssue(Long issueId) {
-    // todo: 이슈가 있는지 없는지 검증
-    issueQueryRepository.deleteByIssueId(issueId);
-  }
-
-  @Transactional(readOnly = false)
-  public void deleteIssues(IssueDeleteRequest request) {
-    // todo: 이슈가 있는지 없는지 검증
-    issueQueryRepository.deleteByIssueIds(request.getIssueIds());
   }
 }

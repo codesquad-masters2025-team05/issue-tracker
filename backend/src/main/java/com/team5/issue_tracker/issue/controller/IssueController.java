@@ -71,7 +71,7 @@ public class IssueController {
   public ResponseEntity<ApiResponse<Void>> deleteIssues(
       @Valid @RequestBody IssueDeleteRequest request
   ) {
-    issueQueryService.deleteIssues(request);
+    issueService.deleteIssues(request);
     return ResponseEntity.ok(ApiResponse.success(null));
   }
 
@@ -83,7 +83,7 @@ public class IssueController {
 
   @DeleteMapping("/{issueId}")
   public ResponseEntity<ApiResponse<Void>> deleteIssue(@PathVariable Long issueId) {
-    issueQueryService.deleteIssue(issueId);
+    issueService.deleteIssue(issueId);
     return ResponseEntity.ok(ApiResponse.success(null));
   }
 

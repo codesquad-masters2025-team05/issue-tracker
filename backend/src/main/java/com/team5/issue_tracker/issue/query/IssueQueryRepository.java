@@ -174,16 +174,4 @@ public class IssueQueryRepository {
     }
     return new FilterSql(where, params);
   }
-
-  public void deleteByIssueId(Long issueId) {
-    MapSqlParameterSource params = new MapSqlParameterSource()
-        .addValue("issueId", issueId);
-    jdbcTemplate.update("DELETE FROM issue WHERE id = :issueId", params);
-  }
-
-  public void deleteByIssueIds(List<Long> issueIds) {
-    MapSqlParameterSource params = new MapSqlParameterSource()
-        .addValue("issueIds", issueIds);
-    jdbcTemplate.update("DELETE FROM issue WHERE id IN (:issueIds)", params);
-  }
 }
