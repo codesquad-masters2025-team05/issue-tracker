@@ -174,4 +174,10 @@ public class IssueQueryRepository {
     }
     return new FilterSql(where, params);
   }
+
+  public void deleteByIssueId(Long issueId) {
+    MapSqlParameterSource params = new MapSqlParameterSource()
+        .addValue("issueId", issueId);
+    jdbcTemplate.update("DELETE FROM issue WHERE id = :issueId", params);
+  }
 }

@@ -1,6 +1,7 @@
 package com.team5.issue_tracker.issue.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,6 +70,12 @@ public class IssueController {
   public ResponseEntity<ApiResponse<IssueDetailResponse>> getIssueById(@PathVariable Long issueId) {
     IssueDetailResponse response = issueQueryService.getIssueById(issueId);
     return ResponseEntity.ok(ApiResponse.success(response));
+  }
+
+  @DeleteMapping("/{issueId}")
+  public ResponseEntity<ApiResponse<Void>> deleteIssue(@PathVariable Long issueId) {
+    issueQueryService.deleteIssue(issueId);
+    return ResponseEntity.ok(ApiResponse.success(null));
   }
 
   @PostMapping("/{issueId}/comments")

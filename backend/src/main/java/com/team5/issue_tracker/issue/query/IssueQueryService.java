@@ -113,4 +113,10 @@ public class IssueQueryService {
     return IssueMapper.toDetailResponse(issueBase, labelList, author, assignees, milestone,
         comments);
   }
+
+  @Transactional(readOnly = false)
+  public void deleteIssue(Long issueId) {
+    //이슈가 있는지 없는지 검증
+    issueQueryRepository.deleteByIssueId(issueId);
+  }
 }
