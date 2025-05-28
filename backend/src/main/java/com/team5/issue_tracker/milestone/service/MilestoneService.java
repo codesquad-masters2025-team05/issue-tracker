@@ -1,6 +1,7 @@
 package com.team5.issue_tracker.milestone.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.team5.issue_tracker.milestone.domain.Milestone;
 import com.team5.issue_tracker.milestone.dto.request.MilestoneCreateRequest;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class MilestoneService {
   private final MilestoneRepository milestoneRepository;
 
+  @Transactional
   public Long createMilestone(MilestoneCreateRequest request) {
     Milestone milestone = new Milestone(
         request.getName(),
