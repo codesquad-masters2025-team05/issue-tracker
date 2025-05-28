@@ -59,6 +59,8 @@ export interface IssueListData {
 	page: number;
 	perPage: number;
 	q: string;
+	openCount: number;
+	closedCount: number;
 	issues: IssueListItem[];
 }
 
@@ -77,7 +79,7 @@ export interface IssueDetailData {
 
 export interface IssueCreateRequest {
 	title: string;
-	content: string;
+	comment: { content: string };
 	assigneeIds: number[];
 	labelIds: number[];
 	milestoneId: number | null;

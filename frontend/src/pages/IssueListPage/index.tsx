@@ -12,7 +12,7 @@ const IssueListPage: FC = () => {
 
 	const [searchParams] = useSearchParams();
 	const q = searchParams.get('q') ?? '';
-	const { data, isLoading, error } = useFetchIssueList(q);
+	const { data: IssueListData, isLoading, error } = useFetchIssueList(q);
 
 	/* 추후 스켈레톤으로 변경 */
 	// if (isLoading) {
@@ -40,7 +40,14 @@ const IssueListPage: FC = () => {
 					<IssueCreationButton />
 				</div>
 			</div>
-			{data && <IssueList issues={data.issues} {...filterState} />}
+			{IssueListData && (
+				<IssueList
+					openCount={IssueListData.openCount}
+					closedCount={IssueListData.closedCount}
+					issues={IssueListData.issues}
+					{...filterState}
+				/>
+			)}
 		</>
 	);
 };

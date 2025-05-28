@@ -1,13 +1,20 @@
 import AlertCircleIcon from '@/assets/alertCircle.svg?react';
 import ArchiveIcon from '@/assets/archive.svg?react';
 import { Dropdown } from '@/shared/ui/Dropdown_v2';
-import type { FC } from 'react';
 import { useISsueFilterOptions } from '../../hooks/useIssueFilterOptions';
 import { hasKeyValue, useQ } from '../../hooks/useQueryString';
-import type { IssueListFilterState as IssueListHeaderProps } from '../../model/types';
+import type { IssueListFilterState } from '../../model/types';
 import { Checkbox } from './CheckBox';
 
-export const IssueListHeader: FC<IssueListHeaderProps> = () => {
+interface IssueListHeaderProps extends IssueListFilterState {
+	openCount: number;
+	closedCount: number;
+}
+
+export const IssueListHeader = ({
+	openCount,
+	closedCount,
+}: IssueListHeaderProps) => {
 	const {
 		labelOptions,
 		milestoneOptions,
@@ -43,7 +50,7 @@ export const IssueListHeader: FC<IssueListHeaderProps> = () => {
 					onClick={() => updateQ('is', 'open')}
 				>
 					<AlertCircleIcon />
-					<span>{`열린 이슈(${0})`}</span>
+					<span>{`열린 이슈(${openCount})`}</span>
 				</button>
 				<button
 					type='button'
@@ -51,7 +58,7 @@ export const IssueListHeader: FC<IssueListHeaderProps> = () => {
 					onClick={() => updateQ('is', 'closed')}
 				>
 					<ArchiveIcon />
-					<span>{`닫힌 이슈(${0})`}</span>
+					<span>{`닫힌 이슈(${closedCount})`}</span>
 				</button>
 			</div>
 			<div className='flex gap-3'>

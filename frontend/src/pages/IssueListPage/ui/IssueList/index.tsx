@@ -5,12 +5,16 @@ import { IssueItem } from './IssueItem';
 import { IssueListHeader } from './IssueListHeader';
 
 interface IssueListProps extends IssueListFilterState {
+	openCount: number;
+	closedCount: number;
 	issues: IssueListItem[];
 }
 
 export function IssueList(props: IssueListProps) {
 	const {
 		issues,
+		openCount,
+		closedCount,
 		isOpen,
 		setIsOpen,
 		stateId,
@@ -34,6 +38,8 @@ export function IssueList(props: IssueListProps) {
 	return (
 		<div className='flex flex-col rounded-2xl border border-[var(--neutral-border-default)] divide-y divide-[var(--neutral-border-default)] text-[var(--neutral-border-default)] '>
 			<IssueListHeader
+				openCount={openCount}
+				closedCount={closedCount}
 				isOpen={isOpen}
 				setIsOpen={setIsOpen}
 				stateId={stateId}
