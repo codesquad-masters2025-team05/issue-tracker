@@ -1,5 +1,6 @@
 package com.team5.issue_tracker.issue.query;
 
+import com.team5.issue_tracker.issue.dto.FilterSql;
 import com.team5.issue_tracker.issue.dto.IssueQueryDto;
 import com.team5.issue_tracker.issue.dto.IssueSearchCondition;
 import com.team5.issue_tracker.issue.dto.response.IssueBaseResponse;
@@ -19,7 +20,8 @@ public class IssueQueryRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  public List<IssueQueryDto> findIssuesByCondition(IssueSearchCondition searchCondition, Integer page,
+  public List<IssueQueryDto> findIssuesByCondition(IssueSearchCondition searchCondition,
+      Integer page,
       Integer perPage) {
     StringBuilder issueSql = new StringBuilder("""
             SELECT 
@@ -29,52 +31,17 @@ public class IssueQueryRepository {
                 i.created_at,
                 i.updated_at
             FROM issue i
+            WHERE 1 = 1 
         """);
 
-    List<String> whereClauses = new ArrayList<>();
-    MapSqlParameterSource params = new MapSqlParameterSource();
+    FilterSql filterSql = buildFilterSql(searchCondition);
+
+    issueSql.append(filterSql.getSql());
+    MapSqlParameterSource params = filterSql.getParams();
 
     if (searchCondition.getIsOpen() != null) {
-      whereClauses.add("i.is_open = :isOpen");
+      issueSql.append(" AND i.is_open = :isOpen");
       params.addValue("isOpen", searchCondition.getIsOpen());
-    }
-
-    if (searchCondition.getAssigneeId() != null) {
-      whereClauses.add("EXISTS (" +
-          " SELECT 1 FROM issue_assignee ia" +
-          " WHERE ia.issue_id = i.id" +
-          " AND ia.assignee_id = :assigneeId" +
-          ")"
-      );
-      params.addValue("assigneeId", searchCondition.getAssigneeId());
-    }
-
-    if (searchCondition.getLabelIds() != null && !searchCondition.getLabelIds().isEmpty()) {
-      whereClauses.add("""
-          i.id IN (
-            SELECT issue_id
-            FROM issue_label
-            WHERE label_id IN (:labelIds)
-            GROUP BY issue_id
-            HAVING COUNT(DISTINCT label_id) = :labelCount
-          )
-          """);
-      params.addValue("labelIds", searchCondition.getLabelIds());
-      params.addValue("labelCount", searchCondition.getLabelIds().size());
-    }
-
-    if (searchCondition.getMilestoneId() != null) {
-      whereClauses.add("i.milestone_id = :milestoneId");
-      params.addValue("milestoneId", searchCondition.getMilestoneId());
-    }
-
-    if (searchCondition.getAuthorId() != null) {
-      whereClauses.add("i.user_id = :authorId");
-      params.addValue("authorId", searchCondition.getAuthorId());
-    }
-
-    if (!whereClauses.isEmpty()) {
-      issueSql.append(" WHERE ").append(String.join(" AND ", whereClauses));
     }
 
     issueSql.append(" ORDER BY i.created_at DESC");
@@ -136,5 +103,52 @@ public class IssueQueryRepository {
         rs.getTimestamp("created_at").toInstant(),
         rs.getTimestamp("updated_at").toInstant()
     ));
+  }
+
+  private FilterSql buildFilterSql(IssueSearchCondition searchCondition) {
+    List<String> whereClauses = new ArrayList<>();
+    MapSqlParameterSource params = new MapSqlParameterSource();
+
+    if (searchCondition.getAssigneeId() != null) {
+      whereClauses.add("""
+          EXISTS (
+          SELECT 1 FROM issue_assignee ia
+          WHERE ia.issue_id = i.id
+          AND ia.assignee_id = :assigneeId
+          )
+          """
+      );
+      params.addValue("assigneeId", searchCondition.getAssigneeId());
+    }
+
+    if (searchCondition.getLabelIds() != null && !searchCondition.getLabelIds().isEmpty()) {
+      whereClauses.add("""
+          i.id IN (
+            SELECT issue_id
+            FROM issue_label
+            WHERE label_id IN (:labelIds)
+            GROUP BY issue_id
+            HAVING COUNT(DISTINCT label_id) = :labelCount
+          )
+          """);
+      params.addValue("labelIds", searchCondition.getLabelIds());
+      params.addValue("labelCount", searchCondition.getLabelIds().size());
+    }
+
+    if (searchCondition.getMilestoneId() != null) {
+      whereClauses.add("i.milestone_id = :milestoneId");
+      params.addValue("milestoneId", searchCondition.getMilestoneId());
+    }
+
+    if (searchCondition.getAuthorId() != null) {
+      whereClauses.add("i.user_id = :authorId");
+      params.addValue("authorId", searchCondition.getAuthorId());
+    }
+
+    String where = "";
+    for (String clause : whereClauses) {
+      where += " AND " + clause;
+    }
+    return new FilterSql(where, params);
   }
 }
