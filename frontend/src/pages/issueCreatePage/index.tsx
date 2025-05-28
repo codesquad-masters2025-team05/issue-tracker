@@ -22,7 +22,7 @@ export default function IssueCreatePage() {
 	const handleSubmit = () => {
 		mutate({
 			title: form.title,
-			content: form.body,
+			comment: { content: form.body },
 			assigneeIds: form.assigneeIds,
 			labelIds: form.labelIds,
 			milestoneId: form.milestoneId,
