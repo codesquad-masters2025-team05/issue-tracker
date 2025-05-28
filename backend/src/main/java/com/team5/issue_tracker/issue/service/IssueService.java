@@ -16,6 +16,7 @@ import com.team5.issue_tracker.issue.domain.IssueAssignee;
 import com.team5.issue_tracker.issue.domain.IssueLabel;
 import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateIssueLabelsRequest;
+import com.team5.issue_tracker.issue.dto.request.UpdateIssueMilestoneRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateIssueStatusRequest;
 import com.team5.issue_tracker.issue.dto.request.UpdateIssueTitleRequest;
 import com.team5.issue_tracker.issue.repository.IssueAssigneeRepository;
@@ -91,6 +92,16 @@ public class IssueService {
     if (labelIds != null && !labelIds.isEmpty()) {
       saveIssueLabels(issueId, labelIds);
     }
+  }
+
+  @Transactional
+  public void updateIssueMilestone(Long issueId, UpdateIssueMilestoneRequest request) {
+    Long milestoneId = request.getMilestoneId();
+    Issue issue = issueRepository.findById(issueId)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이슈입니다."));
+
+    issue.setMilestoneId(milestoneId);
+    issueRepository.save(issue);
   }
 
   private void saveIssueLabels(Long issueId, Collection<Long> labelIds) {
