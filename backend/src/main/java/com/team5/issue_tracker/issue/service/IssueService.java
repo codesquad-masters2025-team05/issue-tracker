@@ -61,8 +61,7 @@ public class IssueService {
   @Transactional
   public void updateIssueTitle(Long issueId, UpdateIssueTitleRequest request) {
     String title = request.getTitle();
-    Issue issue = issueRepository.findById(issueId)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이슈입니다."));
+    Issue issue = getIssueOrThrow(issueId);
 
     issue.setTitle(title);
     issueRepository.save(issue);
@@ -71,8 +70,7 @@ public class IssueService {
   @Transactional
   public void updateIssueStatus(Long issueId, UpdateIssueStatusRequest request) {
     Boolean isOpen = request.getIsOpen();
-    Issue issue = issueRepository.findById(issueId)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이슈입니다."));
+    Issue issue = getIssueOrThrow(issueId);
 
     issue.setIsOpen(isOpen);
     issueRepository.save(issue);
@@ -82,10 +80,7 @@ public class IssueService {
   public void updateIssueLabels(Long issueId, UpdateIssueLabelsRequest request) {
     Set<Long> labelIds = request.getLabelIds();
 
-    if (!issueRepository.existsById(issueId)) {
-      throw new IllegalArgumentException("존재하지 않는 이슈입니다.");
-    } //TODO: 커스텀 에러 만들지 고민중
-
+    validateIssueExists(issueId);
     // 스프링 데이터 jdbc에서는 한 번에 지우는게 안되는 것 같아서 분리
     List<IssueLabel> issueLabels = issueLabelRepository.findAllByIssueId(issueId);
     issueLabelRepository.deleteAll(issueLabels);
@@ -98,8 +93,7 @@ public class IssueService {
   @Transactional
   public void updateIssueMilestone(Long issueId, UpdateIssueMilestoneRequest request) {
     Long milestoneId = request.getMilestoneId();
-    Issue issue = issueRepository.findById(issueId)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이슈입니다."));
+    Issue issue = getIssueOrThrow(issueId);
 
     issue.setMilestoneId(milestoneId);
     issueRepository.save(issue);
@@ -109,10 +103,7 @@ public class IssueService {
   public void updateIssueAssignees(Long issueId, UpdateIssueAssigneesRequest request) {
     Set<Long> assigneeIds = request.getAssigneeIds();
 
-    if (!issueRepository.existsById(issueId)) {
-      throw new IllegalArgumentException("존재하지 않는 이슈입니다.");
-    } //TODO: 커스텀 에러 만들지 고민중
-
+    validateIssueExists(issueId);
     // 스프링 데이터 jdbc에서는 한 번에 지우는게 안되는 것 같아서 분리
     List<IssueAssignee> issueAssignees = issueAssigneeRepository.findAllByIssueId(issueId);
     issueAssigneeRepository.deleteAll(issueAssignees);
@@ -143,4 +134,15 @@ public class IssueService {
       issueAssigneeRepository.save(new IssueAssignee(issueId, assigneeId));
     }
   }
+
+  private void validateIssueExists(Long issueId) {
+    if (!issueRepository.existsById(issueId)) {
+      throw new IllegalArgumentException("존재하지 않는 이슈입니다.");
+    } //TODO: 커스텀 에러 만들지 고민중
+  }
+
+  private Issue getIssueOrThrow(Long issueId) {
+    return issueRepository.findById(issueId)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이슈입니다."));
+  } //TODO: 커스텀 에러 만들지 고민중
 }
