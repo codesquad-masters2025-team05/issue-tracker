@@ -2,6 +2,7 @@ import PlusIcon from '@/assets/plus.svg?react';
 import TrashIcon from '@/assets/trash.svg?react';
 import { useCreateComment } from '@/entities/comment/hooks/useCreateComment';
 import { useUpdateComment } from '@/entities/comment/hooks/useUpdateComment';
+import { useDeleteIssue } from '@/entities/issue/hooks/useDeleteIssue';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
 import { useUpdateIssue } from '@/entities/issue/hooks/useUpdateIssue';
 import type { IssueUpdateRequest } from '@/entities/issue/model/issue.types';
@@ -29,6 +30,8 @@ const IssueDetailPage: FC = () => {
 		refetch();
 		setInputValue('');
 	});
+	const { mutate: issueDeleteMutate } = useDeleteIssue();
+
 	const issue = data ? data : mockIssue;
 
 	const [inputValue, setInputValue] = useState('');
@@ -58,6 +61,8 @@ const IssueDetailPage: FC = () => {
 			issueId: Number(id),
 			payload: { content: inputValue },
 		});
+
+	const onDeleteIssue = () => issueDeleteMutate(Number(id));
 
 	return (
 		<div className='flex flex-col gap-6'>
@@ -121,6 +126,7 @@ const IssueDetailPage: FC = () => {
 						variant='ghost'
 						size='sm'
 						className='text-[var(--danger-text-default)]'
+						onClick={onDeleteIssue}
 					>
 						<TrashIcon className='size-4' />
 						이슈 삭제
