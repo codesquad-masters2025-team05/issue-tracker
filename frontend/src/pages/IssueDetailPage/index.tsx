@@ -4,12 +4,13 @@ import { useCreateComment } from '@/entities/comment/hooks/useCreateComment';
 import { useUpdateComment } from '@/entities/comment/hooks/useUpdateComment';
 import { useDeleteIssue } from '@/entities/issue/hooks/useDeleteIssue';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
+import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
 import { useUpdateIssue } from '@/entities/issue/hooks/useUpdateIssue';
 import type { IssueUpdateRequest } from '@/entities/issue/model/issue.types';
 import { TextArea } from '@/shared/ui/TextArea';
 import { Button } from '@/shared/ui/button';
 import { type FC, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { mockIssue } from './mock';
 import { Comment } from './ui/Comment';
 import { Header } from './ui/Header';
@@ -23,14 +24,15 @@ function Division() {
 
 const IssueDetailPage: FC = () => {
 	const { id } = useParams<{ id: string }>();
-	const { data, refetch } = useFetchIssueDetail(Number(id));
-	const { mutate: issueUpdateMutate } = useUpdateIssue(refetch);
-	const { mutate: commentUpdateMutate } = useUpdateComment(refetch);
+	const { refetch: issuesRefetch } = useFetchIssueList('');
+	const { data, refetch: issueDetailRefetch } = useFetchIssueDetail(Number(id));
+	const { mutate: issueUpdateMutate } = useUpdateIssue(issueDetailRefetch);
+	const { mutate: commentUpdateMutate } = useUpdateComment(issueDetailRefetch);
 	const { mutate: commentCreateMutate } = useCreateComment(() => {
-		refetch();
+		issueDetailRefetch();
 		setInputValue('');
 	});
-	const { mutate: issueDeleteMutate } = useDeleteIssue();
+	const { mutate: issueDeleteMutate } = useDeleteIssue(() => issuesRefetch());
 
 	const issue = data ? data : mockIssue;
 
@@ -63,8 +65,6 @@ const IssueDetailPage: FC = () => {
 		});
 
 	const onDeleteIssue = () => issueDeleteMutate(Number(id));
-
-	const navigate = useNavigate();
 
 	return (
 		<div className='flex flex-col gap-6'>
@@ -128,10 +128,7 @@ const IssueDetailPage: FC = () => {
 						variant='ghost'
 						size='sm'
 						className='text-[var(--danger-text-default)]'
-						onClick={() => {
-							navigate('/issues');
-							onDeleteIssue();
-						}}
+						onClick={onDeleteIssue}
 					>
 						<TrashIcon className='size-4' />
 						이슈 삭제
