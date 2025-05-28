@@ -9,6 +9,7 @@ import type { DropdownOption } from './DropdownOption';
 
 interface DropdownPanelProps {
 	open: boolean;
+	closePanel: () => void;
 	alignRight?: boolean;
 	categoryKey?: string;
 	options: DropdownOption[];
@@ -20,6 +21,7 @@ interface DropdownPanelProps {
 
 export function DropdownPanel({
 	open,
+	closePanel,
 	alignRight,
 	categoryKey,
 	options,
@@ -85,7 +87,10 @@ export function DropdownPanel({
 										? 'font-selected-bold-16 text-[var(--neutral-text-strong)]'
 										: 'font-available-medium-16 text-[var(--neutral-text-default)]',
 								)}
-								onClick={() => updateQ(selectedKey, value)}
+								onClick={() => {
+									updateQ(selectedKey, value);
+									closePanel();
+								}}
 								aria-selected={isSelected}
 								// biome-ignore lint/a11y/useSemanticElements: <explanation>
 								role='option'

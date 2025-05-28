@@ -64,6 +64,7 @@ export function Dropdown({
 			/>
 			<DropdownPanel
 				open={open}
+				closePanel={() => setOpen(false)}
 				alignRight={alignRight}
 				categoryKey={categoryKey}
 				options={options}
