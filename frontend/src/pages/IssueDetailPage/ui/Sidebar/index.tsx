@@ -1,4 +1,5 @@
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
+import { useUpdateIssue } from '@/entities/issue/hooks/useUpdateIssue';
 import { OptionAvatarLabel } from '@/shared/ui/AvatarLabel';
 import { Dropdown } from '@/shared/ui/Dropdown_v3';
 import type { DropdownOption } from '@/shared/ui/Dropdown_v3/DropdownOption';
@@ -45,6 +46,8 @@ export const Sidebar = () => {
 		setMilestoneId,
 	} = useIssueInitialIds(data);
 
+	const { mutate: issueUpdateMutate } = useUpdateIssue();
+
 	const selectedAssignees = assigneeIds
 		.map((id) => usersData?.users.find((u) => u.id === id))
 		.filter(Boolean); // undefined 제거
@@ -69,11 +72,14 @@ export const Sidebar = () => {
 			),
 			isSelected: assigneeIds.includes(user.id),
 			onClick: () => {
-				if (assigneeIds.includes(user.id)) {
-					setAssigneeIds(assigneeIds.filter((id) => id !== user.id));
-				} else {
-					setAssigneeIds([...assigneeIds, user.id]);
-				}
+				const nextIds = assigneeIds.includes(user.id)
+					? assigneeIds.filter((id) => id !== user.id)
+					: [...assigneeIds, user.id];
+				setAssigneeIds(nextIds);
+				issueUpdateMutate({
+					id: Number(id),
+					payload: { assigneeIds: nextIds },
+				});
 			},
 		}),
 	);
@@ -90,11 +96,11 @@ export const Sidebar = () => {
 			),
 			isSelected: labelIds.includes(label.id),
 			onClick: () => {
-				if (labelIds.includes(label.id)) {
-					setLabelIds(labelIds.filter((id) => id !== label.id));
-				} else {
-					setLabelIds([...labelIds, label.id]);
-				}
+				const nextIds = labelIds.includes(label.id)
+					? labelIds.filter((id) => id !== label.id)
+					: [...labelIds, label.id];
+				setLabelIds(nextIds);
+				issueUpdateMutate({ id: Number(id), payload: { labelIds: nextIds } });
 			},
 		}),
 	);
@@ -106,9 +112,10 @@ export const Sidebar = () => {
 		display: ms.name,
 		isSelected: milestoneId === ms.id,
 		onClick: () => {
-			setMilestoneId(milestoneId === ms.id ? null : ms.id);
+			const nextId = milestoneId === ms.id ? null : ms.id;
+			setMilestoneId(nextId);
+			issueUpdateMutate({ id: Number(id), payload: { milestoneId: nextId } });
 		},
-		// 마일스톤은 avatar 없음
 	}));
 
 	return (

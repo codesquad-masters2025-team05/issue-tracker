@@ -45,14 +45,23 @@ export async function createIssue(
 	return json.data; // 실제 새로 생성된 id 등 "진짜 데이터"만 반환
 }
 
+const keyToUrlMap: Record<string, string> = {
+	assigneeIds: 'assignees',
+	labelIds: 'labels',
+	milestoneId: 'milestone',
+	isOpen: 'status',
+	title: 'title',
+	body: 'body', // 필요하다면 추가
+};
+
 // 이슈 수정
 export async function updateIssue(
 	id: number,
 	payload: IssueUpdateRequest,
 ): Promise<void> {
 	const [key] = Object.keys(payload);
-
-	const url = `/api/issues/${id}/${key === 'isOpen' ? 'status' : key}`;
+	const urlKey = keyToUrlMap[key] ?? key;
+	const url = `/api/issues/${id}/${urlKey}`;
 	const res = await fetch(url, {
 		method: 'PATCH',
 		headers: { 'Content-Type': 'application/json' },
