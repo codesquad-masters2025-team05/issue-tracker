@@ -7,15 +7,18 @@ export interface LabelApiEntity {
 	textColor: string;
 }
 
+// API 응답의 data 부분만 타입으로 분리
+export interface LabelListData {
+	total: number;
+	page: number;
+	perPage: number;
+	labels: LabelApiEntity[];
+}
+
 // API 응답 - Label 리스트 (페이징 포함)
 export interface LabelListApiResponseDto {
 	success: boolean;
-	data: {
-		total: number;
-		page: number;
-		perPage: number;
-		labels: LabelApiEntity[];
-	};
+	data: LabelListData;
 	error: string | null;
 }
 

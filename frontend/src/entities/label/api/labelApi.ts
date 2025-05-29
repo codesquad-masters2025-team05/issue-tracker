@@ -1,12 +1,13 @@
 import { getJSON } from '@/shared/api/client';
-import type { ApiResponse } from '@/shared/api/types';
-import type { LabelListApiResponseDto } from '../model/label.types';
+import type {
+	LabelListApiResponseDto,
+	LabelListData,
+} from '../model/label.types';
 
 /**
  * 전체 레이블 목록을 가져옵니다.
  */
-export async function fetchLabels(): Promise<LabelListApiResponseDto> {
-	const res =
-		await getJSON<ApiResponse<LabelListApiResponseDto>>('/api/labels');
+export async function fetchLabels(): Promise<LabelListData> {
+	const res = await getJSON<LabelListApiResponseDto>('/api/labels');
 	return res.data;
 }
