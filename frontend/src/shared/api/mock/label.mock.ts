@@ -1,6 +1,7 @@
-import type { LabelListData } from '@/entities/label/api/labelApi';
-import type { LabelApiEntity } from '@/entities/label/model/label.types';
-import type { ApiResponse } from '@/shared/api/types';
+import type {
+	LabelApiEntity,
+	LabelListApiResponseDto,
+} from '@/entities/label/model/label.types';
 
 const labels: LabelApiEntity[] = [
 	{
@@ -33,7 +34,7 @@ const labels: LabelApiEntity[] = [
 	},
 ];
 
-export const mockLabelListResponse: ApiResponse<LabelListData> = {
+export const mockLabelListResponse: LabelListApiResponseDto = {
 	success: true,
 	data: {
 		total: labels.length,
