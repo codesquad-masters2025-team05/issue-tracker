@@ -13,13 +13,12 @@ export async function fetchLabels(): Promise<LabelListData> {
 
 export async function createLabel(
 	payload: LabelCreatePayload,
-): Promise<number> {
+): Promise<LabelCreateResponseDto> {
 	const res = await fetch('/api/labels', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(payload),
 	});
 
-	const json: LabelCreateResponseDto = await res.json();
-	return json.data;
+	return await res.json();
 }
