@@ -26,6 +26,7 @@ export function LabelCreateForm({ onClose }: LabelCreateFormProps) {
 	const { refetch: LabelListRefetch } = useFetchLabelList();
 	const { mutate: labelCreateMutate } = useCreateLabel(() => {
 		LabelListRefetch();
+		onClose();
 	});
 
 	const [name, setName] = useState<string>('');
