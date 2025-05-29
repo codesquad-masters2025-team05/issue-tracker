@@ -37,6 +37,13 @@ export interface LabelCreatePayload {
 	textColor: string;
 }
 
+// 생성 응답값 (id)
+export interface LabelCreateResponseDto {
+	success: boolean;
+	data: number;
+	error: string | null;
+}
+
 // 수정 입력값 - 메서드는 put으로 전체 대체용
 export interface LabelUpdatePayload {
 	id: number;
