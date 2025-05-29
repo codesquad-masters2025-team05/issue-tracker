@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchLabels } from '../api/labelApi';
-import type { LabelListApiResponseDto } from '../model/label.types';
+import type { LabelListData } from '../model/label.types';
 
 export function useFetchLabelList() {
-	return useQuery<LabelListApiResponseDto, Error>({
+	return useQuery<LabelListData, Error>({
 		queryKey: ['labels'],
 		queryFn: fetchLabels,
 	});
