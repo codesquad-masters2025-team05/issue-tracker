@@ -1,8 +1,8 @@
 import type { LabelListData } from '@/entities/label/api/labelApi';
-import type { LabelApiDto } from '@/entities/label/model/label.types';
+import type { LabelApiEntity } from '@/entities/label/model/label.types';
 import type { ApiResponse } from '@/shared/api/types';
 
-const labels: LabelApiDto[] = [
+const labels: LabelApiEntity[] = [
 	{
 		id: 1,
 		name: 'bug',
@@ -27,7 +27,7 @@ const labels: LabelApiDto[] = [
 	{
 		id: 4,
 		name: 'enhancement',
-		description: null,
+		description: '',
 		backgroundColor: '#5856D6',
 		textColor: '#FFFFFF',
 	},

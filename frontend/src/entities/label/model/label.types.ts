@@ -1,29 +1,53 @@
-// API 레이어가 반환하는 raw 타입
-export interface LabelApiDto {
+// API에서 내려오는 단일 Label
+export interface LabelApiEntity {
 	id: number;
 	name: string;
-	description: string | null;
+	description: string;
 	backgroundColor: string;
 	textColor: string;
 }
 
-// API wrapper 전체 응답
-export interface LabelsResponseDto {
+// API 응답 - Label 리스트 (페이징 포함)
+export interface LabelListApiResponseDto {
 	success: boolean;
 	data: {
 		total: number;
 		page: number;
 		perPage: number;
-		labels: LabelApiDto[];
+		labels: LabelApiEntity[];
 	};
 	error: string | null;
 }
 
-// 프론트엔드에서 사용할 Label 타입
+// API 응답 - 단일 Label
+export interface LabelApiResponseDto {
+	success: boolean;
+	data: LabelApiEntity;
+	error: string | null;
+}
+
+// 생성 입력값 (id 제외)
+export interface LabelCreatePayload {
+	name: string;
+	description: string;
+	backgroundColor: string;
+	textColor: string;
+}
+
+// 수정 입력값 - 메서드는 put으로 전체 대체용
+export interface LabelUpdatePayload {
+	id: number;
+	name: string;
+	description: string;
+	backgroundColor: string;
+	textColor: string;
+}
+
+// 프론트엔드 도메인 모델 (설명, description은 optional로 처리)
 export interface Label {
 	id: number;
 	name: string;
-	description?: string | null;
+	description: string;
 	backgroundColor: string;
 	textColor: string;
 }
