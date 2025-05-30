@@ -6,6 +6,7 @@ import type {
 	LabelApiEntity,
 	LabelListData,
 } from '@/entities/label/model/label.types';
+import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { LabelChip } from '@/shared/ui/LabelChip';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -104,13 +105,20 @@ interface LabelItemButtonsProps {
 
 const LabelItemButtons = ({ id, onEdit }: LabelItemButtonsProps) => {
 	const { refetch } = useFetchLabelList();
-
 	const { mutate: deleteLabelMutate, isPending: isDeleting } =
 		useDeleteLabel(refetch);
 
-	const handleDelete = () => {
+	// 모달 open 상태
+	const [open, setOpen] = useState(false);
+
+	const handleDeleteClick = () => setOpen(true);
+
+	const handleConfirmDelete = () => {
 		deleteLabelMutate(id);
+		setOpen(false);
 	};
+
+	const handleCancel = () => setOpen(false);
 
 	return (
 		<div className='flex gap-6'>
@@ -125,12 +133,20 @@ const LabelItemButtons = ({ id, onEdit }: LabelItemButtonsProps) => {
 			<button
 				type='button'
 				className='flex items-center gap-1 text-[var(--danger-text-default)] font-available-medium-12'
-				onClick={handleDelete}
+				onClick={handleDeleteClick}
 				disabled={isDeleting}
 			>
 				<TrashIcon className='size-4' />
 				삭제
 			</button>
+			<ConfirmModal
+				open={open}
+				text='정말 이 레이블을 삭제하시겠습니까?'
+				confirmText='삭제'
+				cancelText='취소'
+				onConfirm={handleConfirmDelete}
+				onCancel={handleCancel}
+			/>
 		</div>
 	);
 };
