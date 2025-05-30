@@ -1,5 +1,5 @@
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
-import { NavigationButton } from '@/widgets/NavigationButton';
+import { NavigationButton } from '@/widgets/LabelMilestoneTabs';
 import { type FC, useEffect } from 'react';
 import { useQ } from './hooks/useQueryString';
 import { useIssueListFilterState } from './model/useIssueListFilterState';
