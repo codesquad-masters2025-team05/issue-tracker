@@ -1,5 +1,6 @@
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
 import { useUpdateIssue } from '@/entities/issue/hooks/useUpdateIssue';
+import { MilestoneDetailCard } from '@/entities/milestone/ui/MilestoneDetailCard';
 import { OptionAvatarLabel } from '@/shared/ui/AvatarLabel';
 import { Dropdown } from '@/shared/ui/Dropdown_v3';
 import type { DropdownOption } from '@/shared/ui/Dropdown_v3/DropdownOption';
@@ -184,10 +185,7 @@ export const Sidebar = () => {
 					error={milestoneError}
 					isAlignRight={true}
 				/>
-				{/* 선택된 마일스톤 */}
-				{selectedMilestone != null && (
-					<MilestoneBox milestone={selectedMilestone} />
-				)}
+				{selectedMilestone && <MilestoneDetailCard id={selectedMilestone.id} />}
 			</Area>
 		</div>
 	);

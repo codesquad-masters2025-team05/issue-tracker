@@ -41,3 +41,14 @@ export interface MilestoneCountResponse {
 	data: number;
 	error: { message: string; code: number } | null;
 }
+
+export interface MilestoneDetail {
+	id: number;
+	name: string;
+	description: string | null;
+	deadline: string | null; // "2025-05-30"
+	isOpen: boolean;
+	openIssueCount: number;
+	closedIssueCount: number;
+	progress: number; // 0~100
+}

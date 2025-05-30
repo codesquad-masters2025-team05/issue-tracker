@@ -1,6 +1,9 @@
 import { getJSON } from '@/shared/api/client';
 import type { ApiResponse } from '@/shared/api/types';
-import type { MilestonesResponseDto } from '../model/milestone.types';
+import type {
+	MilestoneDetail,
+	MilestonesResponseDto,
+} from '../model/milestone.types';
 
 /** API에서 반환되는 data 필드 타입 */
 export type MilestoneListPageData = MilestonesResponseDto['data'];
@@ -22,5 +25,25 @@ export async function fetchMilestoneCount(): Promise<number> {
 	const json: MilestoneCountResponse = await res.json();
 	if (!json.success)
 		throw new Error(json.error?.message || '카운트 가져오기 실패');
+	return json.data;
+}
+
+export interface MilestoneApiResponse<T> {
+	success: boolean;
+	data: T;
+	error?: {
+		message: string;
+		code: number;
+	};
+}
+
+export async function fetchMilestoneDetail(
+	id: number,
+): Promise<MilestoneDetail> {
+	const res = await fetch(`/api/milestones/${id}`);
+	if (!res.ok) throw new Error('서버 연결에 실패했습니다.');
+	const json: MilestoneApiResponse<MilestoneDetail> = await res.json();
+	if (!json.success)
+		throw new Error(json.error?.message || '마일스톤 정보 가져오기 실패');
 	return json.data;
 }
