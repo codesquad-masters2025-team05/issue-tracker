@@ -1,5 +1,6 @@
 import EditIcon from '@/assets/edit.svg?react';
 import TrashIcon from '@/assets/trash.svg?react';
+import { useDeleteLabel } from '@/entities/label/hooks/useDeleteLabel';
 import { useFetchLabelList } from '@/entities/label/hooks/useFetchLabelList';
 import type {
 	LabelApiEntity,
@@ -8,7 +9,6 @@ import type {
 import { LabelChip } from '@/shared/ui/LabelChip';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useState } from 'react';
-// 반드시 import!
 import { LabelEditForm } from './LabelEditForm';
 
 export const LabelList = () => {
@@ -92,16 +92,26 @@ const LabelListItem = ({
 			<span className='flex-1 font-display-medium-16 text-[var(--neutral-text-weak)]'>
 				{label.description || ''}
 			</span>
-			<LabelItemButtons onEdit={onEdit} />
+			<LabelItemButtons id={label.id} onEdit={onEdit} />
 		</div>
 	);
 };
 
 interface LabelItemButtonsProps {
+	id: number;
 	onEdit: () => void;
 }
 
-const LabelItemButtons = ({ onEdit }: LabelItemButtonsProps) => {
+const LabelItemButtons = ({ id, onEdit }: LabelItemButtonsProps) => {
+	const { refetch } = useFetchLabelList();
+
+	const { mutate: deleteLabelMutate, isPending: isDeleting } =
+		useDeleteLabel(refetch);
+
+	const handleDelete = () => {
+		deleteLabelMutate(id);
+	};
+
 	return (
 		<div className='flex gap-6'>
 			<button
@@ -115,6 +125,8 @@ const LabelItemButtons = ({ onEdit }: LabelItemButtonsProps) => {
 			<button
 				type='button'
 				className='flex items-center gap-1 text-[var(--danger-text-default)] font-available-medium-12'
+				onClick={handleDelete}
+				disabled={isDeleting}
 			>
 				<TrashIcon className='size-4' />
 				삭제
