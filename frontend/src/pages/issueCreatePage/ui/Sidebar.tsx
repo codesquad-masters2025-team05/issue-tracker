@@ -1,3 +1,4 @@
+import { MilestoneDetailCard } from '@/entities/milestone/ui/MilestoneDetailCard';
 import { OptionAvatarLabel } from '@/shared/ui/AvatarLabel'; // 앞서 만든 공용 컴포넌트
 import { Dropdown } from '@/shared/ui/Dropdown';
 import { LabelChip } from '@/shared/ui/LabelChip';
@@ -130,11 +131,7 @@ export const Sidebar: FC<SidebarProps> = ({
 					isAlignRight={true}
 				/>
 				{/* 선택된 마일스톤 */}
-				{selectedMilestone && (
-					<span className='inline-block mx-2 px-4 py-1 rounded-full bg-[var(--neutral-surface-bold)]'>
-						{selectedMilestone.name}
-					</span>
-				)}
+				{selectedMilestone && <MilestoneDetailCard id={selectedMilestone.id} />}
 			</Area>
 		</div>
 	);
