@@ -43,3 +43,14 @@ export async function deleteLabel(id: number): Promise<void> {
 		throw new Error(error?.error ?? '레이블 삭제에 실패했습니다');
 	}
 }
+
+import type { LabelCountResponse } from '../model/label.types';
+
+export async function fetchLabelCount(): Promise<number> {
+	const res = await fetch('/api/labels/count');
+	if (!res.ok) throw new Error('서버 연결에 실패했습니다.');
+	const json: LabelCountResponse = await res.json();
+	if (!json.success)
+		throw new Error(json.error?.message || '카운트 가져오기 실패');
+	return json.data;
+}

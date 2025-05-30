@@ -13,3 +13,14 @@ export async function fetchMilestones(): Promise<MilestoneListPageData> {
 		await getJSON<ApiResponse<MilestoneListPageData>>('/api/milestones');
 	return res.data;
 }
+
+import type { MilestoneCountResponse } from '../model/milestone.types';
+
+export async function fetchMilestoneCount(): Promise<number> {
+	const res = await fetch('/api/milestones/count');
+	if (!res.ok) throw new Error('서버 연결에 실패했습니다.');
+	const json: MilestoneCountResponse = await res.json();
+	if (!json.success)
+		throw new Error(json.error?.message || '카운트 가져오기 실패');
+	return json.data;
+}

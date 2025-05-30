@@ -61,3 +61,9 @@ export interface Label {
 	backgroundColor: string;
 	textColor: string;
 }
+
+export interface LabelCountResponse {
+	success: boolean;
+	data: number;
+	error: { message: string; code: number } | null;
+}

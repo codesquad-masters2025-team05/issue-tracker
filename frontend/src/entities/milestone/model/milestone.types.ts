@@ -35,3 +35,9 @@ export interface Milestone {
 	closedIssueCount: number;
 	progress: number;
 }
+
+export interface MilestoneCountResponse {
+	success: boolean;
+	data: number;
+	error: { message: string; code: number } | null;
+}
