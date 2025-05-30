@@ -1,16 +1,28 @@
-// API에서 내려오는 단일 Milestone
-export interface MilestoneApiEntity {
+// 마일스톤 상세(상세 조회에서 사용)
+export interface MilestoneDetail {
 	id: number;
 	name: string;
-	description: string;
-	deadline?: string; // "YYYY-MM-DD" (없으면 undefined)
+	description: string | null;
+	deadline: string | null; // "YYYY-MM-DD"
 	isOpen: boolean;
 	openIssueCount: number;
 	closedIssueCount: number;
-	progress: number; // 0~100
+	progress: number;
 }
 
-// API 응답의 data 부분만 타입으로 분리
+// 리스트/엔티티 공통 (description, deadline은 string | null로 맞추는 것이 일관)
+export interface MilestoneApiEntity {
+	id: number;
+	name: string;
+	description: string | null;
+	deadline: string | null;
+	isOpen: boolean;
+	openIssueCount: number;
+	closedIssueCount: number;
+	progress: number;
+}
+
+// 리스트 데이터
 export interface MilestoneListData {
 	total: number;
 	page: number;
@@ -20,14 +32,14 @@ export interface MilestoneListData {
 	closedCount: number;
 }
 
-// API 응답 - Milestone 리스트 (페이징 포함)
+// API 응답 - 마일스톤 리스트
 export interface MilestoneListApiResponseDto {
 	success: boolean;
 	data: MilestoneListData;
 	error: { message: string; code: number } | null;
 }
 
-// API 응답 - 단일 Milestone
+// API 응답 - 단일 마일스톤 (detail도 동일하게 받음)
 export interface MilestoneApiResponseDto {
 	success: boolean;
 	data: MilestoneApiEntity;
@@ -37,37 +49,29 @@ export interface MilestoneApiResponseDto {
 // 생성 입력값 (id 제외)
 export interface MilestoneCreatePayload {
 	name: string;
-	description?: string;
-	deadline?: string;
+	description?: string | null;
+	deadline?: string | null;
 }
 
 // 생성 응답값 (id)
 export interface MilestoneCreateResponseDto {
 	success: boolean;
-	data: number; // 새로 생성된 id
+	data: number;
 	error: { message: string; code: number } | null;
 }
 
-// 수정 입력값 - 메서드는 put으로 전체 대체용
+// 수정 입력값 - 전체 대체(put)
 export interface MilestoneUpdatePayload {
 	id: number;
 	name: string;
-	description?: string;
-	deadline?: string;
+	description?: string | null;
+	deadline?: string | null;
 }
 
-// 프론트엔드 도메인 모델 (description/ deadline optional)
-export interface Milestone {
-	id: number;
-	name: string;
-	description?: string;
-	deadline?: string;
-	isOpen: boolean;
-	openIssueCount: number;
-	closedIssueCount: number;
-	progress: number;
-}
+// 도메인 모델 (프론트에서 사용할 때)
+export interface Milestone extends MilestoneApiEntity {}
 
+// 카운트 응답
 export interface MilestoneCountResponse {
 	success: boolean;
 	data: number;

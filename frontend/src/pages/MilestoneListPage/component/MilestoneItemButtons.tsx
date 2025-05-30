@@ -51,6 +51,7 @@ export const MilestoneItemButtons = ({ id, onEdit }: MilestoneItemButtonsProps) 
         cancelText="취소"
         onConfirm={handleConfirmDelete}
         onCancel={handleCancel}
+				isDanger
       />
     </div>
   );
