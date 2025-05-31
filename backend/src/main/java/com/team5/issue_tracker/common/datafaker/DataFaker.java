@@ -7,11 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -58,33 +61,75 @@ public class DataFaker {
     generateMilestones(milestoneCount, milestoneCsv);
     generateUsers(userCount, userCsv);
     generateIssues(issueCount, issueCsv);
-    generatComments(commentCount, commentCsv);
+    generateComments(commentCount, commentCsv);
     generateLabels(labelCount, labelCsv);
     generateIssueLabels(issue_labelCount, issueLabelCsv);
     generateIssueAssignees(issue_assigneeCount, issueAssigneeCsv);
   }
 
-  private static void generateIssueAssignees(int count, String path) {
+  public static void generateIssueAssignees(int count, String path) {
     AtomicLong idSeq = new AtomicLong(1);
-    Schema<String, String> schema =
-        Schema.of(field("id", () -> String.valueOf(idSeq.getAndIncrement())),
-            field("issue_id", () -> String.valueOf(faker.number().numberBetween(1, issueCount + 1))),
-            field("assignee_id", () -> String.valueOf(faker.number().numberBetween(1, userCount + 1))));
+    Set<String> usedCombos = new HashSet<>(); // "issueId-assigneeId" 조합을 저장
 
-    String csv = getCsv(schema, count);
-    writeCsv(csv, path);
+    StringBuilder sb = new StringBuilder();
+
+    // 1) CSV 헤더 추가
+    sb.append("id,issue_id,assignee_id");
+    sb.append(System.lineSeparator());
+
+    // 2) 원하는 개수(count)만큼 유일한 조합 생성
+    while (idSeq.get() <= count) {
+      long issueId = faker.number().numberBetween(1, issueCount + 1);
+      long assigneeId = faker.number().numberBetween(1, userCount + 1);
+      String comboKey = issueId + "-" + assigneeId;
+
+      // 중복이 아니라면 StringBuilder에 추가
+      if (usedCombos.add(comboKey)) {
+        long id = idSeq.getAndIncrement();
+        sb.append(id)
+            .append(separator)
+            .append(issueId)
+            .append(separator)
+            .append(assigneeId)
+            .append(System.lineSeparator());
+      }
+      // 중복일 경우 아무 작업도 하지 않고 while 루프가 한 번 더 돈다
+    }
+    writeCsv(sb.toString(), path);
+
     log.info("✅ 이슈-유저 관계 CSV 파일 생성 완료: " + path);
   }
 
-  private static void generateIssueLabels(int count, String path) {
+  public static void generateIssueLabels(int count, String path) {
     AtomicLong idSeq = new AtomicLong(1);
-    Schema<String, String> schema =
-        Schema.of(field("id", () -> String.valueOf(idSeq.getAndIncrement())),
-            field("issue_id", () -> String.valueOf(faker.number().numberBetween(1, issueCount + 1))),
-            field("label_id", () -> String.valueOf(faker.number().numberBetween(1, labelCount + 1))));
+    Set<String> usedCombos = new HashSet<>(); // "issueId-assigneeId" 조합을 저장
 
-    String csv = getCsv(schema, count);
-    writeCsv(csv, path);
+    StringBuilder sb = new StringBuilder();
+
+    // 1) CSV 헤더 추가
+    sb.append("id,issue_id,label_id");
+    sb.append(System.lineSeparator());
+
+    // 2) 원하는 개수(count)만큼 유일한 조합 생성
+    while (idSeq.get() <= count) {
+      long issueId = faker.number().numberBetween(1, issueCount + 1);
+      long labelId = faker.number().numberBetween(1, labelCount + 1);
+      String comboKey = issueId + "-" + labelId;
+
+      // 중복이 아니라면 StringBuilder에 추가
+      if (usedCombos.add(comboKey)) {
+        long id = idSeq.getAndIncrement();
+        sb.append(id)
+            .append(separator)
+            .append(issueId)
+            .append(separator)
+            .append(labelId)
+            .append(System.lineSeparator());
+      }
+      // 중복일 경우 아무 작업도 하지 않고 while 루프가 한 번 더 돈다
+    }
+    writeCsv(sb.toString(), path);
+
     log.info("✅ 이슈-라벨 관계 CSV 파일 생성 완료: " + path);
   }
 
@@ -92,11 +137,10 @@ public class DataFaker {
     AtomicLong idSeq = new AtomicLong(1);
     Schema<String, String> schema =
         Schema.of(field("id", () -> String.valueOf(idSeq.getAndIncrement())),
-            field("name", () -> englishFaker.hacker().noun() + "_" + englishFaker.hacker().verb()),
+            field("name", () -> englishFaker.hacker().noun() + idSeq.get()),
             field("description", () -> faker.lorem().sentence()),
             field("text_color", () -> String.format("#%06X", random.nextInt(0xFFFFFF))),
             field("background_color", () -> String.format("#%06X", random.nextInt(0xFFFFFF))),
-            field("is_open", () -> String.valueOf(faker.bool().bool())),
             getCreatedAt(faker),
             getUpdatedAt(faker));
 
@@ -105,12 +149,13 @@ public class DataFaker {
     log.info("✅ 라벨 CSV 파일 생성 완료: " + path);
   }
 
-  private static void generatComments(int count, String path) {
+  private static void generateComments(int count, String path) {
     AtomicLong idSeq = new AtomicLong(1);
     Schema<String, String> schema =
         Schema.of(field("id", () -> String.valueOf(idSeq.getAndIncrement())),
             field("user_id", () -> String.valueOf(faker.number().numberBetween(1, userCount + 1))),
-            field("issue_id", () -> String.valueOf(faker.number().numberBetween(1, issueCount + 1))),
+            field("issue_id",
+                () -> String.valueOf(faker.number().numberBetween(1, issueCount + 1))),
             field("content", () -> faker.lorem().paragraph()),
             getCreatedAt(faker),
             getUpdatedAt(faker));
@@ -125,10 +170,10 @@ public class DataFaker {
     Schema<String, String> schema =
         Schema.of(field("id", () -> String.valueOf(idSeq.getAndIncrement())),
             field("title", () -> englishFaker.book().title()),
+            field("user_id", () -> String.valueOf(faker.number().numberBetween(1, userCount + 1))),
             field("milestone_id",
                 () -> String.valueOf(faker.number().numberBetween(1, milestoneCount + 1))),
-            field("user_id", () -> String.valueOf(faker.number().numberBetween(1, userCount + 1))),
-            field("is_open", () -> String.valueOf(faker.bool().bool())),
+            field("is_open", () -> String.valueOf(faker.bool().bool() ? 1 : 0)),
             getCreatedAt(faker),
             getUpdatedAt(faker));
 
@@ -139,15 +184,17 @@ public class DataFaker {
 
   private static void generateMilestones(int count, String path) {
     AtomicLong idSeq = new AtomicLong(1);
+
     Schema<String, String> schema =
         Schema.of(field("id", () -> String.valueOf(idSeq.getAndIncrement())),
             field("deadline", () -> {
               Instant deadline = faker.timeAndDate().future(100, TimeUnit.DAYS);
-              return formatter.format(deadline);
+              LocalDate localDeadline = deadline.atZone(ZoneId.systemDefault()).toLocalDate();
+              return localDeadline.toString();  // yyyy-MM-dd
             }),
-            field("name", () -> englishFaker.hacker().noun() + "_" + englishFaker.hacker().verb()),
+            field("name", () -> englishFaker.hacker().noun() + idSeq.get()),
             field("description", () -> faker.lorem().sentence()),
-            field("is_open", () -> String.valueOf(faker.bool().bool())),
+            field("is_open", () -> String.valueOf(faker.bool().bool() ? 1 : 0)),
             getCreatedAt(faker),
             getUpdatedAt(faker));
 
@@ -160,8 +207,8 @@ public class DataFaker {
     AtomicLong idSeq = new AtomicLong(1);
     Schema<String, String> schema =
         Schema.of(field("id", () -> String.valueOf(idSeq.getAndIncrement())),
-            field("username", () -> englishFaker.name().name() + faker.number().digits(3)),
-            field("email", () -> englishFaker.internet().emailAddress() + faker.number().digits(3)),
+            field("username", () -> englishFaker.name().firstName() + idSeq.get()),
+            field("email", () -> englishFaker.internet().emailAddress() + idSeq.get()),
             field("image_url", () -> faker.internet().image()),
             field("password", () -> faker.internet().password()),
             getCreatedAt(faker),
