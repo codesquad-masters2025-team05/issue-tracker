@@ -1,5 +1,5 @@
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
-import { Pagination } from '@/shared/ui/pagination';
+import { Pagination } from '@/shared/ui/Pagination';
 import { NavigationButton } from '@/widgets/LabelMilestoneTabs';
 import { useEffect } from 'react';
 import { useQ } from './hooks/useQueryString';
