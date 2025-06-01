@@ -7,7 +7,6 @@ import type {
 	IssueDetailData,
 	IssueListData,
 	IssueUpdateRequest,
-	IssueUpdateResponse,
 } from '../model/issue.types';
 
 // 이슈 목록 조회
@@ -67,9 +66,8 @@ export async function updateIssue(
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(payload),
 	});
-	const json: IssueUpdateResponse = await res.json();
-	if (!json.success) throw new Error(json.error ?? '이슈 수정 실패');
-	// 성공이면 아무것도 리턴하지 않음
+	if (res.status === 204) return;
+	throw new Error('이슈 수정 실패');
 }
 
 // 이슈 삭제

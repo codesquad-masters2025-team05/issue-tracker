@@ -9,8 +9,8 @@ export function useUpdateIssue(onSuccess?: () => void) {
 		onSuccess: () => {
 			onSuccess?.();
 		},
-		onError: (error) => {
-			toast.error(error.message || '이슈 수정에 실패했습니다.');
+		onError: () => {
+			toast.error('이슈 수정에 실패했습니다.');
 		},
 	});
 }
