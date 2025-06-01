@@ -5,7 +5,6 @@ import { useUpdateComment } from '@/entities/comment/hooks/useUpdateComment';
 import { useDeleteIssue } from '@/entities/issue/hooks/useDeleteIssue';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
-import { useUpdateIssue } from '@/entities/issue/hooks/useUpdateIssue';
 import type { IssueUpdateRequest } from '@/entities/issue/model/issue.types';
 import { TextArea } from '@/shared/ui/TextArea';
 import { Button } from '@/shared/ui/button';
@@ -27,7 +26,6 @@ const IssueDetailPage: FC = () => {
 	const { data: issue, refetch: issueDetailRefetch } = useFetchIssueDetail(
 		Number(id),
 	);
-	const { mutate: issueUpdateMutate } = useUpdateIssue(issueDetailRefetch);
 	const { mutate: commentUpdateMutate } = useUpdateComment(issueDetailRefetch);
 	const { mutate: commentCreateMutate } = useCreateComment(() => {
 		issueDetailRefetch();
@@ -40,18 +38,6 @@ const IssueDetailPage: FC = () => {
 	const isEnabled = inputValue.trim().length > 0;
 
 	if (!issue) return;
-
-	const toggleOpen = () =>
-		issueUpdateMutate({
-			id: issue.id,
-			payload: { isOpen: !issue.isOpen },
-		});
-
-	const onUpdateIssue = (payload: IssueUpdateRequest) =>
-		issueUpdateMutate({
-			id: issue.id,
-			payload,
-		});
 
 	const onUpdateContent = (id: number, content: string) =>
 		commentUpdateMutate({
@@ -70,16 +56,7 @@ const IssueDetailPage: FC = () => {
 	return (
 		<div className='flex flex-col gap-6'>
 			{/** Title, Buttons, Information */}
-			<Header
-				title={issue.title}
-				id={issue.id}
-				onCloseIssue={toggleOpen}
-				onEditComplete={onUpdateIssue}
-				open={issue.isOpen}
-				author={issue.author}
-				createdAt={issue.createdAt}
-				commentCount={issue.comments?.length}
-			/>
+			<Header />
 			{/** Division */}
 			<Division />
 			<div className='flex gap-8'>

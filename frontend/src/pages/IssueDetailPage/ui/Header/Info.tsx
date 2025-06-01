@@ -1,22 +1,31 @@
 import AlertCircleIcon from '@/assets/alertCircle.svg?react';
 import ArchiveIcon from '@/assets/archive.svg?react';
-import type { User } from '@/entities/issue/model/issue.types';
+import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
+import { useParams } from 'react-router-dom';
 
-export interface InfoProps {
-	open: boolean;
-	author: User;
-	createdAt: string;
-	commentCount: number;
-}
-export function Info({ open, author, createdAt, commentCount }: InfoProps) {
+export function Info() {
+	const { id } = useParams<{ id: string }>();
+	const { data: issue } = useFetchIssueDetail(Number(id));
+
+	if (!issue) return null;
+
+	const when = formatDistanceToNow(new Date(issue.createdAt), {
+		addSuffix: true,
+		locale: ko,
+	});
+
 	return (
 		<div className='flex items-center gap-2'>
-			<Tag open={open} />
-			<Text name={author.username} createdAt={createdAt} />
+			<Tag open={issue.isOpen} />
+			<span className='font-display-medium-16 text-[var(--neutral-text-weak)]'>
+				{`이 이슈가 ${when}에 ${issue.author.username}님에 의해 열렸습니다`}
+			</span>
 			<span>·</span>
-			<CommentCount commentCount={commentCount} />
+			<span className='font-display-medium-16 text-[var(--neutral-text-weak)]'>
+				{`코멘트 ${issue.comments?.length ?? 0}개`}
+			</span>
 		</div>
 	);
 }
@@ -36,22 +45,5 @@ function Tag({ open }: { open: boolean }) {
 				</>
 			)}
 		</div>
-	);
-}
-
-function Text({ name, createdAt }: { name: string; createdAt: string }) {
-	const when = formatDistanceToNow(new Date(createdAt), {
-		addSuffix: true,
-		locale: ko,
-	}); // e.g. "8분 전"
-
-	return (
-		<span className='font-display-medium-16 text-[var(--neutral-text-weak)]'>{`이 이슈가 ${when}에 ${name}님에 의해 열렸습니다`}</span>
-	);
-}
-
-function CommentCount({ commentCount }: { commentCount: number }) {
-	return (
-		<span className='font-display-medium-16 text-[var(--neutral-text-weak)]'>{`코멘트 ${commentCount}개`}</span>
 	);
 }

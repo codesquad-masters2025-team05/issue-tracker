@@ -2,54 +2,59 @@ import ArchiveIcon from '@/assets/archive.svg?react';
 import EditIcon from '@/assets/edit.svg?react';
 import XSquareIcon from '@/assets/xSquare.svg?react';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
+import { useUpdateIssue } from '@/entities/issue/hooks/useUpdateIssue';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/button';
-import { useState } from 'react';
-import type { OnUpdateIssue } from '../..';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-interface TitleProps {
-	title: string;
-	id: number;
-	onEditComplete: OnUpdateIssue;
-}
-
-export function Title({ title, id, onEditComplete }: TitleProps) {
+export function Title() {
+	const { id } = useParams<{ id: string }>();
 	const { data: issue, refetch: issueDetailRefetch } = useFetchIssueDetail(
 		Number(id),
 	);
+	const { mutateAsync: updateIssueMutate } = useUpdateIssue(issueDetailRefetch);
+
 	const [isEditing, setIsEditing] = useState(false);
-	const [editTitle, setEditTitle] = useState(title);
+	const [editTitle, setEditTitle] = useState(issue?.title ?? '');
 	const [isModalOpen, setModalOpen] = useState(false);
 
+	// 타이틀 동기화
+	// (issue.title이 바뀌면, editTitle도 바꿔줌)
+	useEffect(() => {
+		setEditTitle(issue?.title ?? '');
+	}, [issue?.title]);
+
+	if (!issue) return null;
+
 	const handleStartEdit = () => {
-		setEditTitle(title);
+		setEditTitle(issue.title);
 		setIsEditing(true);
 	};
 
 	const handleCancel = () => {
 		setIsEditing(false);
-		setEditTitle(title);
+		setEditTitle(issue.title);
 	};
 
-	const handleComplete = () => {
-		if (editTitle.trim() && editTitle !== title) {
-			onEditComplete({ title: editTitle });
+	const handleComplete = async () => {
+		if (editTitle.trim() && editTitle !== issue.title) {
+			await updateIssueMutate({ id: issue.id, payload: { title: editTitle } });
+			await issueDetailRefetch();
 		}
 		setIsEditing(false);
 	};
 
-	// 이슈 닫기
 	const handleCloseIssue = async () => {
 		setModalOpen(false);
-		await onEditComplete({ isOpen: false });
-		issueDetailRefetch();
+		await updateIssueMutate({ id: issue.id, payload: { isOpen: false } });
+		await issueDetailRefetch();
 	};
 
-	// 이슈 다시 열기
 	const handleReopenIssue = async () => {
-		await onEditComplete({ isOpen: true });
-		issueDetailRefetch();
+		await updateIssueMutate({ id: issue.id, payload: { isOpen: true } });
+		await issueDetailRefetch();
 	};
 
 	return (
@@ -58,10 +63,10 @@ export function Title({ title, id, onEditComplete }: TitleProps) {
 				{!isEditing ? (
 					<div className='flex gap-2 w-fit'>
 						<span className='font-display-bold-32 text-[var(--neutral-text-strong)]'>
-							{title}
+							{issue.title}
 						</span>
 						<span className='font-display-bold-32 text-[var(--neutral-text-weak)]'>
-							#{id}
+							#{issue.id}
 						</span>
 					</div>
 				) : (
@@ -81,7 +86,7 @@ export function Title({ title, id, onEditComplete }: TitleProps) {
 							<EditIcon />
 							제목 편집
 						</Button>
-						{issue?.isOpen ? (
+						{issue.isOpen ? (
 							<Button
 								onClick={() => setModalOpen(true)}
 								variant='outline'
@@ -106,7 +111,7 @@ export function Title({ title, id, onEditComplete }: TitleProps) {
 						<Button
 							onClick={handleComplete}
 							size='sm'
-							disabled={editTitle.trim() === '' || editTitle === title}
+							disabled={editTitle.trim() === '' || editTitle === issue.title}
 						>
 							<EditIcon />
 							편집 완료
