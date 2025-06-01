@@ -175,9 +175,6 @@ public class MilestoneQueryRepository {
   }
 
   public Long getMilestoneIdByName(String milestoneName) {
-    if (milestoneName == null) {
-      return null;
-    }
     String sql = "SELECT id FROM milestone WHERE name = :milestoneName";
     MapSqlParameterSource params = new MapSqlParameterSource("milestoneName", milestoneName);
     List<Long> result = jdbcTemplate.queryForList(sql, params, Long.class);
