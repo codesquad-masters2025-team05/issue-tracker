@@ -1,35 +1,20 @@
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
 import { NavigationButton } from '@/widgets/LabelMilestoneTabs';
-import { type FC, useEffect } from 'react';
-import { useQ } from './hooks/useQueryString';
+import { hasKeyValue, useQ } from './hooks/useQueryString';
 import { useIssueListFilterState } from './model/useIssueListFilterState';
 import { FilterBar } from './ui/FilterBar';
 import { IssueCreationButton } from './ui/IssueCreationButton';
 import { IssueList } from './ui/IssueList';
 
-const IssueListPage: FC = () => {
+const IssueListPage = () => {
 	const filterState = useIssueListFilterState();
+	const { getQ, setQ, updateQ } = useQ();
 
-	const { getQ, setQ } = useQ();
+	if (!getQ()) setQ('is:open');
+	if (!hasKeyValue(getQ(), 'is', 'open') || hasKeyValue(getQ(), 'is', 'closed'))
+		updateQ('is', 'open');
 
-	useEffect(() => {
-		if (!getQ()) setQ('is:open');
-	}, [getQ, setQ]);
-
-	const {
-		data: IssueListData,
-		isLoading,
-		error,
-	} = useFetchIssueList(getQ() as string);
-
-	/* 추후 스켈레톤으로 변경 */
-	// if (isLoading) {
-	// 	return (
-	// 		<div className='flex justify-center items-center h-full'>
-	// 			<Spinner />
-	// 		</div>
-	// 	);
-	// }
+	const { data: IssueListData, error } = useFetchIssueList(getQ() as string);
 
 	if (error) {
 		return (

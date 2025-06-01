@@ -111,7 +111,7 @@ export function useQ() {
 		} else {
 			next.delete('q');
 		}
-		setSearchParams(next, { replace: true }); // history 쌓지 않고 대체
+		setSearchParams(next); // history 쌓지 않고 대체
 	};
 
 	const updateQ = (key: string, value: string) => {
