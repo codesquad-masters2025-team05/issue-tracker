@@ -17,6 +17,7 @@ public enum ErrorCode {
   ISSUE_NOT_FOUND(404, "ISSUE_NOT_FOUND", "해당 이슈를 찾을 수 없습니다."),
   // 인증 관련
   UNAUTHORIZED(401, "UNAUTHORIZED", "인증이 필요합니다."),
+  INVALID_PASSWORD(401, "INVALID_PASSWORD", "잘못된 비밀번호입니다."),
   // 서버 오류
   INTERNAL_SERVER_ERROR(500, "INTERNAL_SERVER_ERROR", "서버에 오류가 발생했습니다."),
   // 파일 관련
