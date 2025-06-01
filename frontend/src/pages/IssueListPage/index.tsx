@@ -1,6 +1,7 @@
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
 import { NavigationButton } from '@/widgets/LabelMilestoneTabs';
-import { hasKeyValue, useQ } from './hooks/useQueryString';
+import { useEffect } from 'react';
+import { useQ } from './hooks/useQueryString';
 import { useIssueListFilterState } from './model/useIssueListFilterState';
 import { FilterBar } from './ui/FilterBar';
 import { IssueCreationButton } from './ui/IssueCreationButton';
@@ -8,11 +9,14 @@ import { IssueList } from './ui/IssueList';
 
 const IssueListPage = () => {
 	const filterState = useIssueListFilterState();
-	const { getQ, setQ, updateQ } = useQ();
+	const { getQ, setQ } = useQ();
+	const q = getQ();
 
-	if (!getQ()) setQ('is:open');
-	if (!hasKeyValue(getQ(), 'is', 'open') || hasKeyValue(getQ(), 'is', 'closed'))
-		updateQ('is', 'open');
+	useEffect(() => {
+		if (!q) setQ('is:open');
+	}, [q, setQ]);
+
+	if (!q) return null;
 
 	const { data: IssueListData, error } = useFetchIssueList(getQ() as string);
 
