@@ -1,6 +1,8 @@
 import ArchiveIcon from '@/assets/archive.svg?react';
 import EditIcon from '@/assets/edit.svg?react';
 import XSquareIcon from '@/assets/xSquare.svg?react';
+import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
+import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/button';
 import { useState } from 'react';
@@ -10,31 +12,44 @@ interface TitleProps {
 	title: string;
 	id: number;
 	onEditComplete: OnUpdateIssue;
-	onCloseIssue: () => void;
 }
 
-export function Title({ title, id, onEditComplete, onCloseIssue }: TitleProps) {
+export function Title({ title, id, onEditComplete }: TitleProps) {
+	const { data: issue, refetch: issueDetailRefetch } = useFetchIssueDetail(
+		Number(id),
+	);
 	const [isEditing, setIsEditing] = useState(false);
 	const [editTitle, setEditTitle] = useState(title);
+	const [isModalOpen, setModalOpen] = useState(false);
 
-	// 편집모드 진입시 초기화
 	const handleStartEdit = () => {
 		setEditTitle(title);
 		setIsEditing(true);
 	};
 
-	// 편집모드 종료
 	const handleCancel = () => {
 		setIsEditing(false);
 		setEditTitle(title);
 	};
 
-	// 편집 완료
 	const handleComplete = () => {
 		if (editTitle.trim() && editTitle !== title) {
 			onEditComplete({ title: editTitle });
 		}
 		setIsEditing(false);
+	};
+
+	// 이슈 닫기
+	const handleCloseIssue = async () => {
+		setModalOpen(false);
+		await onEditComplete({ isOpen: false });
+		issueDetailRefetch();
+	};
+
+	// 이슈 다시 열기
+	const handleReopenIssue = async () => {
+		await onEditComplete({ isOpen: true });
+		issueDetailRefetch();
 	};
 
 	return (
@@ -66,10 +81,21 @@ export function Title({ title, id, onEditComplete, onCloseIssue }: TitleProps) {
 							<EditIcon />
 							제목 편집
 						</Button>
-						<Button onClick={onCloseIssue} variant='outline' size='sm'>
-							<ArchiveIcon />
-							이슈 닫기
-						</Button>
+						{issue?.isOpen ? (
+							<Button
+								onClick={() => setModalOpen(true)}
+								variant='outline'
+								size='sm'
+							>
+								<ArchiveIcon />
+								이슈 닫기
+							</Button>
+						) : (
+							<Button onClick={handleReopenIssue} variant='outline' size='sm'>
+								<ArchiveIcon />
+								다시 열기
+							</Button>
+						)}
 					</>
 				) : (
 					<>
@@ -88,6 +114,15 @@ export function Title({ title, id, onEditComplete, onCloseIssue }: TitleProps) {
 					</>
 				)}
 			</div>
+			<ConfirmModal
+				open={isModalOpen}
+				text='이슈를 정말로 닫으시겠습니까?'
+				confirmText='이슈 닫기'
+				cancelText='취소'
+				isDanger
+				onConfirm={handleCloseIssue}
+				onCancel={() => setModalOpen(false)}
+			/>
 		</div>
 	);
 }

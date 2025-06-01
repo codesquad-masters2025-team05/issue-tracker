@@ -11,7 +11,6 @@ import { TextArea } from '@/shared/ui/TextArea';
 import { Button } from '@/shared/ui/button';
 import { type FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { mockIssue } from './mock';
 import { Comment } from './ui/Comment';
 import { Header } from './ui/Header';
 import { Sidebar } from './ui/Sidebar';
@@ -25,7 +24,9 @@ function Division() {
 const IssueDetailPage: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const { refetch: issuesRefetch } = useFetchIssueList('');
-	const { data, refetch: issueDetailRefetch } = useFetchIssueDetail(Number(id));
+	const { data: issue, refetch: issueDetailRefetch } = useFetchIssueDetail(
+		Number(id),
+	);
 	const { mutate: issueUpdateMutate } = useUpdateIssue(issueDetailRefetch);
 	const { mutate: commentUpdateMutate } = useUpdateComment(issueDetailRefetch);
 	const { mutate: commentCreateMutate } = useCreateComment(() => {
@@ -34,11 +35,11 @@ const IssueDetailPage: FC = () => {
 	});
 	const { mutate: issueDeleteMutate } = useDeleteIssue(() => issuesRefetch());
 
-	const issue = data ? data : mockIssue;
-
 	const [inputValue, setInputValue] = useState('');
 
 	const isEnabled = inputValue.trim().length > 0;
+
+	if (!issue) return;
 
 	const toggleOpen = () =>
 		issueUpdateMutate({

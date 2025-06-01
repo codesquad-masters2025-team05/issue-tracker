@@ -1,8 +1,9 @@
+// src/entities/comment/ui/Comment.tsx
+
 import EditIcon from '@/assets/edit.svg?react';
 import PaperCilpIcon from '@/assets/paperclip.svg?react';
 import SmileIcon from '@/assets/smile.svg?react';
 import XSquareIcon from '@/assets/xSquare.svg?react';
-import type { User } from '@/entities/issue/model/issue.types';
 import { LabelChip } from '@/shared/ui/LabelChip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
@@ -10,15 +11,15 @@ import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
 import { useState } from 'react';
 
-interface CommentProps {
-	id: number;
-	isAuthor: boolean;
-	content: string;
-	commentAuthor: User;
-	createdAt: string;
-	updatedAt: string;
-	onSave: (id: number, value: string) => void;
-}
+import type {
+	CommentActionsProps,
+	CommentAvatarProps,
+	CommentContentProps,
+	CommentMetaProps,
+	CommentProps,
+	CommentTextareaProps,
+	EditingButtonProps,
+} from './Comment.types';
 
 export function Comment({
 	id,
@@ -40,7 +41,7 @@ export function Comment({
 				className={`flex flex-col rounded-[16px] bg-[var(--neutral-surface-strong)] border
         ${editing ? 'border-[var(--neutral-border-active)]' : 'border-[var(--neutral-border-default)]'}`}
 			>
-				{/** 코멘트 메타정보, 버튼 부분 */}
+				{/* 코멘트 메타정보, 버튼 부분 */}
 				<div className='flex items-center justify-between gap-2 px-6 py-4 bg-[var(--neutral-surface-default)] rounded-t-2xl'>
 					<div className='flex gap-2'>
 						<CommentAvatar
@@ -59,7 +60,7 @@ export function Comment({
 
 				<Division />
 
-				{/** 콘텐츠 부분 */}
+				{/* 콘텐츠 부분 */}
 				{!editing ? (
 					<div className='px-6 pt-4 pb-6'>
 						<CommentContent content={content} />
@@ -74,7 +75,7 @@ export function Comment({
 					</>
 				)}
 			</div>
-			{/** 액션 버튼 */}
+			{/* 액션 버튼 */}
 			{editing && (
 				<CommentActions
 					onCancel={() => setEditing(false)}
@@ -86,11 +87,6 @@ export function Comment({
 	);
 }
 
-interface CommentAvatarProps {
-	imageUrl: string;
-	name: string;
-}
-
 export function CommentAvatar({ imageUrl, name }: CommentAvatarProps) {
 	return (
 		<Avatar className='size-8'>
@@ -98,11 +94,6 @@ export function CommentAvatar({ imageUrl, name }: CommentAvatarProps) {
 			<AvatarFallback className='bg-[var(--neutral-surface-bold)]' />
 		</Avatar>
 	);
-}
-
-interface CommentMetaProps {
-	name: string;
-	createdAt: string;
 }
 
 export function CommentMeta({ name, createdAt }: CommentMetaProps) {
@@ -133,10 +124,6 @@ export function AuthorLabelChip() {
 	);
 }
 
-interface EditingButtonProps {
-	setEditing: () => void;
-}
-
 function EditingButton({ setEditing }: EditingButtonProps) {
 	return (
 		<button
@@ -163,21 +150,12 @@ function EmotionButton() {
 	);
 }
 
-interface CommentContentProps {
-	content: string;
-}
-
 export function CommentContent({ content }: CommentContentProps) {
 	return (
 		<div className='whitespace-pre-wrap font-display-medium-16 text-[var(--neutral-text-default)]'>
 			{content}
 		</div>
 	);
-}
-
-interface CommentTextareaProps {
-	value: string;
-	onChange: (value: string) => void;
 }
 
 export function CommentTextarea({ value, onChange }: CommentTextareaProps) {
@@ -188,12 +166,6 @@ export function CommentTextarea({ value, onChange }: CommentTextareaProps) {
 			onChange={(e) => onChange(e.target.value)}
 		/>
 	);
-}
-
-interface CommentActionsProps {
-	onCancel: () => void;
-	onSave: () => void;
-	canSave: boolean;
 }
 
 export function CommentActions({
