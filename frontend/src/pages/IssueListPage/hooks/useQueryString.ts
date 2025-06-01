@@ -120,7 +120,13 @@ export function useQ() {
 		setQ(nextQ);
 	};
 
-	return { getQ, setQ, updateQ };
+	const getPage = () => Number(searchParams.get('page') || 1);
+	const setPage = (page: number) => {
+		const next = new URLSearchParams(searchParams);
+		next.set('page', String(page));
+		setSearchParams(next, { replace: true });
+	};
+	return { getQ, setQ, updateQ, getPage, setPage };
 }
 
 // 띄어쓰기가 있으면 쌍따옴표로 감싸기

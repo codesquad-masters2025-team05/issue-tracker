@@ -1,4 +1,5 @@
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
+import { Pagination } from '@/shared/ui/pagination';
 import { NavigationButton } from '@/widgets/LabelMilestoneTabs';
 import { useEffect } from 'react';
 import { useQ } from './hooks/useQueryString';
@@ -9,8 +10,9 @@ import { IssueList } from './ui/IssueList';
 
 const IssueListPage = () => {
 	const filterState = useIssueListFilterState();
-	const { getQ, setQ } = useQ();
+	const { getQ, setQ, getPage, setPage } = useQ();
 	const q = getQ();
+	const page = getPage();
 
 	useEffect(() => {
 		if (!q) setQ('is:open');
@@ -18,7 +20,20 @@ const IssueListPage = () => {
 
 	if (!q) return null;
 
-	const { data: IssueListData, error } = useFetchIssueList(getQ() as string);
+	const { data: IssueListData, error } = useFetchIssueList(q);
+
+	// q 기준으로 totalCount 결정
+	let totalCount = 0;
+	if (IssueListData) {
+		if (q.includes('is:open')) totalCount = IssueListData.openCount;
+		else if (q.includes('is:closed')) totalCount = IssueListData.closedCount;
+	}
+	const perPage = IssueListData?.perPage ?? 10;
+
+	// 페이지 변경 핸들러
+	const handlePageChange = (nextPage: number) => {
+		setPage(nextPage);
+	};
 
 	if (error) {
 		return (
@@ -38,12 +53,20 @@ const IssueListPage = () => {
 				</div>
 			</div>
 			{IssueListData && (
-				<IssueList
-					openCount={IssueListData.openCount}
-					closedCount={IssueListData.closedCount}
-					issues={IssueListData.issues}
-					{...filterState}
-				/>
+				<>
+					<IssueList
+						openCount={IssueListData.openCount}
+						closedCount={IssueListData.closedCount}
+						issues={IssueListData.issues}
+						{...filterState}
+					/>
+					<Pagination
+						totalCount={totalCount}
+						page={page}
+						perPage={perPage}
+						onPageChange={handlePageChange}
+					/>
+				</>
 			)}
 		</>
 	);
