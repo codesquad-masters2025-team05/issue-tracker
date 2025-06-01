@@ -1,3 +1,4 @@
+-- mysql -u root -p --local-infile=1 으로 로그인
 -- user.csv
 LOAD DATA LOCAL INFILE 'C:/Users/user/Desktop/codesquad_issue_tracker/issue-tracker/dummydata/user.csv'
 INTO TABLE user
