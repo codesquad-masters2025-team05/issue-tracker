@@ -10,8 +10,15 @@ import type {
 } from '../model/issue.types';
 
 // 이슈 목록 조회
-export async function fetchIssues(q = ''): Promise<IssueListData> {
-	const url = q ? `/api/issues?q=${encodeURIComponent(q)}` : '/api/issues';
+export async function fetchIssues(
+	q = '',
+	page?: number,
+	perPage?: number,
+): Promise<IssueListData> {
+	// page, perPage가 있으면 쿼리 파라미터에 포함
+	let url = q ? `/api/issues?q=${encodeURIComponent(q)}` : '/api/issues';
+	if (page !== undefined) url += `&page=${page}`;
+	if (perPage !== undefined) url += `&perPage=${perPage}`;
 	const res = await getJSON<ApiResponse<IssueListData>>(url);
 	if (!res.success) throw new Error(res.error ?? '이슈 목록 조회 실패');
 	return res.data;

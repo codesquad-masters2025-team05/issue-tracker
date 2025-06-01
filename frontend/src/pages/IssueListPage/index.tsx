@@ -20,15 +20,15 @@ const IssueListPage = () => {
 
 	if (!q) return null;
 
-	const { data: IssueListData, error } = useFetchIssueList(q);
+	const { data: IssueListData, error } = useFetchIssueList(q, page);
 
-	// q 기준으로 totalCount 결정
+	const perPage = IssueListData?.perPage ?? 10;
+
 	let totalCount = 0;
 	if (IssueListData) {
 		if (q.includes('is:open')) totalCount = IssueListData.openCount;
 		else if (q.includes('is:closed')) totalCount = IssueListData.closedCount;
 	}
-	const perPage = IssueListData?.perPage ?? 10;
 
 	// 페이지 변경 핸들러
 	const handlePageChange = (nextPage: number) => {
