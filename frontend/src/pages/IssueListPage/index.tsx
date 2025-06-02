@@ -11,7 +11,7 @@ import { IssueList } from './ui/IssueList';
 const IssueListPage = () => {
 	const filterState = useIssueListFilterState();
 	const { getQ, setQ, getPage, setPage } = useQ();
-	const q = getQ();
+	const q = getQ() || '';
 	const page = getPage();
 
 	useEffect(() => {
