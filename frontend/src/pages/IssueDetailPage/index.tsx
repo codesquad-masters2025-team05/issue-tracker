@@ -85,6 +85,7 @@ const IssueDetailPage: FC = () => {
 							value={inputValue}
 							onChange={(e) => setInputValue(e.target.value)}
 							showCounter={true}
+							resourceType='comment'
 						/>
 						<div className='flex justify-end'>
 							<Button

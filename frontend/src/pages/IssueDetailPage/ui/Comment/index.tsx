@@ -1,5 +1,3 @@
-// src/entities/comment/ui/Comment.tsx
-
 import EditIcon from '@/assets/edit.svg?react';
 import PaperCilpIcon from '@/assets/paperclip.svg?react';
 import SmileIcon from '@/assets/smile.svg?react';
@@ -10,6 +8,8 @@ import { Button } from '@/shared/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
 
 import type {
 	CommentActionsProps,
@@ -153,7 +153,7 @@ function EmotionButton() {
 export function CommentContent({ content }: CommentContentProps) {
 	return (
 		<div className='whitespace-pre-wrap font-display-medium-16 text-[var(--neutral-text-default)]'>
-			{content}
+			<ReactMarkdown remarkPlugins={[remarkBreaks]}>{content}</ReactMarkdown>
 		</div>
 	);
 }

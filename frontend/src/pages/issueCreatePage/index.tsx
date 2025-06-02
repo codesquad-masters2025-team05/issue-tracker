@@ -54,7 +54,7 @@ export default function IssueCreatePage() {
 						value={form.body}
 						onChange={(e) => form.setBody(e.target.value)}
 						showCounter={true}
-						onFileSelect={form.setFiles}
+						resourceType='issue'
 					/>
 				</div>
 
