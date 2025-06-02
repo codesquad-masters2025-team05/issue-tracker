@@ -100,7 +100,7 @@ export function useQ() {
 
 	const getQ = () => {
 		const q = searchParams.get('q');
-		return q;
+		return q || 'is:open';
 	};
 
 	// q 값만 변경 (다른 파라미터 보존)

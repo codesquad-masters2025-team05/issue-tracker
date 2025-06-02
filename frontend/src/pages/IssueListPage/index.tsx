@@ -1,7 +1,6 @@
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
 import { Pagination } from '@/shared/ui/Pagination';
 import { NavigationButton } from '@/widgets/LabelMilestoneTabs';
-import { useEffect } from 'react';
 import { useQ } from './hooks/useQueryString';
 import { useIssueListFilterState } from './model/useIssueListFilterState';
 import { FilterBar } from './ui/FilterBar';
@@ -10,18 +9,11 @@ import { IssueList } from './ui/IssueList';
 
 const IssueListPage = () => {
 	const filterState = useIssueListFilterState();
-	const { getQ, setQ, getPage, setPage } = useQ();
-	const q = getQ() || '';
+	const { getQ, getPage, setPage } = useQ();
+	const q = getQ() || 'is:open';
 	const page = getPage();
 
-	useEffect(() => {
-		if (!q) setQ('is:open');
-	}, [q, setQ]);
-
-	const { data: IssueListData, error } = useFetchIssueList(
-		q || 'is:open',
-		page,
-	);
+	const { data: IssueListData, error } = useFetchIssueList(q, page);
 
 	const perPage = IssueListData?.perPage ?? 10;
 
