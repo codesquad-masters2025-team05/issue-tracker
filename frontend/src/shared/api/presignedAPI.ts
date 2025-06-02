@@ -13,7 +13,7 @@ export async function fetchPresignedUrl({
 		type,
 		size: size.toString(),
 	});
-	const res = await fetch(`/api/files/presign?${params.toString()}`, {
+	const res = await fetch(`/api/upload-url?${params.toString()}`, {
 		method: 'GET',
 	});
 	if (!res.ok) throw new Error('Presigned URL 발급 실패');
