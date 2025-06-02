@@ -6,6 +6,7 @@ import { useDeleteIssue } from '@/entities/issue/hooks/useDeleteIssue';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
 import type { IssueUpdateRequest } from '@/entities/issue/model/issue.types';
+import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { TextArea } from '@/shared/ui/TextArea';
 import { Button } from '@/shared/ui/button';
 import { type FC, useState } from 'react';
@@ -21,6 +22,7 @@ function Division() {
 }
 
 const IssueDetailPage: FC = () => {
+	const [openConfirm, setOpenConfirm] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { refetch: issuesRefetch } = useFetchIssueList('');
 	const { data: issue, refetch: issueDetailRefetch } = useFetchIssueDetail(
@@ -107,13 +109,25 @@ const IssueDetailPage: FC = () => {
 						variant='ghost'
 						size='sm'
 						className='text-[var(--danger-text-default)]'
-						onClick={onDeleteIssue}
+						onClick={() => setOpenConfirm(true)}
 					>
 						<TrashIcon className='size-4' />
 						이슈 삭제
 					</Button>
 				</div>
 			</div>
+			<ConfirmModal
+				open={openConfirm}
+				text='정말 이 이슈를 삭제하시겠습니까?'
+				confirmText='삭제'
+				cancelText='취소'
+				onConfirm={() => {
+					setOpenConfirm(false);
+					onDeleteIssue();
+				}}
+				onCancel={() => setOpenConfirm(false)}
+				isDanger
+			/>
 		</div>
 	);
 };
