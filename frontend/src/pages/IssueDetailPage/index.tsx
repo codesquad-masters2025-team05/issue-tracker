@@ -1,7 +1,6 @@
 import PlusIcon from '@/assets/plus.svg?react';
 import TrashIcon from '@/assets/trash.svg?react';
 import { useCreateComment } from '@/entities/comment/hooks/useCreateComment';
-import { useUpdateComment } from '@/entities/comment/hooks/useUpdateComment';
 import { useDeleteIssue } from '@/entities/issue/hooks/useDeleteIssue';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
