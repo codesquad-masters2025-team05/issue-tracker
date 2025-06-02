@@ -18,9 +18,10 @@ const IssueListPage = () => {
 		if (!q) setQ('is:open');
 	}, [q, setQ]);
 
-	if (!q) return null;
-
-	const { data: IssueListData, error } = useFetchIssueList(q, page);
+	const { data: IssueListData, error } = useFetchIssueList(
+		q || 'is:open',
+		page,
+	);
 
 	const perPage = IssueListData?.perPage ?? 10;
 
