@@ -22,7 +22,7 @@ export default function IssueCreatePage() {
 	const handleSubmit = () => {
 		mutate({
 			title: form.title,
-			comment: { content: form.body },
+			comment: { content: form.content },
 			assigneeIds: form.assigneeIds,
 			labelIds: form.labelIds,
 			milestoneId: form.milestoneId,
@@ -51,8 +51,8 @@ export default function IssueCreatePage() {
 					/>
 					<TextArea
 						placeholder='코멘트 내용을 입력하세요'
-						value={form.body}
-						onChange={(e) => form.setBody(e.target.value)}
+						value={form.content}
+						onChange={(e) => form.setContent(e.target.value)}
 						showCounter={true}
 						resourceType='issue'
 					/>
@@ -74,7 +74,12 @@ export default function IssueCreatePage() {
 				<Button variant='ghost' onClick={() => navigate(-1)}>
 					작성 취소
 				</Button>
-				<Button onClick={handleSubmit}>완료</Button>
+				<Button
+					onClick={handleSubmit}
+					disabled={form.title.trim().length === 0}
+				>
+					완료
+				</Button>
 			</div>
 		</div>
 	);

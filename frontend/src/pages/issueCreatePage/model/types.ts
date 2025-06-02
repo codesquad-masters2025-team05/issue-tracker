@@ -1,8 +1,8 @@
 export interface IssueCreateFormState {
 	title: string;
 	setTitle: (v: string) => void;
-	body: string;
-	setBody: (v: string) => void;
+	content: string;
+	setContent: (v: string) => void;
 	assigneeIds: number[];
 	setAssigneeIds: (ids: number[]) => void;
 	labelIds: number[];

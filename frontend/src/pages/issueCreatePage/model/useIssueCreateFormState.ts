@@ -3,7 +3,7 @@ import type { IssueCreateFormState } from './types';
 
 export function useIssueCreateFormState(): IssueCreateFormState {
 	const [title, setTitle] = useState('');
-	const [body, setBody] = useState('');
+	const [content, setContent] = useState('');
 	const [assigneeIds, setAssigneeIds] = useState<number[]>([]);
 	const [labelIds, setLabelIds] = useState<number[]>([]);
 	const [milestoneId, setMilestoneId] = useState<number | null>(null);
@@ -12,8 +12,8 @@ export function useIssueCreateFormState(): IssueCreateFormState {
 	return {
 		title,
 		setTitle,
-		body,
-		setBody,
+		content,
+		setContent,
 		assigneeIds,
 		setAssigneeIds,
 		labelIds,
