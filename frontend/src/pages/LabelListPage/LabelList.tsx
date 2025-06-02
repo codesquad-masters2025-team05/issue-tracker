@@ -29,7 +29,7 @@ export const LabelList = () => {
 	if (isError || !labelListData) return <div>에러 발생</div>;
 
 	return (
-		<div className='w-[1280px] border border-[var(--neutral-border-default)] rounded-2xl'>
+		<div className='border border-[var(--neutral-border-default)] rounded-2xl'>
 			<div className='px-8 py-5 font-display-bold-16 text-[var(--neutral-text-default)]'>{`${total}개의 레이블`}</div>
 			{labels.map((label, idx) => (
 				<div key={label.id}>
