@@ -104,7 +104,7 @@ export function TextArea({
 			if (!res.ok) throw new Error('S3 업로드 실패');
 
 			// 3. textarea에 마크다운 이미지 추가
-			const imageMarkdown = `![image](${accessUrl})`;
+			const imageMarkdown = `![image](${encodeURI(accessUrl)})`;
 			// 커서 위치에 삽입하는 로직을 직접 구현하려면 ref 필요.
 			// 간단히 뒤에 추가 (props.onChange로 관리하니까)
 			onChange({
