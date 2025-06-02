@@ -140,7 +140,9 @@ function formatValue(value: string) {
 export function hasKeyValue(q: string | null, key: string, value: string) {
 	if (!q) return false;
 	const formattedValue = formatValue(value);
-	const pattern = new RegExp(`\\b${key}:${escapeRegExp(formattedValue)}\\b`);
+	const pattern = new RegExp(
+		`\\b${key}:(?:"${escapeRegExp(formattedValue)}"|${escapeRegExp(formattedValue)})\\b`,
+	);
 	return pattern.test(q);
 }
 
