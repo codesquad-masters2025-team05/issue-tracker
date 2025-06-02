@@ -9,24 +9,22 @@ import type {
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { LabelChip } from '@/shared/ui/LabelChip';
 import type { UseQueryResult } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LabelEditForm } from './LabelEditForm';
 
 export const LabelList = () => {
-	const {
-		data: labelListData,
-		isLoading,
-		isError,
-	}: UseQueryResult<LabelListData> = useFetchLabelList();
+	const { data: labelListData, refetch }: UseQueryResult<LabelListData> =
+		useFetchLabelList();
+
+	useEffect(() => {
+		refetch;
+	}, [refetch]);
 
 	const total = labelListData?.total ?? 0;
 	const labels = labelListData?.labels ?? [];
 
 	// "한 번에 한 행만 편집"을 위한 editingId state!
 	const [editingId, setEditingId] = useState<number | null>(null);
-
-	if (isLoading) return <div>로딩 중...</div>;
-	if (isError || !labelListData) return <div>에러 발생</div>;
 
 	return (
 		<div className='border border-[var(--neutral-border-default)] rounded-2xl'>

@@ -6,5 +6,7 @@ export function useFetchMilestoneList() {
 	return useQuery<MilestoneListData, Error>({
 		queryKey: ['milestones'],
 		queryFn: fetchMilestones,
+		staleTime: 1000 * 60,
+		refetchInterval: 1000 * 60,
 	});
 }

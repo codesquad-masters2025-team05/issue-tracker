@@ -1,17 +1,18 @@
 import { useFetchMilestoneList } from '@/entities/milestone/hooks/useFetchMilestoneList';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MilestoneListItem } from './MilestoneListItem';
 
 export const MilestoneList = () => {
-	const { data, isLoading, isError } = useFetchMilestoneList();
+	const { data, refetch } = useFetchMilestoneList();
 	const milestones = data?.milestones ?? [];
 	const total = data?.total ?? 0;
 
 	// 한 번에 한 행만 편집!
 	const [editingId, setEditingId] = useState<number | null>(null);
 
-	if (isLoading) return <div>로딩 중...</div>;
-	if (isError || !data) return <div>에러 발생</div>;
+	useEffect(() => {
+		refetch;
+	}, [refetch]);
 
 	return (
 		<div className='border border-[var(--neutral-border-default)] rounded-2xl'>

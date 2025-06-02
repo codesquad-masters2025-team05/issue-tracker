@@ -1,4 +1,8 @@
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
+import { useFetchLabelCount } from '@/entities/label/hooks/useFetchLabelCount';
+import { useFetchLabelList } from '@/entities/label/hooks/useFetchLabelList';
+import { useFetchMilestoneCount } from '@/entities/milestone/hooks/useFetchMilestoneCount';
+import { useFetchMilestoneList } from '@/entities/milestone/hooks/useFetchMilestoneList';
 import { Pagination } from '@/shared/ui/Pagination';
 import { NavigationButton } from '@/widgets/LabelMilestoneTabs';
 import { useQ } from './hooks/useQueryString';
@@ -12,6 +16,11 @@ const IssueListPage = () => {
 	const { getQ, getPage, setPage } = useQ();
 	const q = getQ() || 'is:open';
 	const page = getPage();
+
+	useFetchLabelList();
+	useFetchLabelCount();
+	useFetchMilestoneList();
+	useFetchMilestoneCount();
 
 	const { data: IssueListData, error } = useFetchIssueList(q, page);
 

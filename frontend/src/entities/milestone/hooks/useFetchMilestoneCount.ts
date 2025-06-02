@@ -5,5 +5,7 @@ export function useFetchMilestoneCount() {
 	return useQuery<number, Error>({
 		queryKey: ['milestoneCount'],
 		queryFn: fetchMilestoneCount,
+		staleTime: 1000 * 60,
+		refetchInterval: 1000 * 60,
 	});
 }
