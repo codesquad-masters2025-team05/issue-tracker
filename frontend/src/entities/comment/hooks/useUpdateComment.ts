@@ -1,14 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { updateComment } from '../api/commentAPI';
-import type {
-	CommentResponse,
-	CommentUpdateRequest,
-} from '../model/comment.types';
+import type { CommentUpdateRequest } from '../model/comment.types';
 
 export function useUpdateComment(onSuccess?: () => void) {
 	return useMutation<
-		CommentResponse,
+		void,
 		Error,
 		{ commentId: number; payload: CommentUpdateRequest }
 	>({

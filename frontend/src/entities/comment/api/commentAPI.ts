@@ -22,7 +22,7 @@ export async function createComment(
 export async function updateComment(
 	commentId: number,
 	payload: CommentUpdateRequest,
-): Promise<CommentResponse> {
+) {
 	const url = `/api/comments/${commentId}`;
 	const res = await fetch(url, {
 		method: 'PATCH',
@@ -31,15 +31,15 @@ export async function updateComment(
 		},
 		body: JSON.stringify(payload),
 	});
-	return res.json();
+	if (res.status === 204) return;
+	throw new Error('코멘트 수정 실패');
 }
 
-export async function deleteComment(
-	commentId: number,
-): Promise<CommentResponse> {
+export async function deleteComment(commentId: number) {
 	const url = `/api/comments/${commentId}`;
 	const res = await fetch(url, {
 		method: 'DELETE',
 	});
-	return res.json();
+	if (res.status === 204) return;
+	throw new Error('코멘트 삭제 실패');
 }

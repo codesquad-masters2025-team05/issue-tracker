@@ -81,7 +81,6 @@ export async function updateIssue(
 export async function deleteIssue(id: number): Promise<void> {
 	const url = `/api/issues/${id}`;
 	const res = await fetch(url, { method: 'DELETE' });
-	const json: IssueDeleteResponse = await res.json();
-	if (!json.success) throw new Error(json.error ?? '이슈 삭제 실패');
-	// 성공이면 아무것도 리턴하지 않음
+	if (res.status === 204) return;
+	throw new Error('이슈 삭제 실패');
 }

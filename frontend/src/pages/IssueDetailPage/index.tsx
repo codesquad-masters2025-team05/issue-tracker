@@ -11,6 +11,7 @@ import { TextArea } from '@/shared/ui/TextArea';
 import { Button } from '@/shared/ui/button';
 import { type FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Comment } from './ui/Comment';
 import { Header } from './ui/Header';
 import { Sidebar } from './ui/Sidebar';
@@ -22,6 +23,7 @@ function Division() {
 }
 
 const IssueDetailPage: FC = () => {
+	const navigate = useNavigate();
 	const [openConfirm, setOpenConfirm] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { refetch: issuesRefetch } = useFetchIssueList('');
@@ -33,7 +35,10 @@ const IssueDetailPage: FC = () => {
 		issueDetailRefetch();
 		setInputValue('');
 	});
-	const { mutate: issueDeleteMutate } = useDeleteIssue(() => issuesRefetch());
+	const { mutate: issueDeleteMutate } = useDeleteIssue(() => {
+		issuesRefetch();
+		navigate('/issues');
+	});
 
 	const [inputValue, setInputValue] = useState('');
 

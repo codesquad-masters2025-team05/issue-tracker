@@ -146,6 +146,7 @@ const LabelItemButtons = ({ id, onEdit }: LabelItemButtonsProps) => {
 				cancelText='취소'
 				onConfirm={handleConfirmDelete}
 				onCancel={handleCancel}
+				isDanger
 			/>
 		</div>
 	);

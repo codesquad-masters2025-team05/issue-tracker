@@ -1,10 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { deleteComment } from '../api/commentAPI';
-import type { CommentResponse } from '../model/comment.types';
 
 export function useDeleteComment(onSuccess?: () => void) {
-	return useMutation<CommentResponse, Error, number>({
+	return useMutation<void, Error, number>({
 		mutationFn: deleteComment,
 		onSuccess: (_data) => {
 			onSuccess?.();
