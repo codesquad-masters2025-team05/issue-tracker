@@ -1,7 +1,3 @@
-import { getMockResponse } from './mock';
-
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
-
 async function realGetJSON<T>(path: string): Promise<T> {
 	const res = await fetch(`${path}`, {
 		method: 'GET',

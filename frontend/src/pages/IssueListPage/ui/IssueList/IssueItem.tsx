@@ -1,7 +1,7 @@
 import Archive from '@/assets/archive.svg?react';
 import IconInfo from '@/assets/icon_info.svg?react';
 import IconMilestone from '@/assets/milestone.svg?react';
-import type { IssueListItem } from '@/entities/issue/model/issue.types';
+import type { IssueListItem } from '@/entities/issue/model/issue.read.types';
 import { LabelChip } from '@/shared/ui/LabelChip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { formatDistanceToNow } from 'date-fns';

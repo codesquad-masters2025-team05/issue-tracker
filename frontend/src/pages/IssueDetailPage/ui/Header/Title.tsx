@@ -6,7 +6,7 @@ import { useUpdateIssue } from '@/entities/issue/hooks/useUpdateIssue';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/button';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 export function Title() {
@@ -19,12 +19,6 @@ export function Title() {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editTitle, setEditTitle] = useState(issue?.title ?? '');
 	const [isModalOpen, setModalOpen] = useState(false);
-
-	// 타이틀 동기화
-	// (issue.title이 바뀌면, editTitle도 바꿔줌)
-	useEffect(() => {
-		setEditTitle(issue?.title ?? '');
-	}, [issue?.title]);
 
 	if (!issue) return null;
 
@@ -41,7 +35,6 @@ export function Title() {
 	const handleComplete = async () => {
 		if (editTitle.trim() && editTitle !== issue.title) {
 			await updateIssueMutate({ id: issue.id, payload: { title: editTitle } });
-			await issueDetailRefetch();
 		}
 		setIsEditing(false);
 	};
@@ -49,12 +42,10 @@ export function Title() {
 	const handleCloseIssue = async () => {
 		setModalOpen(false);
 		await updateIssueMutate({ id: issue.id, payload: { isOpen: false } });
-		await issueDetailRefetch();
 	};
 
 	const handleReopenIssue = async () => {
 		await updateIssueMutate({ id: issue.id, payload: { isOpen: true } });
-		await issueDetailRefetch();
 	};
 
 	return (

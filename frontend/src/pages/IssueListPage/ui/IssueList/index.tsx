@@ -1,4 +1,4 @@
-import type { IssueListItem } from '@/entities/issue/model/issue.types';
+import type { IssueListItem } from '@/entities/issue/model/issue.read.types';
 import { useNavigate } from 'react-router-dom';
 import type { IssueListFilterState } from '../../model/types';
 import { IssueItem } from './IssueItem';

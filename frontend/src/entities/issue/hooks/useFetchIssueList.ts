@@ -1,5 +1,5 @@
 import { fetchIssues } from '@/entities/issue/api/issueAPI';
-import type { IssueListData } from '@/entities/issue/model/issue.types';
+import type { IssueListData } from '@/entities/issue/model/issue.read.types';
 import { useQuery } from '@tanstack/react-query';
 
 export function useFetchIssueList(q: string, page?: number, perPage?: number) {

@@ -9,7 +9,7 @@ export function useDeleteIssue(onSuccess?: () => void) {
 			onSuccess?.();
 		},
 		onError: (error) => {
-			toast.error(error.message || '이슈 삭제에 실패했습니다.');
+			toast.error(error.message);
 		},
 	});
 }

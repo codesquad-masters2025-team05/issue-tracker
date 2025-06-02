@@ -8,7 +8,6 @@ import { LabelChip } from '@/shared/ui/LabelChip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import type { FC } from 'react';
 import { useParams } from 'react-router-dom';
-import { MilestoneBox } from './MilestoneBox';
 import { useIssueInitialIds } from './useIssueInitialIds';
 import { useIssueSelectOptions } from './useIssueSelectOptions';
 

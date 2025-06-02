@@ -11,6 +11,10 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
+import { useUpdateComment } from '@/entities/comment/hooks/useUpdateComment';
+import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
+import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 import type {
 	CommentActionsProps,
 	CommentAvatarProps,
@@ -22,18 +26,30 @@ import type {
 } from './Comment.types';
 
 export function Comment({
-	id,
+	id: commentId,
 	isAuthor,
 	content,
 	commentAuthor,
 	createdAt,
-	updatedAt,
-	onSave,
 }: CommentProps) {
+	const { id: issueId } = useParams<{ id: string }>();
+
 	const [editing, setEditing] = useState(false);
 	const [editValue, setEditValue] = useState(content);
 
 	const hasChanged = editValue !== content && editValue.trim().length > 0;
+
+	const { refetch: issueDetailRefetch } = useFetchIssueDetail(Number(issueId));
+	const { mutate: commentUpdateMutate } = useUpdateComment(() => {
+		issueDetailRefetch();
+		toast.success('코멘트를 수정했습니다.');
+	});
+
+	const onUpdateContent = () =>
+		commentUpdateMutate({
+			commentId: commentId,
+			payload: { content: editValue },
+		});
 
 	return (
 		<div>
@@ -71,7 +87,7 @@ export function Comment({
 							<CommentTextarea value={editValue} onChange={setEditValue} />
 						</div>
 						<VerticalDashDivision />
-						<DemoFileInput baseId={id} />
+						<DemoFileInput baseId={commentId} />
 					</>
 				)}
 			</div>
@@ -79,7 +95,10 @@ export function Comment({
 			{editing && (
 				<CommentActions
 					onCancel={() => setEditing(false)}
-					onSave={() => onSave(id, editValue)}
+					onSave={() => {
+						setEditing(false);
+						onUpdateContent();
+					}}
 					canSave={hasChanged}
 				/>
 			)}

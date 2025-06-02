@@ -1,4 +1,4 @@
-import type { User } from '@/entities/issue/model/issue.types';
+import type { User } from '@/entities/issue/model/issueDetail.read.types';
 
 export interface CommentProps {
 	id: number;
@@ -7,7 +7,6 @@ export interface CommentProps {
 	commentAuthor: User;
 	createdAt: string;
 	updatedAt: string;
-	onSave: (id: number, value: string) => void;
 }
 
 export interface CommentAvatarProps {

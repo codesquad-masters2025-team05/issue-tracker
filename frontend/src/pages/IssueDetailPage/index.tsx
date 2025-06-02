@@ -5,32 +5,28 @@ import { useUpdateComment } from '@/entities/comment/hooks/useUpdateComment';
 import { useDeleteIssue } from '@/entities/issue/hooks/useDeleteIssue';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
 import { useFetchIssueList } from '@/entities/issue/hooks/useFetchIssueList';
-import type { IssueUpdateRequest } from '@/entities/issue/model/issue.types';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { TextArea } from '@/shared/ui/TextArea';
 import { Button } from '@/shared/ui/button';
-import { type FC, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { Comment } from './ui/Comment';
 import { Header } from './ui/Header';
 import { Sidebar } from './ui/Sidebar';
 
-export type OnUpdateIssue = (payload: IssueUpdateRequest) => void;
-
-function Division() {
-	return <div className='border-t border-[var(--neutral-border-default)]' />;
-}
-
-const IssueDetailPage: FC = () => {
+const IssueDetailPage = () => {
 	const navigate = useNavigate();
-	const [openConfirm, setOpenConfirm] = useState(false);
 	const { id } = useParams<{ id: string }>();
+
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const [inputValue, setInputValue] = useState('');
+
 	const { refetch: issuesRefetch } = useFetchIssueList('');
 	const { data: issue, refetch: issueDetailRefetch } = useFetchIssueDetail(
 		Number(id),
 	);
-	const { mutate: commentUpdateMutate } = useUpdateComment(issueDetailRefetch);
 	const { mutate: commentCreateMutate } = useCreateComment(() => {
 		issueDetailRefetch();
 		setInputValue('');
@@ -40,17 +36,9 @@ const IssueDetailPage: FC = () => {
 		navigate('/issues');
 	});
 
-	const [inputValue, setInputValue] = useState('');
-
 	const isEnabled = inputValue.trim().length > 0;
 
 	if (!issue) return;
-
-	const onUpdateContent = (id: number, content: string) =>
-		commentUpdateMutate({
-			commentId: id,
-			payload: { content: content },
-		});
 
 	const onCreateContent = () =>
 		commentCreateMutate({
@@ -79,7 +67,6 @@ const IssueDetailPage: FC = () => {
 								commentAuthor={comment.author}
 								createdAt={comment.createdAt}
 								updatedAt={comment.updatedAt}
-								onSave={(id, content) => onUpdateContent(id, content)}
 							/>
 						);
 					})}
@@ -98,7 +85,10 @@ const IssueDetailPage: FC = () => {
 							<Button
 								variant='contained'
 								size='sm'
-								onClick={onCreateContent}
+								onClick={() => {
+									onCreateContent();
+									toast.success('코멘트를 작성했습니다.');
+								}}
 								disabled={!isEnabled}
 							>
 								<PlusIcon />
@@ -129,6 +119,7 @@ const IssueDetailPage: FC = () => {
 				onConfirm={() => {
 					setOpenConfirm(false);
 					onDeleteIssue();
+					toast.success('이슈를 삭제했습니다.');
 				}}
 				onCancel={() => setOpenConfirm(false)}
 				isDanger
@@ -136,5 +127,9 @@ const IssueDetailPage: FC = () => {
 		</div>
 	);
 };
+
+function Division() {
+	return <div className='border-t border-[var(--neutral-border-default)]' />;
+}
 
 export default IssueDetailPage;

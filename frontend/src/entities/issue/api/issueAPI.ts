@@ -1,54 +1,53 @@
-import { getJSON } from '@/shared/api/client';
-import type { ApiResponse } from '@/shared/api/types';
+import type { ApiResponse } from '../model/api.types';
 import type {
 	IssueCreateRequest,
 	IssueCreateResponse,
-	IssueDeleteResponse,
-	IssueDetailData,
-	IssueListData,
-	IssueUpdateRequest,
-} from '../model/issue.types';
+} from '../model/issue.create.types';
+import type { IssueListData } from '../model/issue.read.types';
+import type { IssueUpdateRequest } from '../model/issue.update.types';
+import type { IssueDetail } from '../model/issueDetail.read.types';
 
-// 이슈 목록 조회
 export async function fetchIssues(
 	q = '',
 	page?: number,
 	perPage?: number,
 ): Promise<IssueListData> {
-	// page, perPage가 있으면 쿼리 파라미터에 포함
 	let url = q ? `/api/issues?q=${encodeURIComponent(q)}` : '/api/issues';
 	if (page !== undefined) url += `&page=${page}`;
 	if (perPage !== undefined) url += `&perPage=${perPage}`;
-	const res = await getJSON<ApiResponse<IssueListData>>(url);
-	if (!res.success) throw new Error(res.error ?? '이슈 목록 조회 실패');
-	return res.data;
+	const res = await fetch(url, {
+		method: 'GET',
+		headers: { 'Content-Type': 'application/json' },
+	});
+	const json: ApiResponse<IssueListData> = await res.json();
+	if (!json.success)
+		throw new Error(json.error?.message ?? '이슈 목록 조회 실패');
+	return json.data;
 }
 
-// 이슈 상세 조회
-export async function fetchIssueDetail(id: number): Promise<IssueDetailData> {
+export async function fetchIssueDetail(id: number): Promise<IssueDetail> {
 	const url = `/api/issues/${id}`;
 	const res = await fetch(url, {
 		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 	});
-	const json: ApiResponse<IssueDetailData> = await res.json();
-	if (!json.success) throw new Error(json.error ?? '이슈 상세 조회 실패');
+	const json: ApiResponse<IssueDetail> = await res.json();
+	if (!json.success)
+		throw new Error(json.error?.message ?? '이슈 상세 조회 실패');
 	return json.data;
 }
 
-// 이슈 생성
 export async function createIssue(
 	payload: IssueCreateRequest,
-): Promise<IssueCreateResponse['data']> {
-	// 실제 data만 반환
+): Promise<number> {
 	const res = await fetch('/api/issues', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(payload),
 	});
 	const json: IssueCreateResponse = await res.json();
-	if (!json.success) throw new Error(json.error ?? '이슈 생성 실패');
-	return json.data; // 실제 새로 생성된 id 등 "진짜 데이터"만 반환
+	if (!json.success) throw new Error(json.error?.message ?? '이슈 생성 실패');
+	return json.data;
 }
 
 const keyToUrlMap: Record<string, string> = {
