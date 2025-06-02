@@ -25,4 +25,4 @@ async function realGetJSON<T>(path: string): Promise<T> {
  *
  * 실제 통신 또는 mock 중 하나를 자동으로 선택하여 사용합니다.
  */
-export const getJSON = USE_MOCK ? getMockResponse : realGetJSON;
+export const getJSON = realGetJSON;
