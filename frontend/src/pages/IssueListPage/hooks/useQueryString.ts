@@ -121,11 +121,13 @@ export function useQ() {
 	};
 
 	const getPage = () => Number(searchParams.get('page') || 1);
+
 	const setPage = (page: number) => {
 		const next = new URLSearchParams(searchParams);
 		next.set('page', String(page));
-		setSearchParams(next, { replace: true });
+		setSearchParams(next);
 	};
+
 	return { getQ, setQ, updateQ, getPage, setPage };
 }
 
