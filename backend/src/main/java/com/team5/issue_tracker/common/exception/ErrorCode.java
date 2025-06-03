@@ -7,6 +7,8 @@ public enum ErrorCode {
   // 유저 관련
   USER_NOT_FOUND(404, "USER_NOT_FOUND", "해당 유저를 찾을 수 없습니다."),
   USER_ALREADY_EXISTS(409, "USER_ALREADY_EXISTS", "이미 존재하는 유저입니다."),
+  EMAIL_ALREADY_EXISTS(409, "EMAIL_ALREADY_EXISTS", "이미 존재하는 이메일입니다."),
+  USERNAME_ALREADY_EXISTS(409, "USERNAME_ALREADY_EXISTS", "이미 존재하는 유저이름입니다."),
   // 코멘트 관련
   COMMENT_NOT_FOUND(404, "COMMENT_NOT_FOUND", "해당 댓글을 찾을 수 없습니다."),
   // 라벨 관련

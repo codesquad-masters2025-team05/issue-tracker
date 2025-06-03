@@ -25,4 +25,13 @@ public class AuthController {
 
     return ResponseEntity.ok(ApiResponse.success(response));
   }
+
+  @PostMapping("/signup")
+  public ResponseEntity<ApiResponse<Void>> signup(
+      @Valid @RequestBody SignupRequest request) {
+
+    authService.signup(request);
+
+    return ResponseEntity.ok(ApiResponse.success(null));
+  }
 }

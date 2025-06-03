@@ -29,4 +29,19 @@ public class AuthService {
 
     return new LoginResponse(accessToken);
   }
+
+  public void signup(SignupRequest signupRequest) {
+    if (userRepository.existsByEmail(signupRequest.getEmail())) {
+      throw new UnauthorizedException(ErrorCode.EMAIL_ALREADY_EXISTS);
+    }
+
+    if (userRepository.existsByUsername(signupRequest.getUsername())) {
+      throw new UnauthorizedException(ErrorCode.USERNAME_ALREADY_EXISTS);
+    }
+
+    User user = new User(signupRequest.getUsername(), signupRequest.getEmail(), signupRequest.getPassword(),
+            signupRequest.getImageUrl());
+
+    userRepository.save(user);
+  }
 }
