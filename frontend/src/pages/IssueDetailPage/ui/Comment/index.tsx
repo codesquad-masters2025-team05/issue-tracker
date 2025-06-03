@@ -10,6 +10,7 @@ import { ko } from 'date-fns/locale/ko';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 
 import { useUpdateComment } from '@/entities/comment/hooks/useUpdateComment';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
@@ -171,8 +172,10 @@ function EmotionButton() {
 
 export function CommentContent({ content }: CommentContentProps) {
 	return (
-		<div className='whitespace-pre-wrap font-display-medium-16 text-[var(--neutral-text-default)]'>
-			<ReactMarkdown remarkPlugins={[remarkBreaks]}>{content}</ReactMarkdown>
+		<div className='prose whitespace-pre-wrap font-display-medium-16 text-[var(--neutral-text-default)]'>
+			<ReactMarkdown remarkPlugins={[remarkBreaks, remarkGfm]}>
+				{content}
+			</ReactMarkdown>
 		</div>
 	);
 }
