@@ -3,21 +3,32 @@ package com.team5.issue_tracker.common.auth;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 
 
 @Component
 public class JwtTokenProvider {
-  private final String base64Secret = "F9c0FlcLC_NSSXm3EFy2q7zZphkBNoHcer0PrcAe3AQ_"; //TODO : 테스트용 임시 키 수정
-  private final Key key = Keys.hmacShaKeyFor(java.util.Base64.getUrlDecoder().decode(base64Secret));
+  @Value("${jwt.secret}")
+  private String base64Secret;
+
   private final long validityInMs = 6 * 3600000; // 6시간
+  // 실제 Key 객체는 주입된 base64Secret을 디코딩해서 생성
+  private Key key;
+
+  // 생성자 또는 @PostConstruct로 Key 초기화
+  @PostConstruct
+  public void init() {
+    this.key = Keys.hmacShaKeyFor(java.util.Base64.getUrlDecoder().decode(base64Secret));
+  }
+  //  private Key key = Keys.hmacShaKeyFor(java.util.Base64.getUrlDecoder().decode(base64Secret));
 
   public String createToken(Long userId, String email) {
     Claims claims = Jwts.claims().setSubject(email);
