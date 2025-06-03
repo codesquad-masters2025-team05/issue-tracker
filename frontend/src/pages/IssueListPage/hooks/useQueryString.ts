@@ -132,7 +132,7 @@ export function useQ() {
 }
 
 // 띄어쓰기가 있으면 쌍따옴표로 감싸기
-function formatValue(value: string) {
+export function formatValue(value: string) {
 	return /\s/.test(value) ? `"${value}"` : value;
 }
 
@@ -140,9 +140,10 @@ function formatValue(value: string) {
 export function hasKeyValue(q: string | null, key: string, value: string) {
 	if (!q) return false;
 	const formattedValue = formatValue(value);
-	const pattern = new RegExp(
-		`\\b${key}:(?:"${escapeRegExp(formattedValue)}"|${escapeRegExp(formattedValue)})\\b`,
-	);
+	const escaped = escapeRegExp(formattedValue);
+	const pattern = new RegExp(`(^|[ \\t])${key}:${escaped}(?=[ \\t]|$)`);
+	if (key === 'label')
+		console.log(`${pattern.test(q)} / pattern: ${pattern}, q: ${q}`);
 	return pattern.test(q);
 }
 

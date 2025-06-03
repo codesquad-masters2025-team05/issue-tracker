@@ -1,6 +1,6 @@
 import CheckOffCircleIcon from '@/assets/checkOffCircle.svg?react';
 import CheckOnCircleIcon from '@/assets/checkOnCircle.svg?react';
-import { useQ } from '@/pages/IssueListPage/hooks/useQueryString';
+import { formatValue, useQ } from '@/pages/IssueListPage/hooks/useQueryString';
 import { hasKeyValue } from '@/pages/IssueListPage/hooks/useQueryString';
 import { Spinner } from '@/shared/ui/spinner';
 import { cn } from '@/shared/utils/shadcn-utils';
@@ -71,10 +71,7 @@ export function DropdownPanel({
 					options.map((opt, idx) => {
 						const value = opt.value || opt.display;
 						const selectedKey = categoryKey || opt.key || '';
-						const isSelected = value
-							? hasKeyValue(getQ(), selectedKey, value)
-							: false;
-
+						const isSelected = hasKeyValue(getQ(), selectedKey, value);
 						return (
 							<button
 								key={opt.id}
