@@ -17,8 +17,9 @@ public class AuthService {
   private final UserRepository userRepository;
 
   public LoginResponse login(LoginRequest loginRequest) {
-    User user = userRepository.findByUsername(loginRequest.getUsername())
-        .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    User user = userRepository.findByEmail(loginRequest.getEmail())
+        .orElseThrow(
+            () -> new NotFoundException(ErrorCode.USER_NOT_FOUND, "해당 이메일을 가진 사용자가 없습니다."));
 
     if (!user.getPassword().equals(loginRequest.getPassword())) {
       throw new UnauthorizedException(ErrorCode.INVALID_PASSWORD);

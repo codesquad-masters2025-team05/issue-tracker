@@ -33,10 +33,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     if (token != null) { //TODO : 다시 확인하기
       try {
         if (jwtTokenProvider.validateToken(token)) {
-          String username = jwtTokenProvider.getUsernameFromToken(token);
+          String email = jwtTokenProvider.getEmailFromToken(token);
           Long userId = jwtTokenProvider.getUserIdFromToken(token);
 
-          request.setAttribute("username", username);
+          request.setAttribute("email", email);
           request.setAttribute("userId", userId);
         } else {
           response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");

@@ -19,8 +19,8 @@ public class JwtTokenProvider {
   private final Key key = Keys.hmacShaKeyFor(java.util.Base64.getUrlDecoder().decode(base64Secret));
   private final long validityInMs = 6 * 3600000; // 6시간
 
-  public String createToken(Long userId, String username) {
-    Claims claims = Jwts.claims().setSubject(username);
+  public String createToken(Long userId, String email) {
+    Claims claims = Jwts.claims().setSubject(email);
     claims.put("userId", userId);
 
     Date now = new Date();
@@ -47,7 +47,7 @@ public class JwtTokenProvider {
     return parseClaims(token).get("userId", Long.class);
   }
 
-  public String getUsernameFromToken(String token) {
+  public String getEmailFromToken(String token) {
     return parseClaims(token).getSubject();
   }
 
