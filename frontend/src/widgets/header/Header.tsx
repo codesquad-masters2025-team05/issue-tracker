@@ -1,4 +1,5 @@
 import Logo from '@/assets/logo_medium.svg?react';
+import LogoutButton from '@/features/auth/ui/LogoutButton';
 import { ThemeToggleButton } from '@/shared/theme/ThemeToggleButton';
 import { User } from 'lucide-react';
 import type { FC } from 'react';
@@ -13,7 +14,7 @@ const Header: FC = () => {
 				</Link>
 			</div>
 
-			<div className='flex items-center gap-4'>
+			<div className='flex items-center gap-2'>
 				<button
 					type='button'
 					aria-label='프로필'
@@ -21,7 +22,7 @@ const Header: FC = () => {
 				>
 					<User className='w-6 h-6' />
 				</button>
-
+				<LogoutButton />
 				<ThemeToggleButton />
 			</div>
 		</div>
