@@ -82,4 +82,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
     return null;
   }
+
+  private void sendJsonErrorResponse(HttpServletResponse response, int status,
+      String message) throws IOException {
+    response.setStatus(status);
+    response.setContentType("application/json; charset=UTF-8");
+
+    Map<String, Object> responseBody = new LinkedHashMap<>();
+    responseBody.put("success", false);
+    responseBody.put("data", null);
+    responseBody.put("error", new ApiError(message, status));
+
+
+    String json = mapper.writeValueAsString(responseBody);
+    response.getWriter().write(json);
+  }
 }
