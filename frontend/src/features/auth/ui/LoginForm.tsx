@@ -47,7 +47,9 @@ export function LoginForm() {
 				autoComplete='current-password'
 			/>
 			{error && (
-				<div className='text-[var(--danger-text-default)] text-sm'>{error}</div>
+				<div className='text-[var(--danger-text-default)] font-display-medium-16 px-2'>
+					{error}
+				</div>
 			)}
 			<Button
 				variant='contained'
