@@ -77,7 +77,6 @@ export function TextArea({
 	value,
 	onChange,
 	resourceType,
-	...props
 }: TextAreaProps) {
 	const baseId = id ?? useId();
 	const [fileName, setFileName] = useState<string | undefined>();
