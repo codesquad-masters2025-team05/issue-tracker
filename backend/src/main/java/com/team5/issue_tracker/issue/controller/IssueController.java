@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.team5.issue_tracker.comment.dto.CommentRequest;
 import com.team5.issue_tracker.comment.service.CommentService;
 import com.team5.issue_tracker.common.dto.ApiResponse;
+import com.team5.issue_tracker.common.util.AuthUtils;
 import com.team5.issue_tracker.issue.dto.request.IssueDeleteRequest;
 import com.team5.issue_tracker.issue.dto.request.IssueSearchRequest;
 import com.team5.issue_tracker.issue.dto.request.IssueCreateRequest;
@@ -66,14 +67,16 @@ public class IssueController {
       @Valid @RequestBody IssueCreateRequest issueRequest, HttpServletRequest httpRequest
   ) {
     log.info("POST /api/issues 요청");
-    return ResponseEntity.ok(ApiResponse.success(issueService.createIssue(issueRequest)));
+    Long userId = AuthUtils.extractUserId(httpRequest);
+    return ResponseEntity.ok(ApiResponse.success(issueService.createIssue(issueRequest, userId)));
   }
 
   @DeleteMapping
   public ResponseEntity<Void> deleteIssues(
-      @Valid @RequestBody IssueDeleteRequest request
+      @Valid @RequestBody IssueDeleteRequest request, HttpServletRequest httpRequest
   ) {
-    issueService.deleteIssues(request);
+    Long userId = AuthUtils.extractUserId(httpRequest);
+    issueService.deleteIssues(request, userId);
     return ResponseEntity.noContent().build();
   }
 
@@ -84,17 +87,21 @@ public class IssueController {
   }
 
   @DeleteMapping("/{issueId}")
-  public ResponseEntity<Void> deleteIssue(@PathVariable Long issueId) {
-    issueService.deleteIssue(issueId);
+  public ResponseEntity<Void> deleteIssue(@PathVariable Long issueId,
+      HttpServletRequest httpRequest) {
+    Long userId = AuthUtils.extractUserId(httpRequest);
+    issueService.deleteIssue(issueId, userId);
     return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/{issueId}/comments")
   public ResponseEntity<ApiResponse<Long>> addComment(
       @PathVariable Long issueId,
-      @Valid @RequestBody CommentRequest commentRequest
+      @Valid @RequestBody CommentRequest commentRequest, HttpServletRequest httpRequest
   ) {
-    return ResponseEntity.ok(ApiResponse.success(commentService.addComment(issueId, commentRequest)));
+    Long userId = AuthUtils.extractUserId(httpRequest);
+    return ResponseEntity.ok(
+        ApiResponse.success(commentService.addComment(issueId, commentRequest, userId)));
   }
 
   @GetMapping("/authors")
@@ -128,53 +135,59 @@ public class IssueController {
   @PatchMapping("/{issueId}/title")
   public ResponseEntity<Void> updateIssueTitle(
       @PathVariable Long issueId,
-      @Valid @RequestBody UpdateIssueTitleRequest issueRequest
+      @Valid @RequestBody UpdateIssueTitleRequest issueRequest, HttpServletRequest httpRequest
   ) {
-    issueService.updateIssueTitle(issueId, issueRequest);
+    Long userId = AuthUtils.extractUserId(httpRequest);
+    issueService.updateIssueTitle(issueId, issueRequest, userId);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping("/{issueId}/status")
   public ResponseEntity<Void> updateIssueStatus(
       @PathVariable Long issueId,
-      @Valid @RequestBody UpdateIssueStatusRequest issueRequest
+      @Valid @RequestBody UpdateIssueStatusRequest issueRequest, HttpServletRequest httpRequest
   ) {
-    issueService.updateIssueStatus(issueId, issueRequest);
+    Long userId = AuthUtils.extractUserId(httpRequest);
+    issueService.updateIssueStatus(issueId, issueRequest, userId);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping("/{issueId}/labels")
   public ResponseEntity<Void> updateIssueLabels(
       @PathVariable Long issueId,
-      @Valid @RequestBody UpdateIssueLabelsRequest issueRequest
+      @Valid @RequestBody UpdateIssueLabelsRequest issueRequest, HttpServletRequest httpRequest
   ) {
-    issueService.updateIssueLabels(issueId, issueRequest);
+    Long userId = AuthUtils.extractUserId(httpRequest);
+    issueService.updateIssueLabels(issueId, issueRequest, userId);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping("/{issueId}/milestone")
   public ResponseEntity<Void> updateIssueMilestone(
       @PathVariable Long issueId,
-      @Valid @RequestBody UpdateIssueMilestoneRequest issueRequest
+      @Valid @RequestBody UpdateIssueMilestoneRequest issueRequest, HttpServletRequest httpRequest
   ) {
-    issueService.updateIssueMilestone(issueId, issueRequest);
+    Long userId = AuthUtils.extractUserId(httpRequest);
+    issueService.updateIssueMilestone(issueId, issueRequest, userId);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping("/{issueId}/assignees")
   public ResponseEntity<Void> updateIssueAssignees(
       @PathVariable Long issueId,
-      @Valid @RequestBody UpdateIssueAssigneesRequest issueRequest
+      @Valid @RequestBody UpdateIssueAssigneesRequest issueRequest, HttpServletRequest httpRequest
   ) {
-    issueService.updateIssueAssignees(issueId, issueRequest);
+    Long userId = AuthUtils.extractUserId(httpRequest);
+    issueService.updateIssueAssignees(issueId, issueRequest, userId);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping("/bulk-status")
   public ResponseEntity<Void> updateBulkIssueStatus(
-      @Valid @RequestBody UpdateBulkIssueStatusRequest issueRequest
-  ){
-    issueService.updateBulkIssuesStatus(issueRequest);
+      @Valid @RequestBody UpdateBulkIssueStatusRequest issueRequest, HttpServletRequest httpRequest
+  ) {
+    Long userId = AuthUtils.extractUserId(httpRequest);
+    issueService.updateBulkIssuesStatus(issueRequest, userId);
     return ResponseEntity.noContent().build();
   }
 }
