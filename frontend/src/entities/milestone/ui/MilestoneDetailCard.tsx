@@ -6,10 +6,9 @@ interface Props {
 }
 
 export function MilestoneDetailCard({ id }: Props) {
-	const { data, isLoading, isError } = useFetchMilestoneDetail(id);
+	const { data } = useFetchMilestoneDetail(id);
 
-	if (isLoading) return <div>로딩 중...</div>;
-	if (isError || !data) return <div>정보를 불러올 수 없습니다.</div>;
+	if (!data) return;
 
 	const formattedDeadline = data.deadline
 		? data.deadline.replace(/-/g, '. ')
