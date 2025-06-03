@@ -33,6 +33,7 @@ import com.team5.issue_tracker.issue.dto.response.IssueMilestoneScrollResponse;
 import com.team5.issue_tracker.milestone.query.MilestoneQueryService;
 import com.team5.issue_tracker.user.dto.UserScrollResponse;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,10 +63,10 @@ public class IssueController {
 
   @PostMapping
   public ResponseEntity<ApiResponse<Long>> createIssue(
-      @Valid @RequestBody IssueCreateRequest request
+      @Valid @RequestBody IssueCreateRequest issueRequest, HttpServletRequest httpRequest
   ) {
     log.info("POST /api/issues 요청");
-    return ResponseEntity.ok(ApiResponse.success(issueService.createIssue(request)));
+    return ResponseEntity.ok(ApiResponse.success(issueService.createIssue(issueRequest)));
   }
 
   @DeleteMapping
@@ -91,9 +92,9 @@ public class IssueController {
   @PostMapping("/{issueId}/comments")
   public ResponseEntity<ApiResponse<Long>> addComment(
       @PathVariable Long issueId,
-      @Valid @RequestBody CommentRequest request
+      @Valid @RequestBody CommentRequest commentRequest
   ) {
-    return ResponseEntity.ok(ApiResponse.success(commentService.addComment(issueId, request)));
+    return ResponseEntity.ok(ApiResponse.success(commentService.addComment(issueId, commentRequest)));
   }
 
   @GetMapping("/authors")
@@ -127,53 +128,53 @@ public class IssueController {
   @PatchMapping("/{issueId}/title")
   public ResponseEntity<Void> updateIssueTitle(
       @PathVariable Long issueId,
-      @Valid @RequestBody UpdateIssueTitleRequest request
+      @Valid @RequestBody UpdateIssueTitleRequest issueRequest
   ) {
-    issueService.updateIssueTitle(issueId, request);
+    issueService.updateIssueTitle(issueId, issueRequest);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping("/{issueId}/status")
   public ResponseEntity<Void> updateIssueStatus(
       @PathVariable Long issueId,
-      @Valid @RequestBody UpdateIssueStatusRequest request
+      @Valid @RequestBody UpdateIssueStatusRequest issueRequest
   ) {
-    issueService.updateIssueStatus(issueId, request);
+    issueService.updateIssueStatus(issueId, issueRequest);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping("/{issueId}/labels")
   public ResponseEntity<Void> updateIssueLabels(
       @PathVariable Long issueId,
-      @Valid @RequestBody UpdateIssueLabelsRequest request
+      @Valid @RequestBody UpdateIssueLabelsRequest issueRequest
   ) {
-    issueService.updateIssueLabels(issueId, request);
+    issueService.updateIssueLabels(issueId, issueRequest);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping("/{issueId}/milestone")
   public ResponseEntity<Void> updateIssueMilestone(
       @PathVariable Long issueId,
-      @Valid @RequestBody UpdateIssueMilestoneRequest request
+      @Valid @RequestBody UpdateIssueMilestoneRequest issueRequest
   ) {
-    issueService.updateIssueMilestone(issueId, request);
+    issueService.updateIssueMilestone(issueId, issueRequest);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping("/{issueId}/assignees")
   public ResponseEntity<Void> updateIssueAssignees(
       @PathVariable Long issueId,
-      @Valid @RequestBody UpdateIssueAssigneesRequest request
+      @Valid @RequestBody UpdateIssueAssigneesRequest issueRequest
   ) {
-    issueService.updateIssueAssignees(issueId, request);
+    issueService.updateIssueAssignees(issueId, issueRequest);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping("/bulk-status")
   public ResponseEntity<Void> updateBulkIssueStatus(
-      @Valid @RequestBody UpdateBulkIssueStatusRequest request
+      @Valid @RequestBody UpdateBulkIssueStatusRequest issueRequest
   ){
-    issueService.updateBulkIssuesStatus(request);
+    issueService.updateBulkIssuesStatus(issueRequest);
     return ResponseEntity.noContent().build();
   }
 }
