@@ -30,7 +30,13 @@ public class CommentService {
   }
 
   @Transactional
-  public void editComment(Long commentId, CommentRequest updateCommentRequest) {
+  public void editComment(Long commentId, CommentRequest updateCommentRequest, Long userId) {
+    validateUserExists(userId);
+
+    if(!commentId.equals(userId)){
+      throw new NotFoundException(ErrorCode.COMMENT_NOT_FOUND);
+    }
+
     Comment comment = commentRepository.findById(commentId)
         .orElseThrow(() -> new NotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
