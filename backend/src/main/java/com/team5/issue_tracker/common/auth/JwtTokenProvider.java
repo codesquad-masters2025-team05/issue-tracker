@@ -34,24 +34,7 @@ public class JwtTokenProvider {
         .compact();
   }
 
-  public boolean validateToken(String token) {
-    try {
-      Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-      return true;
-    } catch (JwtException | IllegalArgumentException e) {
-      return false;
-    }
-  }
-
-  public Long getUserIdFromToken(String token) {
-    return parseClaims(token).get("userId", Long.class);
-  }
-
-  public String getEmailFromToken(String token) {
-    return parseClaims(token).getSubject();
-  }
-
-  private Claims parseClaims(String token) {
+  public Claims parseClaims(String token) {
     return Jwts.parserBuilder().setSigningKey(key).build()
         .parseClaimsJws(token).getBody();
   }
