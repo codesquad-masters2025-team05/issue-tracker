@@ -29,11 +29,7 @@ const router = createBrowserRouter([
 		],
 	},
 	{
-		element: (
-			<AuthGuard>
-				<AppLayout />
-			</AuthGuard>
-		),
+		element: <AppLayout />,
 		children: [
 			{ path: '/', element: <Navigate to='/issues' replace /> },
 			{ path: '/issues', element: <IssueListPage /> },
