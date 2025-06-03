@@ -1,19 +1,22 @@
 import EditIcon from '@/assets/edit.svg?react';
-import PaperCilpIcon from '@/assets/paperclip.svg?react';
+import GripIcon from '@/assets/grip.svg?react';
 import SmileIcon from '@/assets/smile.svg?react';
 import XSquareIcon from '@/assets/xSquare.svg?react';
+import { fetchPresignedUrl } from '@/shared/api/presignedAPI';
 import { LabelChip } from '@/shared/ui/LabelChip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import TextareaAutosize from 'react-textarea-autosize';
 import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
 
 import { useUpdateComment } from '@/entities/comment/hooks/useUpdateComment';
 import { useFetchIssueDetail } from '@/entities/issue/hooks/useFetchIssueDetail';
+import { FileAttachButton } from '@/shared/ui/TextArea';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import type {
@@ -37,6 +40,8 @@ export function Comment({
 
 	const [editing, setEditing] = useState(false);
 	const [editValue, setEditValue] = useState(content);
+	const [uploading, setUploading] = useState(false);
+	const [fileName, setFileName] = useState<string | undefined>();
 
 	const hasChanged = editValue !== content && editValue.trim().length > 0;
 
@@ -46,11 +51,64 @@ export function Comment({
 		toast.success('코멘트를 수정했습니다.');
 	});
 
+	// "입력 글자수" 카운터 노출 관리
+	const [showCounter, setShowCounter] = useState(false);
+	const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+	const handleValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setEditValue(e.target.value);
+		setShowCounter(true);
+		// 기존 타이머 있으면 제거
+		if (timerRef.current) clearTimeout(timerRef.current);
+		timerRef.current = setTimeout(() => setShowCounter(false), 3000);
+	};
+
+	// 언마운트시 타이머 해제
+	useEffect(() => {
+		return () => {
+			if (timerRef.current) clearTimeout(timerRef.current);
+		};
+	}, []);
+
 	const onUpdateContent = () =>
 		commentUpdateMutate({
 			commentId: commentId,
 			payload: { content: editValue },
 		});
+
+	// 파일 업로드 핸들러
+	const handleFileUpload = async (file: File) => {
+		if (file.size > 5 * 1024 * 1024) {
+			alert('5MB 이하 이미지만 업로드 가능합니다.');
+			return;
+		}
+		setFileName(file.name);
+		setUploading(true);
+		try {
+			const { uploadUrl, accessUrl } = await fetchPresignedUrl({
+				filename: file.name,
+				type: 'comment', // 필요에 따라 resourceType 변경
+				size: file.size,
+			});
+
+			const res = await fetch(uploadUrl, {
+				method: 'PUT',
+				headers: { 'Content-Type': file.type },
+				body: file,
+			});
+			if (!res.ok) throw new Error('S3 업로드 실패');
+
+			const imageMarkdown = `![image](${encodeURI(accessUrl)})`;
+			setEditValue((prev) =>
+				prev ? `${prev}\n${imageMarkdown}` : imageMarkdown,
+			);
+		} catch (e) {
+			alert('파일 업로드에 실패했습니다.');
+		} finally {
+			setUploading(false);
+			setFileName(undefined);
+		}
+	};
 
 	return (
 		<div>
@@ -84,11 +142,32 @@ export function Comment({
 					</div>
 				) : (
 					<>
-						<div className='px-6 pt-4 pb-4'>
-							<CommentTextarea value={editValue} onChange={setEditValue} />
+						<div>
+							<CommentTextarea value={editValue} onChange={handleValueChange} />
+							{/* 파일 첨부 버튼(실제 동작) */}
+							<div className='flex flex-row items-center justify-end p-4 gap-2 h-13  relative'>
+								{/* 오른쪽 하단에 카운터 표시 */}
+								{showCounter && (
+									<span
+										className='
+              absolute bottom-4.5 right-11
+              font-available-medium-12 text-[var(--neutral-text-weak)]
+              transition-opacity duration-300
+            '
+									>
+										띄어쓰기 포함 {editValue.length}자
+									</span>
+								)}
+								<GripIcon className='size-5 text-[var(--neutral-text-weak)]' />
+							</div>
+							<DashDivision />
+							<FileAttachButton
+								onFileSelect={handleFileUpload}
+								id={`${commentId}-file`}
+								disabled={uploading}
+								fileName={fileName}
+							/>
 						</div>
-						<VerticalDashDivision />
-						<DemoFileInput baseId={commentId} />
 					</>
 				)}
 			</div>
@@ -182,11 +261,13 @@ export function CommentContent({ content }: CommentContentProps) {
 
 export function CommentTextarea({ value, onChange }: CommentTextareaProps) {
 	return (
-		<textarea
-			className='w-full font-display-medium-16 border-none outline-none'
-			value={value}
-			onChange={(e) => onChange(e.target.value)}
-		/>
+		<div className='px-6 pt-4 pb-4'>
+			<TextareaAutosize
+				className='w-full font-display-medium-16 border-none outline-none resize-none'
+				value={value}
+				onChange={(e) => onChange(e)}
+			/>
+		</div>
 	);
 }
 
@@ -218,27 +299,6 @@ const Division = () => (
 	<div className='border-t border-[var(--neutral-border-default)]' />
 );
 
-const VerticalDashDivision = () => (
+const DashDivision = () => (
 	<div className='border-t border-dashed border-[var(--neutral-border-default)]' />
 );
-
-/**
- * 임시 컴포넌트임.
- * 실제 동작은 shared/ImageInput.tsx 를 써야 함
- */
-function DemoFileInput({ baseId }: { baseId: number }) {
-	return (
-		<>
-			<input id={`${baseId}-file`} type='file' className='hidden' />
-			<label
-				htmlFor={`${baseId}-file`}
-				className='flex items-center px-4 h-13 cursor-pointer select-none'
-			>
-				<PaperCilpIcon className='size-4' />
-				<span className='font-available-medium-12 text-[var(--neutral-text-default)]'>
-					파일 첨부하기
-				</span>
-			</label>
-		</>
-	);
-}

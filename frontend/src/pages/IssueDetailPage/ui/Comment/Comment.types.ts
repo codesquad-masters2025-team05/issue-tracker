@@ -29,7 +29,7 @@ export interface CommentContentProps {
 
 export interface CommentTextareaProps {
 	value: string;
-	onChange: (value: string) => void;
+	onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export interface CommentActionsProps {

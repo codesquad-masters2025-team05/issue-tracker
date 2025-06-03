@@ -1,7 +1,14 @@
 import GripIcon from '@/assets/grip.svg?react';
 import PaperClipIcon from '@/assets/paperclip.svg?react';
 import { fetchPresignedUrl } from '@/shared/api/presignedAPI';
-import { type TextareaHTMLAttributes, useId, useRef, useState } from 'react';
+import {
+	type TextareaHTMLAttributes,
+	useEffect,
+	useId,
+	useRef,
+	useState,
+} from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 
 interface FileAttachButtonProps {
 	onFileSelect: (file: File) => void;
@@ -10,7 +17,7 @@ interface FileAttachButtonProps {
 	fileName?: string;
 }
 
-function FileAttachButton({
+export function FileAttachButton({
 	onFileSelect,
 	id,
 	disabled,
@@ -38,7 +45,7 @@ function FileAttachButton({
 			/>
 			<label
 				htmlFor={id}
-				className='flex items-center px-4 h-13 cursor-pointer select-none'
+				className='flex items-center gap-2 px-4 h-13 cursor-pointer select-none'
 				aria-disabled={disabled}
 			>
 				<PaperClipIcon className='size-4' />
@@ -69,7 +76,6 @@ export function TextArea({
 	id,
 	value,
 	onChange,
-	showCounter,
 	resourceType,
 	...props
 }: TextAreaProps) {
@@ -80,6 +86,25 @@ export function TextArea({
 	// floating 모드일 때 label 표시 여부
 	const showLabel = value.length > 0;
 
+	// "입력 글자수" 카운터 노출 관리
+	const [showCounter, setShowCounter] = useState(false);
+	const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+	const handleValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		onChange(e);
+		setShowCounter(true);
+		// 기존 타이머 있으면 제거
+		if (timerRef.current) clearTimeout(timerRef.current);
+		timerRef.current = setTimeout(() => setShowCounter(false), 3000);
+	};
+
+	// 언마운트시 타이머 해제
+	useEffect(() => {
+		return () => {
+			if (timerRef.current) clearTimeout(timerRef.current);
+		};
+	}, []);
+
 	const handleFileUpload = async (file: File) => {
 		if (file.size > 5 * 1024 * 1024) {
 			alert('5MB 이하 이미지만 업로드 가능합니다.');
@@ -88,14 +113,11 @@ export function TextArea({
 		setFileName(file.name);
 		setUploading(true);
 		try {
-			// 1. presigned URL 요청
 			const { uploadUrl, accessUrl } = await fetchPresignedUrl({
 				filename: file.name,
 				type: resourceType,
 				size: file.size,
 			});
-
-			// 2. S3 업로드
 			const res = await fetch(uploadUrl, {
 				method: 'PUT',
 				headers: { 'Content-Type': file.type },
@@ -103,10 +125,7 @@ export function TextArea({
 			});
 			if (!res.ok) throw new Error('S3 업로드 실패');
 
-			// 3. textarea에 마크다운 이미지 추가
 			const imageMarkdown = `![image](${encodeURI(accessUrl)})`;
-			// 커서 위치에 삽입하는 로직을 직접 구현하려면 ref 필요.
-			// 간단히 뒤에 추가 (props.onChange로 관리하니까)
 			onChange({
 				target: { value: `${value}\n${imageMarkdown}` },
 			} as React.ChangeEvent<HTMLTextAreaElement>);
@@ -126,12 +145,13 @@ export function TextArea({
         focus-within:outline focus-within:outline-[var(--neutral-border-active)]
         bg-[var(--neutral-surface-bold)] focus-within:bg-[var(--neutral-surface-strong)]
         font-display-medium-16
+        relative
       '
 			style={{
 				outlineOffset: -1,
 			}}
 		>
-			<div className='flex flex-col pt-4 px-4 gap-2 flex-1'>
+			<div className='flex flex-col pt-4 px-4 gap-2 flex-1 relative'>
 				{showLabel && (
 					<label
 						htmlFor={`${baseId}-text`}
@@ -141,28 +161,36 @@ export function TextArea({
 					</label>
 				)}
 
-				<textarea
+				<TextareaAutosize
+					cacheMeasurements
 					id={`${baseId}-text`}
 					className='
-            flex flex-1 w-full bg-transparent border-none outline-none
+            flex w-full bg-transparent border-none outline-none
             font-display-medium-16 text-[var(--neutral-text-default)]
             placeholder:text-[var(--neutral-text-weak)]
-            resize-none
+						resize-none
           '
 					placeholder={showLabel ? '' : placeholder}
 					value={value}
-					onChange={onChange}
-					rows={3}
-					{...props}
+					onChange={handleValueChange}
 				/>
 			</div>
 
 			<div className='flex flex-col text-[var(--neutral-text-weak)]'>
-				<div className='flex flex-row items-center justify-end p-4 gap-2 h-13'>
+				<div className='flex flex-row items-center justify-end p-4 gap-2 h-13  relative'>
+					{/* 오른쪽 하단에 카운터 표시 */}
 					{showCounter && (
-						<span className='font-available-medium-12'>{`띄어쓰기 포함 ${value.length}자`}</span>
+						<span
+							className='
+              absolute bottom-4.5 right-11
+              font-available-medium-12 text-[var(--neutral-text-weak)]
+              transition-opacity duration-300
+            '
+						>
+							띄어쓰기 포함 {value.length}자
+						</span>
 					)}
-					<GripIcon className='size-4 text-[var(--neutral-text-weak)]' />
+					<GripIcon className='size-5 text-[var(--neutral-text-weak)]' />
 				</div>
 				<div className='border-t border-dashed border-[var(--neutral-border-default)]' />
 				<FileAttachButton
