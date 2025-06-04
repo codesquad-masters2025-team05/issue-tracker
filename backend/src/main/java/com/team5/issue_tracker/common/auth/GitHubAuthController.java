@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth/github")
+@RequestMapping("/api/auth/github")
 public class GitHubAuthController {
   private final GitHubOAuthService gitHubOAuthService;
 
