@@ -1,13 +1,11 @@
 import { LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../model/useAuth';
 
 export function LogoutButton() {
-	const { logout } = useAuth();
 	const navigate = useNavigate();
 
 	const handleLogout = () => {
-		logout();
+		localStorage.removeItem('token');
 		navigate('/login', { replace: true });
 	};
 
