@@ -114,28 +114,6 @@ export function MilestoneEditForm({
 	);
 }
 
-interface PreviewProps {
-	name: string;
-	description?: string;
-	deadline?: string;
-}
-function Preview({ name, description, deadline }: PreviewProps) {
-	return (
-		<div className='w-[288px] h-[153px] flex flex-col justify-center gap-2 px-6 border border-[var(--neutral-border-default)] rounded-2xl bg-white'>
-			<span className='font-display-bold-16 text-[var(--neutral-text-strong)] break-words'>
-				{name || '마일스톤 이름'}
-			</span>
-			<span className='font-display-medium-12 text-[var(--neutral-text-weak)] break-words'>
-				{description || '설명(선택)'}
-			</span>
-			<span className='flex items-center gap-1 font-display-medium-12 text-[var(--neutral-text-default)]'>
-				<CalendarIcon className='size-4' />
-				{deadline || '완료일(선택)'}
-			</span>
-		</div>
-	);
-}
-
 interface DeadlineInputProps {
 	value: string;
 	onChange: (v: string) => void;
