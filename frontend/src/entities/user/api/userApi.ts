@@ -9,7 +9,7 @@ export type UserListData = UsersResponseDto['data'];
  * - page, perPage 같은 파라미터가 필요하다면 URL에 쿼리스트링을 추가해 주세요.
  */
 export async function fetchUsers(): Promise<UserListData> {
-	const url = '/api/users';
+	const url = '/api/users?limit=2000';
 	const res = await fetch(url, {
 		method: 'GET',
 		headers: getAuthHeaders(),

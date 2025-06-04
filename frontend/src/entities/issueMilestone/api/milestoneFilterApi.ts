@@ -9,7 +9,7 @@ export type IssueMilestoneOptionsData =
  * 이슈 필터용 마일스톤 옵션 목록을 가져옵니다.
  */
 export async function fetchIssueMilestoneOptions(): Promise<IssueMilestoneOptionsData> {
-	const url = '/api/issues/milestones';
+	const url = '/api/issues/milestones?limit=2000';
 	const res = await fetch(url, {
 		method: 'GET',
 		headers: getAuthHeaders(),

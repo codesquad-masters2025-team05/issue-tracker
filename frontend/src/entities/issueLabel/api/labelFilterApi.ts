@@ -8,7 +8,7 @@ export type IssueLabelOptionsData = IssueLabelOptionsResponseDto['data'];
  * 이슈 필터 드롭다운에서 쓸 레이블 옵션 목록을 가져옵니다.
  */
 export async function fetchIssueLabelOptions(): Promise<IssueLabelOptionsData> {
-	const url = '/api/issues/labels';
+	const url = '/api/issues/labels?limit=2000';
 	const res = await fetch(url, {
 		method: 'GET',
 		headers: getAuthHeaders(),

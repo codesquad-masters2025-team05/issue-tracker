@@ -8,7 +8,7 @@ export type AuthorListData = AuthorsResponseDto['data'];
  * 전체 작성자(Authors) 목록을 가져옵니다.
  */
 export async function fetchAuthors(): Promise<AuthorListData> {
-	const url = '/api/issues/authors';
+	const url = '/api/issues/authors?limit=2000';
 	const res = await fetch(url, {
 		method: 'GET',
 		headers: getAuthHeaders(),
