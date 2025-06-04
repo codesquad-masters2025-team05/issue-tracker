@@ -1,27 +1,25 @@
-import { getJSON } from '@/shared/api/client';
+import type { ApiResponse } from '@/shared/api/types';
 import { getAuthHeaders } from '@/shared/lib/getAuthHeaders';
 import type {
-	MilestoneApiEntity,
-	MilestoneApiResponseDto,
 	MilestoneCountResponse,
 	MilestoneCreatePayload,
 	MilestoneCreateResponseDto,
 	MilestoneDetail,
-	MilestoneListApiResponseDto,
 	MilestoneListData,
 	MilestoneUpdatePayload,
 } from '../model/milestone.types';
 
 // 마일스톤 전체 리스트 조회
 export async function fetchMilestones(): Promise<MilestoneListData> {
-	const res = await getJSON<MilestoneListApiResponseDto>('/api/milestones');
-	return res.data;
-}
+	const url = '/api/milestones';
+	const res = await fetch(url, {
+		method: 'GET',
+		headers: getAuthHeaders(),
+	});
 
-// 마일스톤 단일(상세) 조회 (id 기준)
-export async function fetchMilestone(id: number): Promise<MilestoneApiEntity> {
-	const res = await getJSON<MilestoneApiResponseDto>(`/api/milestones/${id}`);
-	return res.data;
+	const json: ApiResponse<MilestoneListData> = await res.json();
+	if (!json.success) throw new Error(json.error ?? '마일스톤 목록 조회 실패');
+	return json.data;
 }
 
 // 마일스톤 상세(강제 예시) - fetch + json 패턴 (에러 핸들링 직관적)
@@ -30,10 +28,14 @@ export interface MilestoneApiResponse<T> {
 	data: T;
 	error?: { message: string; code: number };
 }
+
 export async function fetchMilestoneDetail(
 	id: number,
 ): Promise<MilestoneDetail> {
-	const res = await fetch(`/api/milestones/${id}`);
+	const res = await fetch(`/api/milestones/${id}`, {
+		method: 'GET',
+		headers: getAuthHeaders(),
+	});
 	if (!res.ok) throw new Error('서버 연결에 실패했습니다.');
 	const json: MilestoneApiResponse<MilestoneDetail> = await res.json();
 	if (!json.success)
