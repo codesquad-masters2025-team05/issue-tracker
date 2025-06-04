@@ -1,6 +1,5 @@
 export const GITHUB_OAUTH_URL =
-	'https://github.com/login/oauth/authorize?client_id=Ov23liuOX60WtYLKOZUp&redirect_uri=https://www.issue-tracker.online/auth/github/callback';
-
+	'https://github.com/login/oauth/authorize?client_id=Ov23liuOX60WtYLKOZUp&redirect_uri=https://www.issue-tracker.online/auth/github/callback&scope=user:email';
 export async function exchangeGithubCode(code: string) {
 	const res = await fetch(`/api/auth/github/callback?code=${code}`, {
 		method: 'GET',
