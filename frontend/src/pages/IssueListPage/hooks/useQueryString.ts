@@ -142,8 +142,6 @@ export function hasKeyValue(q: string | null, key: string, value: string) {
 	const formattedValue = formatValue(value);
 	const escaped = escapeRegExp(formattedValue);
 	const pattern = new RegExp(`(^|[ \\t])${key}:${escaped}(?=[ \\t]|$)`);
-	if (key === 'label')
-		console.log(`${pattern.test(q)} / pattern: ${pattern}, q: ${q}`);
 	return pattern.test(q);
 }
 
