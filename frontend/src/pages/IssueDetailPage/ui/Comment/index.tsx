@@ -119,7 +119,7 @@ export function Comment({
 		<div>
 			<div
 				className={`flex flex-col rounded-[16px] bg-[var(--neutral-surface-strong)] border
-        $editing ? 'border-[var(--neutral-border-active)]' : 'border-[var(--neutral-border-default)]'`}
+        ${editing} ? 'border-[var(--neutral-border-active)]' : 'border-[var(--neutral-border-default)]'`}
 			>
 				{/* 코멘트 메타정보, 버튼 부분 */}
 				<div className='flex items-center justify-between gap-2 px-6 py-4 bg-[var(--neutral-surface-default)] rounded-t-2xl'>
