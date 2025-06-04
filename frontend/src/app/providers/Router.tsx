@@ -28,7 +28,7 @@ const router = createBrowserRouter([
 				element: <LoginPage />,
 			},
 			{
-				path: '/api/auth/github/callback',
+				path: '/auth/github/callback',
 				element: <GitHubCallbackPage />,
 			},
 		],
