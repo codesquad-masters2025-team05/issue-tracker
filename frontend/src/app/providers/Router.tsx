@@ -12,11 +12,12 @@ import NoHeaderLayout from '@/app/layout/NoHeaderLayout';
 import IssueDetailPage from '@/pages/IssueDetailPage';
 import IssueListPage from '@/pages/IssueListPage';
 import LabelListPage from '@/pages/LabelListPage';
-import LoginPage from '@/pages/LoginPage';
 import MilestoneListPage from '@/pages/MilestoneListPage';
 import IssueCreatePage from '@/pages/issueCreatePage';
 
-import AuthGuard from '@/shared/auth/AuthGuard';
+import { GitHubCallbackPage } from '@/pages/github-callback';
+import { LoginPage } from '@/pages/login';
+import { ProtectedRoute } from '@/widgets/auth';
 
 const router = createBrowserRouter([
 	{
@@ -26,10 +27,18 @@ const router = createBrowserRouter([
 				path: '/login',
 				element: <LoginPage />,
 			},
+			{
+				path: '/auth/github/callback',
+				element: <GitHubCallbackPage />,
+			},
 		],
 	},
 	{
-		element: <AppLayout />,
+		element: (
+			<ProtectedRoute>
+				<AppLayout />
+			</ProtectedRoute>
+		),
 		children: [
 			{ path: '/', element: <Navigate to='/issues' replace /> },
 			{ path: '/issues', element: <IssueListPage /> },
