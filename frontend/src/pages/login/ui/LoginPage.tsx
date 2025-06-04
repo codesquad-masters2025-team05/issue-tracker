@@ -1,5 +1,6 @@
 import Logo from '@/assets/logo_large.svg?react';
 import { LoginForm } from '@/features/auth/ui/LoginForm';
+import { SignUpButton } from '@/features/auth/ui/SignUpButton';
 import OAuthLoginButton from '@/features/oauthLogin/ui/OAuthLoginButton';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +25,7 @@ export function LoginPage() {
 					or
 				</span>
 				<LoginForm />
+				<SignUpButton />
 			</div>
 		</div>
 	);

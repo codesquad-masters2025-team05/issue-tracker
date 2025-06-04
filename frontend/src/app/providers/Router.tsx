@@ -17,6 +17,7 @@ import IssueCreatePage from '@/pages/issueCreatePage';
 
 import { GitHubCallbackPage } from '@/pages/github-callback';
 import { LoginPage } from '@/pages/login';
+import { SignUpPage } from '@/pages/signup';
 import { ProtectedRoute } from '@/widgets/auth';
 
 const router = createBrowserRouter([
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
 			{
 				path: '/auth/github/callback',
 				element: <GitHubCallbackPage />,
+			},
+			{
+				path: '/signup',
+				element: <SignUpPage />,
 			},
 		],
 	},

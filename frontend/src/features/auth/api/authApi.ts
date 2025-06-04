@@ -1,4 +1,3 @@
-import { getAuthHeaders } from '@/shared/lib/getAuthHeaders';
 import type {
 	LoginRequest,
 	LoginResponse,
@@ -9,9 +8,8 @@ import type {
 export async function register(
 	request: RegisterRequest,
 ): Promise<RegisterResponse['data']> {
-	const res = await fetch('/api/auth/register', {
+	const res = await fetch('/api/auth/signup', {
 		method: 'POST',
-		headers: getAuthHeaders(),
 		body: JSON.stringify(request),
 	});
 
@@ -27,7 +25,6 @@ export async function login(
 ): Promise<LoginResponse['data']> {
 	const res = await fetch('/api/auth/login', {
 		method: 'POST',
-		headers: getAuthHeaders(),
 		body: JSON.stringify(request),
 	});
 
