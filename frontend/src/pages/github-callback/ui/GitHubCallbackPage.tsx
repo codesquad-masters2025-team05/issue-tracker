@@ -29,7 +29,7 @@ export function GitHubCallbackPage() {
 	useEffect(() => {
 		// 인증 성공 시 토큰 저장 및 리다이렉트
 		if (isSuccess && authData?.accessToken) {
-			localStorage.setItem('accessToken', authData.accessToken);
+			localStorage.setItem('token', authData.accessToken);
 			navigate('/', { replace: true });
 		}
 	}, [isSuccess, authData, navigate]);
