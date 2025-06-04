@@ -74,26 +74,31 @@ export function MilestoneEditForm({
 			</span>
 			{/* 프리뷰 + 폼 */}
 			<div className='flex gap-6'>
-				<Preview name={name} description={description} deadline={deadline} />
 				<div className='flex flex-1 flex-col gap-4'>
-					<Input
-						type='basic'
-						placeholder='마일스톤의 이름을 입력하세요'
-						fixedValue='이름'
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-					/>
+					<div className='flex gap-4'>
+						<div className='flex-1'>
+							<Input
+								type='basic'
+								placeholder='마일스톤의 이름을 입력하세요'
+								fixedValue='이름'
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+							/>
+						</div>
+						<div className='flex-1'>
+							<DeadlineInput
+								value={deadline}
+								onChange={onChangeDeadline}
+								error={deadlineError}
+							/>
+						</div>
+					</div>
 					<Input
 						type='basic'
 						placeholder='마일스톤에 대한 설명을 입력하세요'
 						fixedValue='설명(선택)'
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
-					/>
-					<DeadlineInput
-						value={deadline}
-						onChange={onChangeDeadline}
-						error={deadlineError}
 					/>
 				</div>
 			</div>
@@ -140,7 +145,7 @@ function DeadlineInput({ value, onChange, error }: DeadlineInputProps) {
 	return (
 		<div className='flex flex-col gap-1'>
 			<div
-				className='flex items-center h-10 rounded-[16px] px-4 w-[240px]
+				className='flex items-center h-10 rounded-[16px] px-4 w-full
         focus-within:outline-[1px] focus-within:outline-[var(--brand-border-active)]
         bg-[var(--neutral-surface-bold)] focus-within:bg-[var(--neutral-surface-strong)]'
 				style={{ outlineOffset: -1 }}
