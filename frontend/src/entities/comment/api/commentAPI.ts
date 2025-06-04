@@ -1,3 +1,4 @@
+import { getAuthHeaders } from '@/shared/lib/getAuthHeaders';
 import type {
 	CommentCreateRequest,
 	CommentResponse,
@@ -11,9 +12,7 @@ export async function createComment(
 	const url = `/api/issues/${issueId}/comments`;
 	const res = await fetch(url, {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
+		headers: getAuthHeaders(),
 		body: JSON.stringify(payload),
 	});
 	return res.json();
@@ -26,9 +25,7 @@ export async function updateComment(
 	const url = `/api/comments/${commentId}`;
 	const res = await fetch(url, {
 		method: 'PATCH',
-		headers: {
-			'Content-Type': 'application/json',
-		},
+		headers: getAuthHeaders(),
 		body: JSON.stringify(payload),
 	});
 	if (res.status === 204) return;
@@ -39,6 +36,7 @@ export async function deleteComment(commentId: number) {
 	const url = `/api/comments/${commentId}`;
 	const res = await fetch(url, {
 		method: 'DELETE',
+		headers: getAuthHeaders(false),
 	});
 	if (res.status === 204) return;
 	throw new Error('코멘트 삭제 실패');

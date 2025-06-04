@@ -1,4 +1,5 @@
 import { getJSON } from '@/shared/api/client';
+import { getAuthHeaders } from '@/shared/lib/getAuthHeaders';
 import type {
 	MilestoneApiEntity,
 	MilestoneApiResponseDto,
@@ -29,37 +30,47 @@ export interface MilestoneApiResponse<T> {
 	data: T;
 	error?: { message: string; code: number };
 }
-export async function fetchMilestoneDetail(id: number): Promise<MilestoneDetail> {
+export async function fetchMilestoneDetail(
+	id: number,
+): Promise<MilestoneDetail> {
 	const res = await fetch(`/api/milestones/${id}`);
 	if (!res.ok) throw new Error('서버 연결에 실패했습니다.');
 	const json: MilestoneApiResponse<MilestoneDetail> = await res.json();
-	if (!json.success) throw new Error(json.error?.message || '마일스톤 정보 가져오기 실패');
+	if (!json.success)
+		throw new Error(json.error?.message || '마일스톤 정보 가져오기 실패');
 	return json.data;
 }
 
 // 마일스톤 생성
-export async function createMilestone(payload: MilestoneCreatePayload): Promise<MilestoneCreateResponseDto> {
+export async function createMilestone(
+	payload: MilestoneCreatePayload,
+): Promise<MilestoneCreateResponseDto> {
 	const res = await fetch('/api/milestones', {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
+		headers: getAuthHeaders(),
 		body: JSON.stringify(payload),
 	});
 	return await res.json();
 }
 
 // 마일스톤 수정 (PUT)
-export async function updateMilestone(payload: MilestoneUpdatePayload): Promise<void> {
+export async function updateMilestone(
+	payload: MilestoneUpdatePayload,
+): Promise<void> {
 	const { id, ...body } = payload;
 	await fetch(`/api/milestones/${id}`, {
 		method: 'PUT',
-		headers: { 'Content-Type': 'application/json' },
+		headers: getAuthHeaders(),
 		body: JSON.stringify(body),
 	});
 }
 
 // 마일스톤 삭제
 export async function deleteMilestone(id: number): Promise<void> {
-	const res = await fetch(`/api/milestones/${id}`, { method: 'DELETE' });
+	const res = await fetch(`/api/milestones/${id}`, {
+		method: 'DELETE',
+		headers: getAuthHeaders(false),
+	});
 	if (!res.ok) {
 		const error = await res.json().catch(() => ({}));
 		throw new Error(error?.error ?? '마일스톤 삭제에 실패했습니다');
@@ -68,9 +79,13 @@ export async function deleteMilestone(id: number): Promise<void> {
 
 // 마일스톤 카운트
 export async function fetchMilestoneCount(): Promise<number> {
-	const res = await fetch('/api/milestones/count');
+	const res = await fetch('/api/milestones/count', {
+		method: 'GET',
+		headers: getAuthHeaders(),
+	});
 	if (!res.ok) throw new Error('서버 연결에 실패했습니다.');
 	const json: MilestoneCountResponse = await res.json();
-	if (!json.success) throw new Error(json.error?.message || '카운트 가져오기 실패');
+	if (!json.success)
+		throw new Error(json.error?.message || '카운트 가져오기 실패');
 	return json.data;
 }

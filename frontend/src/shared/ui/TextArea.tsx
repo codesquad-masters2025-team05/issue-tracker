@@ -117,9 +117,15 @@ export function TextArea({
 				type: resourceType,
 				size: file.size,
 			});
+
+			const token = localStorage.getItem('token');
+
 			const res = await fetch(uploadUrl, {
 				method: 'PUT',
-				headers: { 'Content-Type': file.type },
+				headers: {
+					'Content-Type': file.type,
+					Authorization: `Bearer ${token}`,
+				},
 				body: file,
 			});
 			if (!res.ok) throw new Error('S3 업로드 실패');
