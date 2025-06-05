@@ -26,7 +26,7 @@ export async function createLabel(
 ): Promise<LabelCreateResponseDto> {
 	const res = await fetch('/api/labels', {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
+		headers: getAuthHeaders(),
 		body: JSON.stringify(payload),
 	});
 
