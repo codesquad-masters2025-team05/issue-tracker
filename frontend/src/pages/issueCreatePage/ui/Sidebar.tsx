@@ -59,7 +59,7 @@ export const Sidebar: FC<SidebarProps> = ({
 	);
 
 	return (
-		<div className='flex flex-col h-fit border border-[var(--neutral-border-default)] rounded-2xl bg-[var(--neutral-surface-strong)]'>
+		<div className='min-h-[288px] flex flex-col h-fit border border-[var(--neutral-border-default)] rounded-2xl bg-[var(--neutral-surface-strong)]'>
 			<Area>
 				<Dropdown
 					label='담당자'
@@ -69,7 +69,6 @@ export const Sidebar: FC<SidebarProps> = ({
 					onChange={setAssigneeIds}
 					isLoading={userLoading}
 					error={userError}
-					className='w-[256px]'
 					isAlignRight={true}
 				/>
 

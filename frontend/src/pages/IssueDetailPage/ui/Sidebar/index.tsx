@@ -119,7 +119,7 @@ export const Sidebar = () => {
 	}));
 
 	return (
-		<div className='flex flex-col h-fit border border-[var(--neutral-border-default)] rounded-2xl bg-[var(--neutral-surface-strong)]'>
+		<div className='min-w-[288px] flex flex-col h-fit border border-[var(--neutral-border-default)] rounded-2xl bg-[var(--neutral-surface-strong)]'>
 			<Area>
 				<Dropdown
 					label='담당자'
@@ -128,7 +128,6 @@ export const Sidebar = () => {
 					isLoading={userLoading}
 					error={userError}
 					isAlignRight={true}
-					className='w-[254px]'
 				/>
 
 				{/* 선택된 담당자 목록 */}
