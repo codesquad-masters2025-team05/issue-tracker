@@ -124,7 +124,6 @@ export function TextArea({
 				method: 'PUT',
 				headers: {
 					'Content-Type': file.type,
-					Authorization: `Bearer ${token}`,
 				},
 				body: file,
 			});
