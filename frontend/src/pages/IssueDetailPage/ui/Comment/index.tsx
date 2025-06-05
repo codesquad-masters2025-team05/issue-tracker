@@ -91,8 +91,6 @@ export function Comment({
 				size: file.size,
 			});
 
-			const token = localStorage.getItem('token');
-
 			const res = await fetch(uploadUrl, {
 				method: 'PUT',
 				headers: {

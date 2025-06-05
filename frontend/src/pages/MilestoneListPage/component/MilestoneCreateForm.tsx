@@ -1,4 +1,3 @@
-import CalendarIcon from '@/assets/calendar.svg?react';
 import PlusIcon from '@/assets/plus.svg?react';
 import XSquareIcon from '@/assets/xSquare.svg?react';
 import { useCreateMilestone } from '@/entities/milestone/hooks/useCreateMilestone';
@@ -46,13 +45,13 @@ export function MilestoneCreateForm({ onClose }: MilestoneCreateFormProps) {
 			setDeadlineError('YYYY-MM-DD 형식으로 입력해주세요.');
 			return;
 		}
-    milestoneCreateMutate({
-      payload: {
-        name,
-        description: description ? description : null,
-        deadline: deadline ? deadline : null,
-      },
-    });
+		milestoneCreateMutate({
+			payload: {
+				name,
+				description: description ? description : null,
+				deadline: deadline ? deadline : null,
+			},
+		});
 	};
 
 	return (
