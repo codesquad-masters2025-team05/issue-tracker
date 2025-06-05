@@ -13,8 +13,14 @@ export async function fetchPresignedUrl({
 		type,
 		size: size.toString(),
 	});
+
+	const token = localStorage.getItem('token');
+
 	const res = await fetch(`/api/upload-url?${params.toString()}`, {
 		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
 	});
 	if (!res.ok) throw new Error('Presigned URL 발급 실패');
 	const json = await res.json();
