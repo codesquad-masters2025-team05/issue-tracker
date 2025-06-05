@@ -59,7 +59,7 @@ export const Sidebar: FC<SidebarProps> = ({
 	);
 
 	return (
-		<div className='min-h-[288px] flex flex-col h-fit border border-[var(--neutral-border-default)] rounded-2xl bg-[var(--neutral-surface-strong)]'>
+		<div className='min-w-[288px] flex flex-col h-fit border border-[var(--neutral-border-default)] rounded-2xl bg-[var(--neutral-surface-strong)]'>
 			<Area>
 				<Dropdown
 					label='담당자'
