@@ -56,7 +56,13 @@ export function DropdownPanel({
 			)}
 
 			{/* 옵션 목록 */}
-			<div>
+			<div
+				className='max-h-[420px] overflow-y-auto dropdown-scrollbar'
+				style={{
+					scrollbarWidth: 'thin',
+					scrollbarColor: 'var(--neutral-border-default) transparent',
+				}}
+			>
 				{isLoading ? (
 					<Spinner className='flex items-center justify-center' />
 				) : error ? (
