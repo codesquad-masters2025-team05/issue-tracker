@@ -97,7 +97,6 @@ export function Comment({
 				method: 'PUT',
 				headers: {
 					'Content-Type': file.type,
-					Authorization: `Bearer ${token}`,
 				},
 				body: file,
 			});
