@@ -11,7 +11,7 @@ import type {
 
 // 마일스톤 전체 리스트 조회
 export async function fetchMilestones(): Promise<MilestoneListData> {
-	const url = '/api/milestones';
+	const url = '/api/milestones?perPage=30';
 	const res = await fetch(url, {
 		method: 'GET',
 		headers: getAuthHeaders(),

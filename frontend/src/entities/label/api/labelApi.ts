@@ -9,7 +9,7 @@ import type {
 } from '../model/label.types';
 
 export async function fetchLabels(): Promise<LabelListData> {
-	const url = '/api/labels';
+	const url = '/api/labels?perPage=30';
 	const res = await fetch(url, {
 		method: 'GET',
 		headers: getAuthHeaders(),
