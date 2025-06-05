@@ -1,9 +1,9 @@
 import Logo from '@/assets/logo_medium.svg?react';
 import LogoutButton from '@/features/auth/ui/LogoutButton';
 import { ThemeToggleButton } from '@/shared/theme/ThemeToggleButton';
-import { User } from 'lucide-react';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
+import ProfileButton from './ui/ProfileButton';
 
 const Header: FC = () => {
 	return (
@@ -15,13 +15,7 @@ const Header: FC = () => {
 			</div>
 
 			<div className='flex items-center gap-2'>
-				<button
-					type='button'
-					aria-label='프로필'
-					className='p-2 rounded-full cursor-pointer hover:bg-[var(--neutral-surface-bold)]'
-				>
-					<User className='w-6 h-6' />
-				</button>
+				<ProfileButton />
 				<LogoutButton />
 				<ThemeToggleButton />
 			</div>
