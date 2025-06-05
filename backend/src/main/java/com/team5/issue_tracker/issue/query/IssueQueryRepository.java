@@ -1,20 +1,20 @@
 package com.team5.issue_tracker.issue.query;
 
-import com.team5.issue_tracker.issue.dto.response.IssueSummaryResponse;
-import com.team5.issue_tracker.label.dto.LabelResponse;
-import com.team5.issue_tracker.milestone.dto.MilestoneResponse;
+import com.team5.issue_tracker.issue.domain.Issue;
+import com.team5.issue_tracker.issue.dto.FilterSql;
+import com.team5.issue_tracker.issue.dto.IssueQueryDto;
+import com.team5.issue_tracker.issue.dto.IssueSearchCondition;
+import com.team5.issue_tracker.issue.dto.response.IssueBaseResponse;
+import com.team5.issue_tracker.issue.dto.response.IssueCountResponse;
 import com.team5.issue_tracker.user.dto.UserSummaryResponse;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,107 +22,176 @@ public class IssueQueryRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  public List<IssueSummaryResponse> findAllIssues() {
-    // 1. 이슈 목록 전체 조회
-    String issueSql = """
-        SELECT 
-            i.id AS issue_id,
-            i.title,
-            i.is_open,
-            i.created_at,
-            i.updated_at,
-            u.id AS user_id,
-            u.username,
-            u.image_url,
-            m.id AS milestone_id,
-            m.name AS milestone_title,
-            (SELECT COUNT(*) FROM comment c WHERE c.issue_id = i.id) AS comments_count
-        FROM issue i
-        JOIN user u ON i.user_id = u.id
-        LEFT JOIN milestone m ON i.milestone_id = m.id
-        ORDER BY i.created_at DESC
-        """;
+  public List<IssueQueryDto> findIssuesByCondition(IssueSearchCondition searchCondition,
+      Integer page,
+      Integer perPage) {
+    StringBuilder issueSql = new StringBuilder("""
+            SELECT 
+                i.id,
+                i.title,
+                i.is_open,
+                i.created_at,
+                i.updated_at
+            FROM issue i
+        """);
 
-    List<IssueSummaryResponse> issues =
-        jdbcTemplate.query(issueSql, (rs, rowNum) -> mapToIssueListItem(rs));
+    FilterSql filterSql = buildFilterSql(searchCondition);
 
-    // 2. issue ID 목록 추출
-    List<Long> issueIds = issues.stream().map(IssueSummaryResponse::getId).toList();
-    if (issueIds.isEmpty()) {
-      return issues;
+    issueSql.append(filterSql.getSql());
+    MapSqlParameterSource params = filterSql.getParams();
+
+    if (searchCondition.getIsOpen() != null) {
+      issueSql.append(" AND i.is_open = :isOpen");
+      params.addValue("isOpen", searchCondition.getIsOpen());
     }
 
-    // 3. 라벨 전체 조회 (IN 쿼리)
-    Map<Long, List<LabelResponse>> labelMap = findLabelsByIssueIds(issueIds);
+    issueSql.append(" ORDER BY i.created_at DESC");
 
-    // 4. 이슈에 라벨 붙이기
-    for (IssueSummaryResponse issue : issues) {
-      List<LabelResponse> labels = labelMap.getOrDefault(issue.getId(), List.of());
-      issue.getLabels().addAll(labels); // 생성자에서 리스트 초기화해놔야 가능
-    }
+    int limit = perPage;
+    int offset = (page - 1) * perPage;
+    issueSql.append(" LIMIT :limit OFFSET :offset");
+    params.addValue("limit", limit);
+    params.addValue("offset", offset);
 
-    return issues;
-  }
-
-  private IssueSummaryResponse mapToIssueListItem(ResultSet rs) throws SQLException {
-    return new IssueSummaryResponse(
-        rs.getLong("issue_id"),
-        rs.getString("title"),
-        rs.getBoolean("is_open"),
-        new ArrayList<>(), // 라벨은 나중에 채움
-        new UserSummaryResponse(
-            rs.getLong("user_id"),
-            rs.getString("username"),
-            rs.getString("image_url")
-        ),
-        rs.getObject("milestone_id") != null
-            ? new MilestoneResponse(
-            rs.getLong("milestone_id"),
-            rs.getString("milestone_title")
+    return jdbcTemplate.query(issueSql.toString(), params, (rs, rowNum) ->
+        new IssueQueryDto(
+            rs.getLong("id"),
+            rs.getString("title"),
+            rs.getBoolean("is_open"),
+            rs.getTimestamp("created_at").toInstant(),
+            rs.getTimestamp("updated_at").toInstant()
         )
-            : null,
-        rs.getTimestamp("created_at").toLocalDateTime(),
-        rs.getTimestamp("updated_at").toLocalDateTime(),
-        rs.getLong("comments_count")
     );
   }
 
-  private Map<Long, List<LabelResponse>> findLabelsByIssueIds(List<Long> issueIds) {
-    String sql = """
-        SELECT il.issue_id, l.id AS label_id, l.name, l.color
-        FROM issue_label il
-        JOIN label l ON il.label_id = l.id
-        WHERE il.issue_id IN (:issueIds)
-        """;
+  public IssueCountResponse getIssueCountByCondition(IssueSearchCondition searchCondition) {
+    StringBuilder countSql = new StringBuilder("""
+            SELECT 
+               COALESCE(SUM(CASE WHEN i.is_open THEN 1 ELSE 0 END), 0) AS open_count,
+               COALESCE(SUM(CASE WHEN NOT i.is_open THEN 1 ELSE 0 END), 0) AS closed_count
+            FROM issue i
+        """);
 
-    MapSqlParameterSource params = new MapSqlParameterSource("issueIds", issueIds);
+    FilterSql filterSql = buildFilterSql(searchCondition);
+    countSql.append(filterSql.getSql());
+    MapSqlParameterSource params = filterSql.getParams();
 
-    List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, params);
-
-    return rows.stream()
-        .collect(Collectors.groupingBy(
-            row -> ((Number) row.get("issue_id")).longValue(),
-            Collectors.mapping(row -> new LabelResponse(
-                ((Number) row.get("label_id")).longValue(),
-                (String) row.get("name"),
-                (String) row.get("color")
-            ), Collectors.toList())
-        ));
+    return jdbcTemplate.queryForObject(countSql.toString(), params, (rs, rowNum) ->
+        new IssueCountResponse(
+            rs.getLong("open_count"),
+            rs.getLong("closed_count")
+        )
+    );
   }
 
-  public List<UserSummaryResponse> findDistinctAuthors() {
+
+  public List<UserSummaryResponse> findDistinctAuthors(String cursor, Integer limit) {
     String authorSql = """
         SELECT DISTINCT u.id, u.username, u.image_url
         FROM issue i
         JOIN user u ON i.user_id = u.id
+        WHERE (:cursor IS NULL OR username > :cursor) 
+        ORDER BY username ASC
+        LIMIT :limitPlusOne;
         """;
+    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.addValue("cursor", cursor);
+    params.addValue("limitPlusOne", limit + 1);
 
-    return jdbcTemplate.query(authorSql, (rs, rowNum) ->
+    return jdbcTemplate.query(authorSql, params, (rs, rowNum) ->
         new UserSummaryResponse(
             rs.getLong("id"),
             rs.getString("username"),
             rs.getString("image_url")
         )
     );
+  }
+
+  public IssueBaseResponse findIssueDetailById(Long issueId) {
+    String issueSql = """
+            SELECT id, title, user_id, milestone_id, is_open, created_at, updated_at
+            FROM issue
+            WHERE id = :issueId
+        """;
+
+    MapSqlParameterSource params = new MapSqlParameterSource("issueId", issueId);
+
+    return jdbcTemplate.queryForObject(issueSql, params, (rs, rowNum) -> new IssueBaseResponse(
+        rs.getLong("id"),
+        rs.getString("title"),
+        rs.getLong("user_id"),
+        rs.getLong("milestone_id"),
+        rs.getBoolean("is_open"),
+        rs.getTimestamp("created_at").toInstant(),
+        rs.getTimestamp("updated_at").toInstant()
+    ));
+  }
+
+  private FilterSql buildFilterSql(IssueSearchCondition searchCondition) {
+    List<String> whereClauses = new ArrayList<>();
+    MapSqlParameterSource params = new MapSqlParameterSource();
+    StringBuilder sql = new StringBuilder();
+
+    // 동적으로 JOIN 추가해야하므로 WHERE 절 이전에 추가
+    if (searchCondition.getLabelIds() != null && !searchCondition.getLabelIds().isEmpty()) {
+      sql.append("""
+          INNER JOIN (
+              SELECT issue_id
+              FROM issue_label
+              WHERE label_id IN (:labelIds)
+              GROUP BY issue_id
+              HAVING COUNT(DISTINCT label_id) = :labelCount
+          ) as filtered on i.id = filtered.issue_id
+          """);
+      params.addValue("labelIds", searchCondition.getLabelIds());
+      params.addValue("labelCount", searchCondition.getLabelIds().size());
+    }
+
+    // 동적으로 WHERE 추가하기 위한 기본 조건
+    sql.append("WHERE 1 = 1");
+
+    if (searchCondition.getAssigneeId() != null) {
+      whereClauses.add("""
+          EXISTS (
+          SELECT 1 FROM issue_assignee ia
+          WHERE ia.issue_id = i.id
+          AND ia.assignee_id = :assigneeId
+          )
+          """
+      );
+      params.addValue("assigneeId", searchCondition.getAssigneeId());
+    }
+
+    if (searchCondition.getMilestoneId() != null) {
+      whereClauses.add("i.milestone_id = :milestoneId");
+      params.addValue("milestoneId", searchCondition.getMilestoneId());
+    }
+
+    if (searchCondition.getAuthorId() != null) {
+      whereClauses.add("i.user_id = :authorId");
+      params.addValue("authorId", searchCondition.getAuthorId());
+    }
+
+    for (String clause : whereClauses) {
+      sql.append(" AND ").append(clause);
+    }
+    return new FilterSql(sql.toString(), params);
+  }
+
+  public List<Issue> findAllByIds(Collection<Long> issueIds) {
+    String sql = "SELECT id, title, milestone_id, is_open, user_id, created_at, updated_at " +
+        "FROM issue WHERE id IN (:issueIds)";
+
+    MapSqlParameterSource params = new MapSqlParameterSource("issueIds", issueIds);
+
+    return jdbcTemplate.query(sql, params, (rs, rowNum) -> new Issue(
+        rs.getLong("id"),
+        rs.getString("title"),
+        rs.getLong("milestone_id"),
+        rs.getBoolean("is_open"),
+        rs.getLong("user_id"),
+        rs.getTimestamp("created_at").toInstant(),
+        rs.getTimestamp("updated_at").toInstant()
+    ));
   }
 }
