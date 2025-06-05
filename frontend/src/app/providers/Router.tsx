@@ -9,15 +9,16 @@ import { Toaster } from '@/shared/ui/sonner';
 import AppLayout from '@/app/layout/AppLayout';
 import NoHeaderLayout from '@/app/layout/NoHeaderLayout';
 
+import IssueDetailPage from '@/pages/IssueDetailPage';
+import IssueListPage from '@/pages/IssueListPage';
 import LabelListPage from '@/pages/LabelListPage';
-import LoginPage from '@/pages/LoginPage';
 import MilestoneListPage from '@/pages/MilestoneListPage';
-import IssueDetailPage from '@/pages/issues/IssueDetailPage';
-import IssueListPage from '@/pages/issues/IssueListPage';
+import IssueCreatePage from '@/pages/issueCreatePage';
 
-import { IssueCreateModal } from '@/features/issueList/widget';
-
-import AuthGuard from '@/shared/auth/AuthGuard';
+import { GitHubCallbackPage } from '@/pages/github-callback';
+import { LoginPage } from '@/pages/login';
+import { SignUpPage } from '@/pages/signup';
+import { ProtectedRoute } from '@/widgets/auth';
 
 const router = createBrowserRouter([
 	{
@@ -27,21 +28,26 @@ const router = createBrowserRouter([
 				path: '/login',
 				element: <LoginPage />,
 			},
+			{
+				path: '/auth/github/callback',
+				element: <GitHubCallbackPage />,
+			},
+			{
+				path: '/signup',
+				element: <SignUpPage />,
+			},
 		],
 	},
 	{
 		element: (
-			<AuthGuard>
+			<ProtectedRoute>
 				<AppLayout />
-			</AuthGuard>
+			</ProtectedRoute>
 		),
 		children: [
 			{ path: '/', element: <Navigate to='/issues' replace /> },
-			{
-				path: '/issues',
-				element: <IssueListPage />,
-				children: [{ path: 'new', element: <IssueCreateModal /> }],
-			},
+			{ path: '/issues', element: <IssueListPage /> },
+			{ path: '/issues/new', element: <IssueCreatePage /> },
 			{ path: '/issues/:id', element: <IssueDetailPage /> },
 			{ path: '/labels', element: <LabelListPage /> },
 			{ path: '/milestones', element: <MilestoneListPage /> },
