@@ -4,6 +4,7 @@
 **2025 마스터즈 팀 프로젝트**로 진행한 이슈 트래커입니다.
 
 이슈 상태, 담당자, 마일스톤, 라벨 등 다양한 속성을 기준으로 이슈를 체계적으로 관리할 수 있도록 직접 설계 및 구현하였습니다.
+<img width="1334" height="843" alt="image" src="https://github.com/user-attachments/assets/773ad801-77aa-45c8-b94c-35f375b75dcb" />
 
 ---
 
@@ -19,14 +20,13 @@
 ## 팀원 
 |                                                    나고                                                     |                                                    디노                                                    |                                                    배찌                                                    |
 |:---------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|
-| <img src="https://github.com/user-attachments/assets/ddd213ef-3201-4e89-8da6-1493ee23571a" width="120"/>  | <img src="https://github.com/user-attachments/assets/4af9272e-159b-4e81-b4a2-4269f47a2288" width="120"/> | <img src="https://github.com/user-attachments/assets/63cd6dfb-b3d1-40da-ab7b-d60433cef57b" width="120"/> |
 🦊 frontend|                                                🦖 backend                                                |                                                🐯 backend                                                |                                                                                                           |
 
 
 ## 링크
 
 - [🍡 프로젝트 사이트](https://www.issue-tracker.online)
-- [🐈‍⬛ Github 링크](https://github.com/codesquad-masters2025-team05/issue-tracker.git)
+- [🐱 Github 링크](https://github.com/codesquad-masters2025-team05/issue-tracker.git)
 - [📖  Notion 링크](https://flowery-unicorn-313.notion.site/CodeSquard-team05-1909003424f180438a2dd668361f3bf4?pvs=4)
 
 ## 브랜치 구조
