@@ -49,7 +49,7 @@ main                ← 최종 배포 브랜치
 - JDBC
 - GitHub Actions (CI/CD)
 - AWS EC2, RDS, S3
-- Ngnix
+- Nginx
 
 ### 📁 시스템 아키텍처
 
